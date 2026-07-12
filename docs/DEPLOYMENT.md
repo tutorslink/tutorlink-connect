@@ -4,11 +4,11 @@ Implements SRS §23 (Deployment & Maintenance).
 
 ## 1. Environments
 
-| Env         | Purpose                         | URL pattern                                  |
-| ----------- | ------------------------------- | -------------------------------------------- |
-| Development | Local + Lovable preview sandbox | `id-preview--<project>.lovable.app`          |
-| Preview     | Latest committed build          | `project--<project-id>-dev.lovable.app`      |
-| Production  | Published release               | `project--<project-id>.lovable.app` + custom |
+| Env         | Purpose                          | URL pattern                                  |
+| ----------- | -------------------------------- | -------------------------------------------- |
+| Development | Local + Lovable preview sandbox  | `id-preview--<project>.lovable.app`          |
+| Preview     | Latest committed build           | `project--<project-id>-dev.lovable.app`      |
+| Production  | Published release                | `project--<project-id>.lovable.app` + custom |
 
 Configuration is fully isolated per environment. Secrets are stored via Lovable
 Cloud (Supabase secrets) — never in source code, never in the frontend bundle.
@@ -40,7 +40,7 @@ notable changes, migration list. Recorded in Lovable's version history plus
 
 ## 5. Rollback (§23.7)
 
-- **Frontend:** open Lovable version history → _Restore_ previous version →
+- **Frontend:** open Lovable version history → *Restore* previous version →
   re-publish. Preserves user data (DB is not reverted).
 - **Backend / DB:** never mutate a shipped migration. Author a forward
   compensating migration that reverses the change; test locally first.

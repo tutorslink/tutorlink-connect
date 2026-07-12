@@ -94,23 +94,13 @@ function AuthPage() {
               <form onSubmit={handleSignIn} className="space-y-4 mt-4">
                 <div className="space-y-2">
                   <Label htmlFor="si-email">Email</Label>
-                  <Input
-                    id="si-email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                  <Input id="si-email" type="email" required value={email}
+                    onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="si-pw">Password</Label>
-                  <Input
-                    id="si-pw"
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                  <Input id="si-pw" type="password" required value={password}
+                    onChange={(e) => setPassword(e.target.value)} />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Signing in…" : "Sign in"}
@@ -122,32 +112,18 @@ function AuthPage() {
               <form onSubmit={handleSignUp} className="space-y-4 mt-4">
                 <div className="space-y-2">
                   <Label htmlFor="su-name">Full name</Label>
-                  <Input
-                    id="su-name"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                  />
+                  <Input id="su-name" value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="su-email">Email</Label>
-                  <Input
-                    id="su-email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                  <Input id="su-email" type="email" required value={email}
+                    onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="su-pw">Password</Label>
-                  <Input
-                    id="su-pw"
-                    type="password"
-                    required
-                    minLength={8}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                  <Input id="su-pw" type="password" required minLength={8} value={password}
+                    onChange={(e) => setPassword(e.target.value)} />
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Creating account…" : "Create account"}
