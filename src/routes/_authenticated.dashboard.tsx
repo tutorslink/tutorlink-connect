@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { appwrite } from "@/integrations/appwrite/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Calendar, Clock, Bell, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DataStore } from "@/lib/data-store";
 
 type Role = "student" | "tutor" | "recruitment" | "website_manager" | "owner";
 
@@ -24,15 +25,15 @@ function Dashboard() {
 
   useEffect(() => {
     (async () => {
-      const { data: userData } = await supabase.auth.getUser();
+      const { data: userData } = await appwrite.auth.getUser();
       const uid = userData.user?.id;
       if (!uid) return;
-      const [{ data: r }, { data: p }] = await Promise.all([
-        supabase.from("user_roles").select("role").eq("user_id", uid),
-        supabase.from("profiles").select("display_name,email").eq("id", uid).maybeSingle(),
-      ]);
-      setRoles((r ?? []).map((x) => x.role as Role));
-      setProfile(p ?? null);
+      const [roles, record] = await Promise.all([DataStore.getUserRoles(uid), DataStore.getUserRecord(uid)]);
+      setRoles((roles ?? []).map((x) => x as Role));
+      setProfile({
+        display_name: record?.displayName || userData.user?.name || null,
+        email: record?.email || userData.user?.email || null,
+      });
     })();
   }, []);
 

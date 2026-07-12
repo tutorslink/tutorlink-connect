@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-empty */
-import { supabase } from "@/integrations/supabase/client";
+import { ID, Query } from "appwrite";
+import { appwrite, APPWRITE_DATABASE_ID, getCurrentUser } from "@/integrations/appwrite/client";
 
 export interface Tutor {
   id: string;
@@ -62,13 +63,11 @@ export interface CMSContent {
   faqs: { question: string; answer: string; category: string }[];
 }
 
-// 1. Polished Default Static Data
 const defaultTutors: Tutor[] = [
   {
     id: "tutor_1",
     name: "Dr. Alexander Sterling",
-    avatar_url:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+    avatar_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
     headline: "Oxford Graduate & Experienced Mathematics Professor",
     about:
       "I hold a PhD in Mathematics from Oxford University and have spent over 12 years helping students master advanced calculus, algebra, and physics. My teaching style focuses on understanding core principles rather than memorization, making complex topics accessible and engaging.",
@@ -86,8 +85,7 @@ const defaultTutors: Tutor[] = [
   {
     id: "tutor_2",
     name: "Sophia Martinez",
-    avatar_url:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
+    avatar_url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
     headline: "Bilingual Literature Scholar & English Essay Specialist",
     about:
       "Specializing in SAT English, AP Literature, and academic writing. I work closely with students to polish their essay writing skills, vocabulary, and literary analysis. I am passionate about literature and helping students express themselves clearly.",
@@ -105,8 +103,7 @@ const defaultTutors: Tutor[] = [
   {
     id: "tutor_3",
     name: "Marcus Chen",
-    avatar_url:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+    avatar_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
     headline: "Software Engineer & Computer Science Tutor",
     about:
       "Ex-Google Engineer teaching Python, Java, web development, and data structures. I believe in hands-on, project-based learning. Whether you are prepping for AP Computer Science, university exams, or coding interviews, I've got you covered.",
@@ -124,8 +121,7 @@ const defaultTutors: Tutor[] = [
   {
     id: "tutor_4",
     name: "Elena Rostova",
-    avatar_url:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+    avatar_url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
     headline: "Biochemistry Ph.D. & Pre-Med Mentor",
     about:
       "Teaching Biology and Chemistry for medical school aspirants and high school students. I use illustrative diagrams, concept maps, and practical medical scenarios to help make biology and biochemistry understandable and fun.",
@@ -147,8 +143,7 @@ const defaultTestimonials: Testimonial[] = [
     id: "test_1",
     name: "Sarah Jenkins",
     rating: 5,
-    comment:
-      "Dr. Sterling completely turned around my son's attitude towards calculus. He went from failing to getting an A in his IB exams!",
+    comment: "Dr. Sterling completely turned around my son's attitude towards calculus. He went from failing to getting an A in his IB exams!",
     role: "Parent of IB Student",
     is_featured: true,
   },
@@ -156,8 +151,7 @@ const defaultTestimonials: Testimonial[] = [
     id: "test_2",
     name: "Liam O'Connor",
     rating: 5,
-    comment:
-      "The Computer Science tutoring from Marcus was incredible. His practical industry insights helped me secure a software engineering internship.",
+    comment: "The Computer Science tutoring from Marcus was incredible. His practical industry insights helped me secure a software engineering internship.",
     role: "University Sophomore",
     is_featured: true,
   },
@@ -165,8 +159,7 @@ const defaultTestimonials: Testimonial[] = [
     id: "test_3",
     name: "Amira Patel",
     rating: 5,
-    comment:
-      "Tutors Link connected me with Sophia, who helped me raise my SAT Verbal score by 140 points in just six weeks. I'm so grateful!",
+    comment: "Tutors Link connected me with Sophia, who helped me raise my SAT Verbal score by 140 points in just six weeks. I'm so grateful!",
     role: "SAT Aspirant",
     is_featured: true,
   },
@@ -192,23 +185,19 @@ const defaultCMS: CMSContent = {
   about: {
     mission:
       "To democratize elite, bespoke education and bridge the gap between world-class educators and ambitious students globally.",
-    vision:
-      "To become the global standard for premium, high-trust academic mentorship and personal tutoring.",
+    vision: "To become the global standard for premium, high-trust academic mentorship and personal tutoring.",
     values: [
       {
         title: "Academic Rigor",
-        description:
-          "We hold our tutors and curriculum to the highest global educational standards.",
+        description: "We hold our tutors and curriculum to the highest global educational standards.",
       },
       {
         title: "Personalized Care",
-        description:
-          "No two students learn the same way. We structure custom pathways for every mind.",
+        description: "No two students learn the same way. We structure custom pathways for every mind.",
       },
       {
         title: "Uncompromising Integrity",
-        description:
-          "Clear, transparent communication, vetted safety, and professional excellence.",
+        description: "Clear, transparent communication, vetted safety, and professional excellence.",
       },
     ],
   },
@@ -234,29 +223,9 @@ const defaultCMS: CMSContent = {
   ],
 };
 
-const defaultSubjects = [
-  "Mathematics",
-  "Physics",
-  "Chemistry",
-  "Biology",
-  "Computer Science",
-  "English Literature",
-  "Economics",
-  "History",
-];
-const defaultLevels = [
-  "Primary",
-  "Secondary",
-  "GCSE",
-  "IGCSE",
-  "A-Level",
-  "IB",
-  "SAT",
-  "University",
-  "Professional",
-];
+const defaultSubjects = ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Science", "English Literature", "Economics", "History"];
+const defaultLevels = ["Primary", "Secondary", "GCSE", "IGCSE", "A-Level", "IB", "SAT", "University", "Professional"];
 
-// 2. Local Storage Keys
 const KEYS = {
   TUTORS: "tl_tutors",
   TESTIMONIALS: "tl_testimonials",
@@ -269,7 +238,28 @@ const KEYS = {
   NOTIFICATIONS: "tl_notifications",
 };
 
-// Helper: Safely get from localStorage or fallback
+const COLLECTIONS = {
+  USERS: "users",
+  STUDENTS: "students",
+  TUTOR_PROFILES: "tutor_profiles",
+  TUTOR_ADS: "ads",
+  TUTOR_APPLICATIONS: "tutor_applications",
+  RECRUITMENT_APPLICATIONS: "volunteer_applications",
+  SUBJECTS: "subjects",
+  SUBJECT_CATEGORIES: "subject_categories",
+  REVIEWS: "tutor_reviews",
+  LESSONS: "lessons",
+  NOTIFICATIONS: "notifications",
+  PAGES: "pages",
+  HOMEPAGE: "homepage_content",
+  AUDIT_LOGS: "audit_logs",
+  PLATFORM_SETTINGS: "platform_settings",
+  NOTIFICATION_PREFERENCES: "notification_preferences",
+  DISCORD_LINKS: "discord_links",
+  SCHEDULES: "schedules",
+  ASSIGNMENTS: "student_tutor_assignments",
+};
+
 function getLocal<T>(key: string, defaultValue: T): T {
   if (typeof window === "undefined") return defaultValue;
   try {
@@ -280,68 +270,239 @@ function getLocal<T>(key: string, defaultValue: T): T {
   }
 }
 
-// Helper: Safely set to localStorage
 function setLocal(key: string, data: any) {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(key, JSON.stringify(data));
-  } catch (e) {
-    console.error("Local storage save error", e);
+  } catch (error) {
+    console.error("Local storage save error", error);
   }
 }
 
-// 3. API Data Service with Dual Supabase / Local Storage Fallback
+function safeString(value: unknown, fallback = ""): string {
+  return typeof value === "string" && value.trim() ? value : fallback;
+}
+
+function safeBool(value: unknown): boolean {
+  return value === true;
+}
+
+function safeNumber(value: unknown, fallback = 0): number {
+  const n = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => part[0]?.toUpperCase() || "")
+    .join("")
+    .slice(0, 2) || "TL";
+}
+
+function avatarFor(name: string): string {
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0f172a&color=ffffff&size=256`;
+}
+
+async function listDocuments(collectionId: string, queries: string[] = []) {
+  try {
+    const result = await appwrite.databases.listDocuments({
+      databaseId: APPWRITE_DATABASE_ID,
+      collectionId,
+      queries,
+    });
+    return result.documents as any[];
+  } catch {
+    return [];
+  }
+}
+
+async function getDocument(collectionId: string, documentId: string) {
+  try {
+    return await appwrite.databases.getDocument({
+      databaseId: APPWRITE_DATABASE_ID,
+      collectionId,
+      documentId,
+    });
+  } catch {
+    return null;
+  }
+}
+
+async function upsertDocument(collectionId: string, documentId: string, data: Record<string, any>) {
+  try {
+    return await appwrite.databases.upsertDocument({
+      databaseId: APPWRITE_DATABASE_ID,
+      collectionId,
+      documentId,
+      data,
+    });
+  } catch {
+    return null;
+  }
+}
+
+async function deleteDocument(collectionId: string, documentId: string) {
+  try {
+    await appwrite.databases.deleteDocument({
+      databaseId: APPWRITE_DATABASE_ID,
+      collectionId,
+      documentId,
+    });
+  } catch {}
+}
+
+async function createDocument(collectionId: string, data: Record<string, any>, documentId = ID.unique()) {
+  try {
+    return await appwrite.databases.createDocument({
+      databaseId: APPWRITE_DATABASE_ID,
+      collectionId,
+      documentId,
+      data,
+    });
+  } catch {
+    return null;
+  }
+}
+
+function mapTutorDoc(doc: any): Tutor {
+  const name = safeString(doc.displayName || doc.name || doc.fullName || doc.authUserId, "Certified Tutor");
+  const rate = safeNumber(doc.hourlyRate ?? doc.hourly_rate, 40);
+  const rating = safeNumber(doc.rating ?? doc.rating_avg, 5);
+  const reviews = safeNumber(doc.reviewCount ?? doc.rating_count, 0);
+  const years = safeNumber(doc.experienceYears ?? doc.years_experience, 5);
+
+  return {
+    id: doc.$id || doc.id || doc.authUserId || name,
+    name,
+    avatar_url: safeString(doc.avatarUrl || doc.avatar_url, avatarFor(name)),
+    headline: safeString(doc.headline, "Tutors Link Educator"),
+    about: safeString(doc.fullBio || doc.shortBio || doc.about, ""),
+    hourly_rate: rate,
+    rating_avg: rating,
+    rating_count: reviews,
+    years_experience: years,
+    languages: Array.isArray(doc.languages) ? doc.languages : Array.isArray(doc.education) ? doc.education : ["English"],
+    subjects: Array.isArray(doc.subjects) ? doc.subjects : [],
+    levels: Array.isArray(doc.levels) ? doc.levels : defaultLevels,
+    is_featured: safeBool(doc.featured ?? doc.is_featured),
+    is_verified: safeBool(doc.verified ?? doc.is_verified),
+    availability: safeString(doc.availability, "Flexible schedule (contact us)"),
+  };
+}
+
+function mapReviewDoc(doc: any): Review {
+  return {
+    id: doc.$id || doc.id,
+    student_name: safeString(doc.authorName || doc.student_name, "Anonymous Student"),
+    rating: safeNumber(doc.rating, 5),
+    comment: safeString(doc.body || doc.comment, ""),
+    created_at: doc.$createdAt || doc.createdAt || doc.created_at || new Date().toISOString(),
+    tutor_id: doc.tutor?.$id || doc.tutor_id || doc.tutorId || "",
+    status: safeString(doc.status, "pending") as Review["status"],
+  };
+}
+
+function mapPageDoc(doc: any) {
+  return {
+    id: doc.$id || doc.id,
+    title: safeString(doc.title, ""),
+    slug: safeString(doc.slug, ""),
+    content: safeString(doc.content, ""),
+    seo_title: safeString(doc.seoTitle || doc.seo_title, ""),
+    seo_description: safeString(doc.seoDescription || doc.seo_description, ""),
+    status: safeString(doc.status, "draft"),
+    published_at: doc.publishedAt || doc.published_at || null,
+    updated_at: doc.updatedAt || doc.updated_at || doc.$updatedAt || new Date().toISOString(),
+    is_deleted: safeBool(doc.isDeleted ?? doc.is_deleted),
+  };
+}
+
+function mapLessonDoc(doc: any) {
+  return {
+    id: doc.$id || doc.id,
+    student_id: doc.studentId || doc.student_id || "",
+    tutor_id: doc.tutorId || doc.tutor_id || "",
+    subject: doc.subject || "",
+    academic_level: doc.academicLevel || doc.academic_level || "",
+    starts_at: doc.startsAt || doc.starts_at || "",
+    ends_at: doc.endsAt || doc.ends_at || "",
+    status: safeString(doc.status, "scheduled"),
+    notes: doc.notes || "",
+    created_by: doc.createdBy || doc.created_by || null,
+    is_deleted: safeBool(doc.isDeleted ?? doc.is_deleted),
+    student: doc.student,
+    tutor: doc.tutor,
+  };
+}
+
+function mapNotificationDoc(doc: any) {
+  return {
+    id: doc.$id || doc.id,
+    user_id: doc.userId || doc.user_id || "",
+    type: safeString(doc.type, "info"),
+    title: safeString(doc.title, ""),
+    body: safeString(doc.body, ""),
+    link: safeString(doc.link, ""),
+    is_read: safeBool(doc.isRead ?? doc.is_read),
+    is_deleted: safeBool(doc.isDeleted ?? doc.is_deleted),
+    created_at: doc.createdAt || doc.created_at || doc.$createdAt || new Date().toISOString(),
+  };
+}
+
+function asArray(value: unknown): string[] {
+  if (Array.isArray(value)) return value.map((item) => String(item));
+  if (typeof value === "string" && value.trim()) return [value];
+  return [];
+}
+
+function asObject<T extends Record<string, any>>(value: unknown, fallback: T): T {
+  if (value && typeof value === "object" && !Array.isArray(value)) return value as T;
+  if (typeof value === "string" && value.trim()) {
+    try {
+      const parsed = JSON.parse(value);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) return parsed as T;
+    } catch {}
+  }
+  return fallback;
+}
+
+function parseJson(value: unknown) {
+  if (typeof value === "string" && value.trim()) {
+    try {
+      return JSON.parse(value);
+    } catch {}
+  }
+  return value;
+}
+
 export const DataStore = {
+  saveUserRecord: async (user: { id: string; email?: string; displayName?: string; role?: string }) => {
+    await upsertDocument(COLLECTIONS.USERS, user.id, {
+      authUserId: user.id,
+      email: safeString(user.email, `${user.id}@tutorslink.local`),
+      displayName: safeString(user.displayName, user.email?.split("@")[0] || "Tutors Link User"),
+      role: safeString(user.role, "student"),
+      discordId: null,
+      active: true,
+    });
+  },
+
+  getUserRecord: async (userId: string): Promise<any | null> => {
+    try {
+      return await getDocument(COLLECTIONS.USERS, userId);
+    } catch {
+      return null;
+    }
+  },
+
   // --- TUTORS ---
   getTutors: async (): Promise<Tutor[]> => {
     try {
-      const { data: profiles, error: pErr } = await supabase.from("tutor_profiles").select(`
-        id,
-        about,
-        headline,
-        hourly_rate,
-        is_active,
-        is_featured,
-        is_verified,
-        languages,
-        rating_avg,
-        rating_count,
-        timezone,
-        years_experience
-      `);
-
-      if (!pErr && profiles && profiles.length > 0) {
-        // We also need display name from profiles table
-        const { data: profs } = await supabase
-          .from("profiles")
-          .select("id, display_name, avatar_url");
-        const mapped = profiles.map((tp) => {
-          const profile = profs?.find((p) => p.id === tp.id);
-          return {
-            id: tp.id,
-            name: profile?.display_name || "Certified Tutor",
-            avatar_url:
-              profile?.avatar_url ||
-              "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-            headline: tp.headline || "Tutors Link Educator",
-            about: tp.about || "",
-            hourly_rate: tp.hourly_rate || 40,
-            rating_avg: tp.rating_avg || 5.0,
-            rating_count: tp.rating_count || 0,
-            years_experience: tp.years_experience || 5,
-            languages: tp.languages || ["English"],
-            subjects: ["Mathematics"], // Default
-            levels: ["High School"], // Default
-            is_featured: tp.is_featured || false,
-            is_verified: tp.is_verified || false,
-            availability: "Flexible schedule (contact us)",
-          } as Tutor;
-        });
-        return mapped;
-      }
-    } catch (e) {
-      console.warn("Supabase tutor fetch failed, using localized data:", e);
-    }
+      const docs = await listDocuments(COLLECTIONS.TUTOR_PROFILES, [Query.equal("active", true)]);
+      if (docs.length > 0) return docs.map(mapTutorDoc);
+    } catch {}
     return getLocal<Tutor[]>(KEYS.TUTORS, defaultTutors);
   },
 
@@ -351,48 +512,56 @@ export const DataStore = {
   },
 
   saveTutor: async (tutor: Tutor): Promise<void> => {
+    const payload = {
+      slug: tutor.id,
+      displayName: tutor.name,
+      headline: tutor.headline,
+      shortBio: tutor.about.slice(0, 240),
+      fullBio: tutor.about,
+      avatarInitials: initials(tutor.name),
+      rating: tutor.rating_avg,
+      reviewCount: tutor.rating_count,
+      hourlyRate: Math.round(tutor.hourly_rate),
+      experienceYears: tutor.years_experience,
+      education: tutor.languages,
+      totalStudents: tutor.rating_count * 2,
+      totalSessions: tutor.rating_count * 10,
+      responseTime: "Within 24 hours",
+      availability: tutor.availability,
+      languages: tutor.languages,
+      levels: tutor.levels,
+      publicBadges: tutor.is_verified ? ["Verified"] : [],
+      contactEmail: null,
+      contactUrl: null,
+      inquiryUrl: null,
+      featured: tutor.is_featured,
+      verified: tutor.is_verified,
+      active: true,
+      subjects: tutor.subjects,
+      avatarUrl: tutor.avatar_url,
+    };
+
+    await upsertDocument(COLLECTIONS.TUTOR_PROFILES, tutor.id, payload);
     const tutors = await DataStore.getTutors();
     const idx = tutors.findIndex((t) => t.id === tutor.id);
     if (idx !== -1) tutors[idx] = tutor;
     else tutors.push(tutor);
     setLocal(KEYS.TUTORS, tutors);
-
-    try {
-      await supabase.from("tutor_profiles").upsert({
-        id: tutor.id,
-        about: tutor.about,
-        headline: tutor.headline,
-        hourly_rate: tutor.hourly_rate,
-        is_featured: tutor.is_featured,
-        is_verified: tutor.is_verified,
-        languages: tutor.languages,
-        years_experience: tutor.years_experience,
-        timezone: "UTC",
-      });
-    } catch {}
   },
 
   // --- SUBJECTS & LEVELS ---
   getSubjects: async (): Promise<string[]> => {
     try {
-      const { data } = await supabase.from("subjects").select("name");
-      if (data && data.length > 0) return data.map((d) => d.name);
+      const docs = await listDocuments(COLLECTIONS.SUBJECTS, [Query.equal("active", true)]);
+      if (docs.length > 0) return docs.map((d) => safeString(d.name)).filter(Boolean);
     } catch {}
     return defaultSubjects;
   },
 
-  getLevels: async (): Promise<string[]> => {
-    try {
-      const { data } = await supabase.from("academic_levels").select("name");
-      if (data && data.length > 0) return data.map((d) => d.name);
-    } catch {}
-    return defaultLevels;
-  },
+  getLevels: async (): Promise<string[]> => defaultLevels,
 
   // --- TESTIMONIALS ---
-  getTestimonials: async (): Promise<Testimonial[]> => {
-    return getLocal<Testimonial[]>(KEYS.TESTIMONIALS, defaultTestimonials);
-  },
+  getTestimonials: async (): Promise<Testimonial[]> => getLocal<Testimonial[]>(KEYS.TESTIMONIALS, defaultTestimonials),
 
   saveTestimonial: async (test: Testimonial): Promise<void> => {
     const testimonials = await DataStore.getTestimonials();
@@ -404,17 +573,59 @@ export const DataStore = {
 
   deleteTestimonial: async (id: string): Promise<void> => {
     const testimonials = await DataStore.getTestimonials();
-    const filtered = testimonials.filter((t) => t.id !== id);
-    setLocal(KEYS.TESTIMONIALS, filtered);
+    setLocal(KEYS.TESTIMONIALS, testimonials.filter((t) => t.id !== id));
   },
 
   // --- CMS ---
   getCMS: async (): Promise<CMSContent> => {
-    return getLocal<CMSContent>(KEYS.CMS, defaultCMS);
+    const stored = getLocal<CMSContent>(KEYS.CMS, defaultCMS);
+    try {
+      const doc = await getDocument(COLLECTIONS.HOMEPAGE, "homepage");
+      if (!doc) return stored;
+      const stats = asObject(doc.stats, stored.homepage.stats);
+      return {
+        homepage: {
+          hero: {
+            headline: safeString(doc.heroHeadline, stored.homepage.hero.headline),
+            subheadline: safeString(doc.heroSubheadline, stored.homepage.hero.subheadline),
+            ctaPrimary: safeString(doc.ctaPrimary, stored.homepage.hero.ctaPrimary),
+            ctaSecondary: safeString(doc.ctaSecondary, stored.homepage.hero.ctaSecondary),
+          },
+          stats: {
+            tutors: safeNumber(stats.tutors, stored.homepage.stats.tutors),
+            students: safeNumber(stats.students, stored.homepage.stats.students),
+            lessons: safeNumber(stats.lessons, stored.homepage.stats.lessons),
+            subjects: safeNumber(stats.subjects, stored.homepage.stats.subjects),
+            rating: safeNumber(stats.rating, stored.homepage.stats.rating),
+          },
+        },
+        about: {
+          mission: safeString(doc.aboutMission, stored.about.mission),
+          vision: safeString(doc.aboutVision, stored.about.vision),
+          values: Array.isArray(parseJson(doc.aboutValues)) ? (parseJson(doc.aboutValues) as any) : stored.about.values,
+        },
+        faqs: Array.isArray(parseJson(doc.faqs)) ? (parseJson(doc.faqs) as any) : stored.faqs,
+      };
+    } catch {
+      return stored;
+    }
   },
 
   saveCMS: async (cms: CMSContent): Promise<void> => {
     setLocal(KEYS.CMS, cms);
+    await upsertDocument(COLLECTIONS.HOMEPAGE, "homepage", {
+      heroHeadline: cms.homepage.hero.headline,
+      heroSubheadline: cms.homepage.hero.subheadline,
+      ctaPrimary: cms.homepage.hero.ctaPrimary,
+      ctaSecondary: cms.homepage.hero.ctaSecondary,
+      stats: JSON.stringify(cms.homepage.stats),
+      aboutMission: cms.about.mission,
+      aboutVision: cms.about.vision,
+      aboutValues: JSON.stringify(cms.about.values),
+      faqs: JSON.stringify(cms.faqs),
+      isPublished: true,
+      updatedAt: new Date().toISOString(),
+    });
   },
 
   // --- APPLICATIONS (TUTOR) ---
@@ -432,7 +643,7 @@ export const DataStore = {
     cv_name?: string;
     userId?: string;
   }) => {
-    const id = "app_" + Math.random().toString(36).substr(2, 9);
+    const id = "app_" + Math.random().toString(36).slice(2, 11);
     const newApp = {
       id,
       applicant_user_id: app.userId || null,
@@ -456,85 +667,82 @@ export const DataStore = {
     list.push(newApp);
     setLocal(KEYS.APPLICATIONS, list);
 
-    try {
-      await supabase.from("tutor_applications").insert({
-        applicant_user_id: app.userId || null,
-        full_name: app.name,
-        email: app.email,
-        phone: app.phone,
-        subjects: app.subjects,
-        levels: app.levels,
-        languages: app.languages || ["English"],
-        years_experience: app.years_experience || 0,
-        cover_letter: app.cover_letter || app.bio || "",
-        status: "pending",
-      });
-    } catch {}
+    await createDocument(COLLECTIONS.TUTOR_APPLICATIONS, {
+      email: app.email,
+      dateOfBirth: new Date().toISOString().slice(0, 10),
+      phoneNumber: app.phone,
+      discordUsername: app.email.split("@")[0],
+      highestQualificationLink: null,
+      highestQualificationFileId: null,
+      highestQualificationFileName: app.cv_name || null,
+      highestQualificationFileUrl: null,
+      countryOfResidence: "Unknown",
+      languagesSpoken: app.languages || ["English"],
+      subjectName: app.subjects[0] || "General",
+      subjectCode: app.subjects[0] || null,
+      examBoard: null,
+      teachingLevel: app.levels[0] || "General",
+      examResultSummary: app.cover_letter || app.bio || "",
+      resultDocumentLink: null,
+      resultDocumentFileId: null,
+      resultDocumentFileName: null,
+      resultDocumentFileUrl: null,
+      teachingExperience: app.cover_letter || app.bio || "",
+      teachingFormat: "online",
+      oneOnOneRateUsd: safeNumber(app.expected_rate, 0),
+      groupRateUsd: safeNumber(app.expected_rate, 0),
+      maxGroupStudents: 1,
+      weeklyClassesPerStudent: 1,
+      applicantUserId: app.userId || null,
+      status: "pending",
+      internalNotes: null,
+      reviewedAt: null,
+      reviewedBy: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }, id);
 
     return newApp;
   },
 
-  submitContactInquiry: async (inquiry: {
-    name: string;
-    email: string;
-    phone: string;
-    subject?: string;
-    level?: string;
-    tutor_id?: string;
-    message: string;
-  }) => {
-    const id = "inquiry_" + Math.random().toString(36).substr(2, 9);
-    const newInquiry = {
-      id,
-      ...inquiry,
-      status: "new" as const,
-      created_at: new Date().toISOString(),
-    };
-
+  submitContactInquiry: async (inquiry: { name: string; email: string; phone: string; subject?: string; level?: string; tutor_id?: string; message: string }) => {
+    const id = "inquiry_" + Math.random().toString(36).slice(2, 11);
+    const newInquiry = { id, ...inquiry, status: "new" as const, created_at: new Date().toISOString() };
     const list = getLocal<any[]>("tl_contact_inquiries", []);
     list.push(newInquiry);
     setLocal("tl_contact_inquiries", list);
-
     return newInquiry;
   },
 
   updateApplicationStatus: async (id: string, status: string) => {
-    try {
-      await supabase.from("tutor_applications").update({ status, reviewed_at: new Date().toISOString() }).eq("id", id);
-    } catch {}
     const list = getLocal<any[]>(KEYS.APPLICATIONS, []);
     const idx = list.findIndex((a) => a.id === id);
     if (idx !== -1) {
       list[idx].status = status;
       setLocal(KEYS.APPLICATIONS, list);
     }
+    await upsertDocument(COLLECTIONS.TUTOR_APPLICATIONS, id, { status, reviewedAt: new Date().toISOString() });
   },
 
   updateRecruitmentStatus: async (id: string, status: string) => {
-    try {
-      await supabase.from("recruitment_applications").update({ status, reviewed_at: new Date().toISOString() }).eq("id", id);
-    } catch {}
     const list = getLocal<any[]>(KEYS.RECRUITMENT, []);
     const idx = list.findIndex((a) => a.id === id);
     if (idx !== -1) {
       list[idx].status = status;
       setLocal(KEYS.RECRUITMENT, list);
     }
+    await upsertDocument(COLLECTIONS.RECRUITMENT_APPLICATIONS, id, { status, reviewedAt: new Date().toISOString() });
   },
 
   getTutorApplications: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase.from("tutor_applications").select("*");
-      if (data && data.length > 0) return data;
+      const docs = await listDocuments(COLLECTIONS.TUTOR_APPLICATIONS, [Query.orderDesc("$createdAt")]);
+      if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>(KEYS.APPLICATIONS, []);
   },
 
-  updateTutorApplicationStatus: async (
-    id: string,
-    status: "pending" | "under_review" | "approved" | "rejected",
-    notes?: string,
-  ) => {
+  updateTutorApplicationStatus: async (id: string, status: "pending" | "under_review" | "approved" | "rejected", notes?: string) => {
     const list = getLocal<any[]>(KEYS.APPLICATIONS, []);
     const idx = list.findIndex((x) => x.id === id);
     if (idx !== -1) {
@@ -542,17 +750,13 @@ export const DataStore = {
       if (notes) list[idx].internal_notes = notes;
       setLocal(KEYS.APPLICATIONS, list);
 
-      // If approved, create tutor profile and add tutor role to user!
       if (status === "approved" && list[idx].applicant_user_id) {
         const userId = list[idx].applicant_user_id;
-        // Add "tutor" role to roles list
         await DataStore.assignUserRole(userId, "tutor");
-        // Create profile
         await DataStore.saveTutor({
           id: userId,
           name: list[idx].full_name,
-          avatar_url:
-            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+          avatar_url: avatarFor(list[idx].full_name),
           headline: "Professional Educator",
           about: list[idx].cover_letter || "",
           hourly_rate: 45,
@@ -569,16 +773,12 @@ export const DataStore = {
       }
     }
 
-    try {
-      await supabase
-        .from("tutor_applications")
-        .update({
-          status,
-          internal_notes: notes || null,
-          reviewed_at: new Date().toISOString(),
-        })
-        .eq("id", id);
-    } catch {}
+    await upsertDocument(COLLECTIONS.TUTOR_APPLICATIONS, id, {
+      status,
+      internalNotes: notes || null,
+      reviewedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
   },
 
   // --- RECRUITMENT APPLICATIONS ---
@@ -590,7 +790,7 @@ export const DataStore = {
     coverLetter: string;
     userId?: string;
   }) => {
-    const id = "rec_" + Math.random().toString(36).substr(2, 9);
+    const id = "rec_" + Math.random().toString(36).slice(2, 11);
     const newApp = {
       id,
       applicant_user_id: app.userId || null,
@@ -607,76 +807,77 @@ export const DataStore = {
     list.push(newApp);
     setLocal(KEYS.RECRUITMENT, list);
 
-    try {
-      await supabase.from("recruitment_applications").insert({
-        applicant_user_id: app.userId || null,
-        full_name: app.fullName,
-        email: app.email,
-        phone: app.phone,
-        role_applied_for: app.roleAppliedFor,
-        cover_letter: app.coverLetter,
-        status: "pending",
-      });
-    } catch {}
+    await createDocument(COLLECTIONS.RECRUITMENT_APPLICATIONS, {
+      Full_name: app.fullName,
+      Discord_username: app.email.split("@")[0],
+      Instagram_handle: app.email.split("@")[0],
+      Email_address: app.email,
+      Country_of_residence: "Unknown",
+      Languages_fluent_in: ["English"],
+      Current_education_level: "Unknown",
+      Role_you_want_to_apply_for: app.roleAppliedFor,
+      Reason_to_apply: app.coverLetter,
+      Experience: app.coverLetter,
+      Why_good_fit: app.coverLetter,
+      status: "pending",
+      applicantUserId: app.userId || null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }, id);
 
     return newApp;
   },
 
   getRecruitmentApplications: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase.from("recruitment_applications").select("*");
-      if (data && data.length > 0) return data;
+      const docs = await listDocuments(COLLECTIONS.RECRUITMENT_APPLICATIONS, [Query.orderDesc("$createdAt")]);
+      if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>(KEYS.RECRUITMENT, []);
   },
 
-  updateRecruitmentApplicationStatus: async (
-    id: string,
-    status: "pending" | "under_review" | "approved" | "rejected",
-    notes?: string,
-  ) => {
+  updateRecruitmentApplicationStatus: async (id: string, status: "pending" | "under_review" | "approved" | "rejected", notes?: string) => {
     const list = getLocal<any[]>(KEYS.RECRUITMENT, []);
     const idx = list.findIndex((x) => x.id === id);
     if (idx !== -1) {
       list[idx].status = status;
       if (notes) list[idx].internal_notes = notes;
       setLocal(KEYS.RECRUITMENT, list);
-
-      // If approved, assign recruitment role
       if (status === "approved" && list[idx].applicant_user_id) {
         await DataStore.assignUserRole(list[idx].applicant_user_id, "recruitment");
       }
     }
 
-    try {
-      await supabase
-        .from("recruitment_applications")
-        .update({
-          status,
-          internal_notes: notes || null,
-          reviewed_at: new Date().toISOString(),
-        })
-        .eq("id", id);
-    } catch {}
+    await upsertDocument(COLLECTIONS.RECRUITMENT_APPLICATIONS, id, {
+      status,
+      internalNotes: notes || null,
+      reviewedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
   },
 
   // --- USER ROLES & PROFILES ---
   getUserRoles: async (userId: string): Promise<string[]> => {
     try {
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
-      if (data && data.length > 0) return data.map((d) => d.role);
+      const doc = await getDocument(COLLECTIONS.USERS, userId);
+      const role = safeString(doc?.role, "");
+      if (role) return [role];
     } catch {}
 
-    // Local fallback
     const mockRoles = getLocal<Record<string, string[]>>("user_roles_map", {});
     return mockRoles[userId] || ["student"];
   },
 
   assignUserRole: async (userId: string, role: string): Promise<void> => {
     try {
-      await supabase.from("user_roles").insert({
-        user_id: userId,
-        role: role as any,
+      const user = await getCurrentUser();
+      await upsertDocument(COLLECTIONS.USERS, userId, {
+        authUserId: userId,
+        email: safeString(user?.email, `${userId}@tutorslink.local`),
+        displayName: safeString(user?.name, user?.email?.split("@")[0] || userId),
+        role,
+        discordId: null,
+        active: true,
       });
     } catch {}
 
@@ -688,7 +889,10 @@ export const DataStore = {
 
   removeUserRole: async (userId: string, role: string): Promise<void> => {
     try {
-      await supabase.from("user_roles").delete().eq("user_id", userId).eq("role", role);
+      const doc = await getDocument(COLLECTIONS.USERS, userId);
+      if (doc?.role === role) {
+        await upsertDocument(COLLECTIONS.USERS, userId, { ...doc, role: "student" });
+      }
     } catch {}
 
     const mockRoles = getLocal<Record<string, string[]>>("user_roles_map", {});
@@ -700,41 +904,49 @@ export const DataStore = {
 
   // --- STUDENT TUTOR ASSIGNMENTS & SCHEDULES ---
   getStudentAssignments: async (studentId: string): Promise<any[]> => {
-    // Return tutors assigned to student
     const tutors = await DataStore.getTutors();
+    try {
+      const docs = await listDocuments(COLLECTIONS.ASSIGNMENTS, [Query.equal("studentId", studentId), Query.equal("isActive", true)]);
+      if (docs.length > 0) {
+        return docs.map((a) => {
+          const tutor = tutors.find((t) => t.id === (a.tutorId || a.tutor_id));
+          return {
+            ...a,
+            tutor: tutor || {
+              name: "Unassigned Tutor",
+              headline: "Professional Tutor",
+              avatar_url: avatarFor("Unassigned Tutor"),
+              hourly_rate: 40,
+              rating_avg: 5.0,
+              rating_count: 0,
+            },
+          };
+        });
+      }
+    } catch {}
+
     const localAss = getLocal<any[]>(KEYS.ASSIGNMENTS, [
-      {
-        id: "ass_1",
-        student_id: studentId,
-        tutor_id: "tutor_1",
-        remaining_classes: 8,
-        is_active: true,
-      },
-      {
-        id: "ass_2",
-        student_id: studentId,
-        tutor_id: "tutor_2",
-        remaining_classes: 4,
-        is_active: true,
-      },
+      { id: "ass_1", student_id: studentId, tutor_id: "tutor_1", remaining_classes: 8, is_active: true },
+      { id: "ass_2", student_id: studentId, tutor_id: "tutor_2", remaining_classes: 4, is_active: true },
     ]);
 
-    const studentAssignments = localAss.filter((a) => a.student_id === studentId && a.is_active);
-    return studentAssignments.map((a) => {
-      const tutor = tutors.find((t) => t.id === a.tutor_id);
-      return {
-        ...a,
-        tutor: tutor || {
-          name: "Unassigned Tutor",
-          headline: "Professional Tutor",
-          avatar_url:
-            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-          hourly_rate: 40,
-          rating_avg: 5.0,
-          rating_count: 0,
-        },
-      };
-    });
+    return localAss
+      .filter((a) => a.student_id === studentId && a.is_active)
+      .map((a) => {
+        const tutor = tutors.find((t) => t.id === a.tutor_id);
+        return {
+          ...a,
+          tutor:
+            tutor || {
+              name: "Unassigned Tutor",
+              headline: "Professional Tutor",
+              avatar_url: avatarFor("Unassigned Tutor"),
+              hourly_rate: 40,
+              rating_avg: 5.0,
+              rating_count: 0,
+            },
+        };
+      });
   },
 
   getLessons: async (userId: string, isTutor = false): Promise<any[]> => {
@@ -744,7 +956,7 @@ export const DataStore = {
         id: "less_1",
         student_id: userId,
         tutor_id: "tutor_1",
-        starts_at: new Date(Date.now() + 24 * 3600 * 1000).toISOString(), // Tomorrow
+        starts_at: new Date(Date.now() + 24 * 3600 * 1000).toISOString(),
         ends_at: new Date(Date.now() + 25 * 3600 * 1000).toISOString(),
         status: "scheduled",
         notes: "Introduction to Advanced Linear Algebra & Calculus",
@@ -754,7 +966,7 @@ export const DataStore = {
         id: "less_2",
         student_id: userId,
         tutor_id: "tutor_2",
-        starts_at: new Date(Date.now() - 48 * 3600 * 1000).toISOString(), // 2 days ago
+        starts_at: new Date(Date.now() - 48 * 3600 * 1000).toISOString(),
         ends_at: new Date(Date.now() - 47 * 3600 * 1000).toISOString(),
         status: "completed",
         notes: "SAT Verbal Mock Test & Essay Revision",
@@ -762,52 +974,42 @@ export const DataStore = {
       },
     ]);
 
-    const filtered = isTutor
-      ? localLessons.filter((l) => l.tutor_id === userId)
-      : localLessons.filter((l) => l.student_id === userId);
-
+    const filtered = isTutor ? localLessons.filter((l) => l.tutor_id === userId) : localLessons.filter((l) => l.student_id === userId);
     return filtered.map((l) => {
       const tutor = tutors.find((t) => t.id === l.tutor_id);
       return {
         ...l,
         tutor_name: tutor?.name || "Dr. Alexander Sterling",
-        tutor_avatar:
-          tutor?.avatar_url ||
-          "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+        tutor_avatar: tutor?.avatar_url || avatarFor("Dr. Alexander Sterling"),
       };
     });
   },
 
-  scheduleLesson: async (lesson: {
-    student_id: string;
-    tutor_id: string;
-    starts_at: string;
-    ends_at: string;
-    notes?: string;
-    subject: string;
-  }) => {
+  scheduleLesson: async (lesson: { student_id: string; tutor_id: string; starts_at: string; ends_at: string; notes?: string; subject: string }) => {
     const list = getLocal<any[]>(KEYS.LESSONS, []);
-    const newLess = {
-      id: "less_" + Math.random().toString(36).substr(2, 9),
-      ...lesson,
-      status: "scheduled",
-    };
+    const newLess = { id: "less_" + Math.random().toString(36).slice(2, 11), ...lesson, status: "scheduled" };
     list.push(newLess);
     setLocal(KEYS.LESSONS, list);
+    await createDocument(COLLECTIONS.LESSONS, {
+      studentId: lesson.student_id,
+      tutorId: lesson.tutor_id,
+      startsAt: lesson.starts_at,
+      endsAt: lesson.ends_at,
+      subject: lesson.subject,
+      academicLevel: null,
+      notes: lesson.notes || "",
+      createdBy: null,
+      status: "scheduled",
+      isDeleted: false,
+    }, newLess.id);
     return newLess;
   },
 
   // --- REVIEWS ---
-  submitReview: async (review: {
-    student_id: string;
-    student_name: string;
-    tutor_id: string;
-    rating: number;
-    comment: string;
-  }) => {
+  submitReview: async (review: { student_id: string; student_name: string; tutor_id: string; rating: number; comment: string }) => {
     const list = getLocal<Review[]>(KEYS.REVIEWS, []);
     const newRev: Review = {
-      id: "rev_" + Math.random().toString(36).substr(2, 9),
+      id: "rev_" + Math.random().toString(36).slice(2, 11),
       student_name: review.student_name,
       rating: review.rating,
       comment: review.comment,
@@ -818,20 +1020,33 @@ export const DataStore = {
     list.push(newRev);
     setLocal(KEYS.REVIEWS, list);
 
-    try {
-      await supabase.from("reviews").insert({
-        student_id: review.student_id,
-        tutor_id: review.tutor_id,
-        rating: review.rating,
-        comment: review.comment,
-        status: "pending",
-      });
-    } catch {}
+    await createDocument(COLLECTIONS.REVIEWS, {
+      authorName: review.student_name,
+      authorInitials: initials(review.student_name),
+      title: null,
+      body: review.comment,
+      rating: review.rating,
+      isPublic: false,
+      status: "pending",
+      helpfulCount: 0,
+      response: null,
+      responseAt: null,
+      tutor: review.tutor_id,
+      studentId: review.student_id,
+      createdAt: new Date().toISOString(),
+    }, newRev.id);
 
     return newRev;
   },
 
   getReviews: async (tutorId?: string): Promise<Review[]> => {
+    try {
+      const queries = [Query.equal("isPublic", true), Query.equal("status", "approved")];
+      if (tutorId) queries.push(Query.equal("tutor", tutorId));
+      const docs = await listDocuments(COLLECTIONS.REVIEWS, queries);
+      if (docs.length > 0) return docs.map(mapReviewDoc);
+    } catch {}
+
     const localRevs = getLocal<Review[]>(KEYS.REVIEWS, [
       {
         id: "rev_1",
@@ -854,572 +1069,438 @@ export const DataStore = {
       list[idx].status = status;
       setLocal(KEYS.REVIEWS, list);
     }
+    await upsertDocument(COLLECTIONS.REVIEWS, id, { status });
   },
 
   // --- AUDIT LOGS ---
   logAction: async (action: string, actorId: string | null, details: any) => {
     const list = getLocal<any[]>("tl_audit_logs", []);
-    list.push({
-      id: "audit_" + Math.random().toString(36).substr(2, 9),
-      action,
-      actor_id: actorId,
-      metadata: details,
-      created_at: new Date().toISOString(),
-    });
+    const entry = { id: "audit_" + Math.random().toString(36).slice(2, 11), action, actor_id: actorId, metadata: details, created_at: new Date().toISOString() };
+    list.push(entry);
     setLocal("tl_audit_logs", list);
-
-    try {
-      await supabase.from("audit_log").insert({
-        action,
-        actor_id: actorId,
-        metadata: details,
-      });
-    } catch {}
+    await createDocument(COLLECTIONS.AUDIT_LOGS, { action, actorId, metadata: details, createdAt: new Date().toISOString() }, entry.id);
   },
 
   getAuditLogs: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("audit_log")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(100);
-      if (data) return data;
+      const docs = await listDocuments(COLLECTIONS.AUDIT_LOGS, [Query.orderDesc("$createdAt"), Query.limit(100)]);
+      if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>("tl_audit_logs", []);
   },
 
-  // --- SUBJECT CATEGORIES (Section 13.10) ---
+  // --- SUBJECT CATEGORIES ---
   getSubjectCategories: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("subject_categories")
-        .select("*")
-        .eq("is_active", true)
-        .order("display_order");
-      if (data) return data;
+      const docs = await listDocuments(COLLECTIONS.SUBJECT_CATEGORIES, [Query.equal("active", true), Query.orderAsc("displayOrder")]);
+      if (docs.length > 0) return docs;
     } catch {}
     return [];
   },
 
-  // --- PAGES (Section 13.14) ---
+  // --- PAGES ---
   getPages: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("pages")
-        .select("*")
-        .eq("is_deleted", false)
-        .order("updated_at", { ascending: false });
-      if (data) return data;
+      const docs = await listDocuments(COLLECTIONS.PAGES, [Query.equal("isDeleted", false), Query.orderDesc("updatedAt")]);
+      if (docs.length > 0) return docs.map(mapPageDoc);
     } catch {}
     return getLocal<any[]>("tl_pages", []);
   },
 
   getPage: async (slug: string): Promise<any | null> => {
     try {
-      const { data } = await supabase
-        .from("pages")
-        .select("*")
-        .eq("slug", slug)
-        .eq("status", "published")
-        .eq("is_deleted", false)
-        .maybeSingle();
-      if (data) return data;
+      const docs = await listDocuments(COLLECTIONS.PAGES, [Query.equal("slug", slug), Query.equal("status", "published"), Query.equal("isDeleted", false), Query.limit(1)]);
+      if (docs[0]) return mapPageDoc(docs[0]);
     } catch {}
     return null;
   },
 
   savePage: async (page: { id?: string; title: string; slug: string; content?: string; seo_title?: string; seo_description?: string; status?: string }) => {
-    try {
-      if (page.id) {
-        await supabase.from("pages").update({
-          title: page.title,
-          slug: page.slug,
-          content: page.content,
-          seo_title: page.seo_title,
-          seo_description: page.seo_description,
-          status: page.status || "draft",
-          published_at: page.status === "published" ? new Date().toISOString() : undefined,
-        }).eq("id", page.id);
-      } else {
-        await supabase.from("pages").insert({
-          title: page.title,
-          slug: page.slug,
-          content: page.content,
-          seo_title: page.seo_title,
-          seo_description: page.seo_description,
-          status: page.status || "draft",
-        });
-      }
-    } catch {}
+    const docId = page.id || page.slug;
+    const payload = {
+      title: page.title,
+      slug: page.slug,
+      content: page.content || "",
+      seoTitle: page.seo_title || "",
+      seoDescription: page.seo_description || "",
+      status: page.status || "draft",
+      publishedAt: page.status === "published" ? new Date().toISOString() : null,
+      updatedAt: new Date().toISOString(),
+      isDeleted: false,
+    };
+    if (page.id) await upsertDocument(COLLECTIONS.PAGES, docId, payload);
+    else await createDocument(COLLECTIONS.PAGES, payload, docId);
   },
 
-  // --- HOMEPAGE CONTENT (Section 13.15) ---
+  // --- HOMEPAGE CONTENT ---
   getHomepageContent: async (): Promise<any | null> => {
     try {
-      const { data } = await supabase
-        .from("homepage_content")
-        .select("*")
-        .eq("is_published", true)
-        .order("updated_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (data) return data;
+      const doc = await getDocument(COLLECTIONS.HOMEPAGE, "homepage");
+      if (doc) return doc;
     } catch {}
     return null;
   },
 
   saveHomepageContent: async (content: { hero_headline?: string; hero_subheadline?: string; cta_primary?: string; cta_secondary?: string; stats?: any }) => {
-    try {
-      const { data: existing } = await supabase
-        .from("homepage_content")
-        .select("id")
-        .order("updated_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (existing) {
-        await supabase.from("homepage_content").update({
-          hero_headline: content.hero_headline,
-          hero_subheadline: content.hero_subheadline,
-          cta_primary: content.cta_primary,
-          cta_secondary: content.cta_secondary,
-          stats: content.stats,
-        }).eq("id", existing.id);
-      } else {
-        await supabase.from("homepage_content").insert({
-          hero_headline: content.hero_headline,
-          hero_subheadline: content.hero_subheadline,
-          cta_primary: content.cta_primary,
-          cta_secondary: content.cta_secondary,
-          stats: content.stats,
-          is_published: true,
-        });
-      }
-    } catch {}
+    await upsertDocument(COLLECTIONS.HOMEPAGE, "homepage", {
+      heroHeadline: content.hero_headline,
+      heroSubheadline: content.hero_subheadline,
+      ctaPrimary: content.cta_primary,
+      ctaSecondary: content.cta_secondary,
+      stats: JSON.stringify(content.stats || {}),
+      isPublished: true,
+      updatedAt: new Date().toISOString(),
+    });
   },
 
-  // --- PLATFORM SETTINGS (Section 13.17) ---
+  // --- PLATFORM SETTINGS ---
   getPlatformSetting: async (key: string): Promise<any | null> => {
     try {
-      const { data } = await supabase
-        .from("platform_settings")
-        .select("value")
-        .eq("key", key)
-        .maybeSingle();
-      if (data) return data.value;
+      const doc = await getDocument(COLLECTIONS.PLATFORM_SETTINGS, key);
+      if (doc) return asObject(doc.value, doc.value);
     } catch {}
     return null;
   },
 
   savePlatformSetting: async (key: string, value: any): Promise<void> => {
-    try {
-      await supabase.from("platform_settings").upsert({
-        key,
-        value,
-        updated_by: (await supabase.auth.getUser()).data.user?.id || null,
-      }, { onConflict: "key" });
-    } catch {}
+    await upsertDocument(COLLECTIONS.PLATFORM_SETTINGS, key, {
+      key,
+      value: JSON.stringify(value),
+      updatedBy: (await getCurrentUser())?.$id || null,
+      updatedAt: new Date().toISOString(),
+    });
   },
 
-  // --- NOTIFICATION PREFERENCES (Section 17.11) ---
+  // --- NOTIFICATION PREFERENCES ---
   getNotificationPreferences: async (userId: string): Promise<any | null> => {
     try {
-      const { data } = await supabase
-        .from("notification_preferences")
-        .select("*")
-        .eq("user_id", userId)
-        .maybeSingle();
-      if (data) return data;
-    } catch {}
-    return null;
+      return await getDocument(COLLECTIONS.NOTIFICATION_PREFERENCES, userId);
+    } catch {
+      return null;
+    }
   },
 
-  saveNotificationPreferences: async (prefs: {
-    user_id: string;
-    email_notifications?: boolean;
-    push_notifications?: boolean;
-    lesson_reminders?: boolean;
-    announcements?: boolean;
-    marketing?: boolean;
-  }): Promise<void> => {
-    try {
-      await supabase.from("notification_preferences").upsert({
-        user_id: prefs.user_id,
-        email_notifications: prefs.email_notifications ?? true,
-        push_notifications: prefs.push_notifications ?? true,
-        lesson_reminders: prefs.lesson_reminders ?? true,
-        announcements: prefs.announcements ?? true,
-        marketing: prefs.marketing ?? false,
-      }, { onConflict: "user_id" });
-    } catch {}
+  saveNotificationPreferences: async (prefs: { user_id: string; email_notifications?: boolean; push_notifications?: boolean; lesson_reminders?: boolean; announcements?: boolean; marketing?: boolean }): Promise<void> => {
+    await upsertDocument(COLLECTIONS.NOTIFICATION_PREFERENCES, prefs.user_id, {
+      userId: prefs.user_id,
+      emailNotifications: prefs.email_notifications ?? true,
+      pushNotifications: prefs.push_notifications ?? true,
+      lessonReminders: prefs.lesson_reminders ?? true,
+      announcements: prefs.announcements ?? true,
+      marketing: prefs.marketing ?? false,
+      updatedAt: new Date().toISOString(),
+    });
   },
 
-  // --- NOTIFICATIONS (Section 17) ---
+  // --- NOTIFICATIONS ---
   getNotifications: async (userId: string): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("notifications")
-        .select("*")
-        .eq("user_id", userId)
-        .eq("is_deleted", false)
-        .order("created_at", { ascending: false })
-        .limit(50);
-      if (data) return data;
+      const docs = await listDocuments(COLLECTIONS.NOTIFICATIONS, [Query.equal("userId", userId), Query.equal("isDeleted", false), Query.orderDesc("createdAt"), Query.limit(50)]);
+      if (docs.length > 0) return docs.map(mapNotificationDoc);
     } catch {}
     return getLocal<any[]>(KEYS.NOTIFICATIONS, []);
   },
 
   getUnreadNotificationCount: async (userId: string): Promise<number> => {
     try {
-      const { count } = await supabase
-        .from("notifications")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", userId)
-        .eq("is_read", false)
-        .eq("is_deleted", false);
-      if (count !== null) return count;
-    } catch {}
-    return 0;
+      const docs = await listDocuments(COLLECTIONS.NOTIFICATIONS, [Query.equal("userId", userId), Query.equal("isRead", false), Query.equal("isDeleted", false)]);
+      return docs.length;
+    } catch {
+      return 0;
+    }
   },
 
-  createNotification: async (notif: {
-    user_id: string;
-    type?: string;
-    title: string;
-    body?: string;
-    link?: string;
-  }): Promise<void> => {
-    try {
-      await supabase.from("notifications").insert({
-        user_id: notif.user_id,
-        type: notif.type || "info",
-        title: notif.title,
-        body: notif.body,
-        link: notif.link,
-        is_read: false,
-      });
-    } catch {}
+  createNotification: async (notif: { user_id: string; type?: string; title: string; body?: string; link?: string }): Promise<void> => {
+    await createDocument(COLLECTIONS.NOTIFICATIONS, {
+      userId: notif.user_id,
+      type: notif.type || "info",
+      title: notif.title,
+      body: notif.body || "",
+      link: notif.link || "",
+      isRead: false,
+      isDeleted: false,
+      createdAt: new Date().toISOString(),
+    });
   },
 
   markNotificationRead: async (id: string): Promise<void> => {
-    try {
-      await supabase.from("notifications").update({ is_read: true }).eq("id", id);
-    } catch {}
+    await upsertDocument(COLLECTIONS.NOTIFICATIONS, id, { isRead: true });
   },
 
   markAllNotificationsRead: async (userId: string): Promise<void> => {
     try {
-      await supabase.from("notifications").update({ is_read: true }).eq("user_id", userId).eq("is_read", false);
+      const docs = await listDocuments(COLLECTIONS.NOTIFICATIONS, [Query.equal("userId", userId), Query.equal("isRead", false)]);
+      for (const doc of docs) {
+        await upsertDocument(COLLECTIONS.NOTIFICATIONS, doc.$id || doc.id, { isRead: true });
+      }
     } catch {}
   },
 
-  // --- LESSONS (Section 15 - enhanced) ---
+  // --- LESSONS ---
   getLessonsForUser: async (userId: string, isTutor = false): Promise<any[]> => {
     try {
-      const query = supabase
-        .from("lessons")
-        .select("*")
-        .eq("is_deleted", false)
-        .order("starts_at", { ascending: true });
-
-      if (isTutor) {
-        query.eq("tutor_id", userId);
-      } else {
-        query.eq("student_id", userId);
-      }
-
-      const { data } = await query;
-      if (data) return data;
+      const queries = [Query.equal("isDeleted", false), Query.orderAsc("startsAt"), Query.limit(200)];
+      queries.push(Query.equal(isTutor ? "tutorId" : "studentId", userId));
+      const docs = await listDocuments(COLLECTIONS.LESSONS, queries);
+      if (docs.length > 0) return docs.map(mapLessonDoc);
     } catch {}
     return getLocal<any[]>(KEYS.LESSONS, []);
   },
 
   getAllLessons: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("lessons")
-        .select("*, student:profiles!lessons_student_id_fkey(display_name), tutor:profiles!lessons_tutor_id_fkey(display_name)")
-        .eq("is_deleted", false)
-        .order("starts_at", { ascending: false })
-        .limit(100);
-      if (data) return data;
+      const [docs, students, tutors] = await Promise.all([
+        listDocuments(COLLECTIONS.LESSONS, [Query.equal("isDeleted", false), Query.orderDesc("startsAt"), Query.limit(100)]),
+        DataStore.getAllStudents(),
+        DataStore.getAllTutors(),
+      ]);
+      if (docs.length > 0) {
+        return docs.map((doc) => {
+          const lesson = mapLessonDoc(doc);
+          const student = students.find((s) => s.id === lesson.student_id);
+          const tutor = tutors.find((t) => t.id === lesson.tutor_id);
+          return {
+            ...lesson,
+            student: student ? { display_name: student.name || student.display_name } : lesson.student,
+            tutor: tutor ? { display_name: tutor.name || tutor.display_name } : lesson.tutor,
+          };
+        });
+      }
     } catch {}
     return [];
   },
 
-  createLesson: async (lesson: {
-    tutor_id: string;
-    student_id: string;
-    starts_at: string;
-    ends_at: string;
-    subject?: string;
-    academic_level?: string;
-    notes?: string;
-    created_by?: string;
-  }): Promise<any | null> => {
-    try {
-      const { data } = await supabase.from("lessons").insert({
-        tutor_id: lesson.tutor_id,
-        student_id: lesson.student_id,
-        starts_at: lesson.starts_at,
-        ends_at: lesson.ends_at,
-        subject: lesson.subject,
-        academic_level: lesson.academic_level,
-        notes: lesson.notes,
-        created_by: lesson.created_by,
-        status: "scheduled",
-      }).select("*").single();
-      if (data) {
-        await DataStore.createNotification({
-          user_id: lesson.student_id,
-          type: "info",
-          title: "Lesson Scheduled",
-          body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}`,
-        });
-        await DataStore.createNotification({
-          user_id: lesson.tutor_id,
-          type: "info",
-          title: "Lesson Scheduled",
-          body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}`,
-        });
-        return data;
-      }
-    } catch {}
+  createLesson: async (lesson: { tutor_id: string; student_id: string; starts_at: string; ends_at: string; subject?: string; academic_level?: string; notes?: string; created_by?: string }): Promise<any | null> => {
+    const data = {
+      tutorId: lesson.tutor_id,
+      studentId: lesson.student_id,
+      startsAt: lesson.starts_at,
+      endsAt: lesson.ends_at,
+      subject: lesson.subject || "",
+      academicLevel: lesson.academic_level || "",
+      notes: lesson.notes || "",
+      createdBy: lesson.created_by || null,
+      status: "scheduled",
+      isDeleted: false,
+    };
+    const doc = await createDocument(COLLECTIONS.LESSONS, data);
+    if (doc) {
+      await DataStore.createNotification({ user_id: lesson.student_id, type: "info", title: "Lesson Scheduled", body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}` });
+      await DataStore.createNotification({ user_id: lesson.tutor_id, type: "info", title: "Lesson Scheduled", body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}` });
+      return mapLessonDoc(doc);
+    }
     return null;
   },
 
   updateLessonStatus: async (id: string, status: string): Promise<void> => {
-    try {
-      await supabase.from("lessons").update({ status }).eq("id", id);
-    } catch {}
+    await upsertDocument(COLLECTIONS.LESSONS, id, { status });
   },
 
   cancelLesson: async (id: string): Promise<void> => {
-    try {
-      await supabase.from("lessons").update({ status: "cancelled" }).eq("id", id);
-    } catch {}
+    await upsertDocument(COLLECTIONS.LESSONS, id, { status: "cancelled" });
   },
 
-  // --- REVIEWS (Section 16 - enhanced) ---
+  // --- REVIEWS ---
   getReviewsForTutor: async (tutorId: string): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("reviews")
-        .select("*, student:profiles!reviews_student_id_fkey(display_name, avatar_url)")
-        .eq("tutor_id", tutorId)
-        .eq("is_deleted", false)
-        .order("created_at", { ascending: false });
-      if (data) return data;
+      const docs = await listDocuments(COLLECTIONS.REVIEWS, [Query.equal("tutor", tutorId), Query.equal("isDeleted", false), Query.orderDesc("createdAt")]);
+      if (docs.length > 0) return docs.map((doc) => ({ ...mapReviewDoc(doc), student: doc.student }));
     } catch {}
     return getLocal<Review[]>(KEYS.REVIEWS, []);
   },
 
   getAllReviews: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("reviews")
-        .select("*, student:profiles!reviews_student_id_fkey(display_name), tutor:profiles!reviews_tutor_id_fkey(display_name)")
-        .eq("is_deleted", false)
-        .order("created_at", { ascending: false });
-      if (data) return data;
+      const docs = await listDocuments(COLLECTIONS.REVIEWS, [Query.equal("isDeleted", false), Query.orderDesc("createdAt"), Query.limit(100)]);
+      if (docs.length > 0) return docs.map(mapReviewDoc);
     } catch {}
     return getLocal<Review[]>(KEYS.REVIEWS, []);
   },
 
   moderateReview: async (id: string, status: "pending" | "approved" | "rejected"): Promise<void> => {
-    try {
-      await supabase.from("reviews").update({ status }).eq("id", id);
-    } catch {}
     const list = getLocal<Review[]>(KEYS.REVIEWS, []);
     const idx = list.findIndex((r) => r.id === id);
     if (idx !== -1) {
       list[idx].status = status;
       setLocal(KEYS.REVIEWS, list);
     }
+    await upsertDocument(COLLECTIONS.REVIEWS, id, { status });
   },
 
   addTutorResponse: async (reviewId: string, response: string): Promise<void> => {
-    try {
-      await supabase.from("reviews").update({ tutor_response: response }).eq("id", reviewId);
-    } catch {}
+    await upsertDocument(COLLECTIONS.REVIEWS, reviewId, { response, responseAt: new Date().toISOString() });
   },
 
-  // --- DISCORD LINKS (Section 18) ---
+  // --- DISCORD LINKS ---
   getDiscordLink: async (userId: string): Promise<any | null> => {
     try {
-      const { data } = await supabase
-        .from("discord_links")
-        .select("*")
-        .eq("user_id", userId)
-        .maybeSingle();
-      if (data) return data;
-    } catch {}
-    return null;
+      return await getDocument(COLLECTIONS.DISCORD_LINKS, userId);
+    } catch {
+      return null;
+    }
   },
 
   linkDiscordAccount: async (userId: string, discordId: string, discordUsername: string): Promise<void> => {
-    try {
-      await supabase.from("discord_links").upsert({
-        user_id: userId,
-        discord_id: discordId,
-        discord_username: discordUsername,
-      }, { onConflict: "user_id" });
-    } catch {}
+    await upsertDocument(COLLECTIONS.DISCORD_LINKS, userId, {
+      userId,
+      discordId,
+      discordUsername,
+      linkedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
   },
 
   unlinkDiscordAccount: async (userId: string): Promise<void> => {
-    try {
-      await supabase.from("discord_links").delete().eq("user_id", userId);
-    } catch {}
+    await deleteDocument(COLLECTIONS.DISCORD_LINKS, userId);
   },
 
-  // --- STUDENT ASSIGNMENTS (enhanced) ---
+  // --- STUDENT ASSIGNMENTS ---
   getStudentAssignmentsFromDB: async (studentId: string): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("student_tutor_assignments")
-        .select("*, tutor:profiles!student_tutor_assignments_tutor_id_fkey(display_name, avatar_url)")
-        .eq("student_id", studentId)
-        .eq("is_active", true);
-      if (data) return data;
+      const tutors = await DataStore.getTutors();
+      const docs = await listDocuments(COLLECTIONS.ASSIGNMENTS, [Query.equal("studentId", studentId), Query.equal("isActive", true)]);
+      if (docs.length > 0) {
+        return docs.map((a) => {
+          const tutor = tutors.find((t) => t.id === (a.tutorId || a.tutor_id));
+          return {
+            ...a,
+            tutor: tutor || {
+              name: "Unassigned Tutor",
+              headline: "Professional Tutor",
+              avatar_url: avatarFor("Unassigned Tutor"),
+              hourly_rate: 40,
+              rating_avg: 5.0,
+              rating_count: 0,
+            },
+          };
+        });
+      }
     } catch {}
     return DataStore.getStudentAssignments(studentId);
   },
 
   getAllStudents: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("user_roles")
-        .select("user_id, profiles!user_roles_user_id_fkey(display_name, email, avatar_url)")
-        .eq("role", "student");
-      if (data) return data.map((r: any) => ({ id: r.user_id, name: r.profiles?.display_name, email: r.profiles?.email, avatar_url: r.profiles?.avatar_url }));
+      const docs = await listDocuments(COLLECTIONS.USERS, [Query.equal("role", "student"), Query.equal("active", true)]);
+      if (docs.length > 0) {
+        return docs.map((doc) => ({ id: doc.$id || doc.id, name: doc.displayName, email: doc.email, avatar_url: avatarFor(doc.displayName || doc.email || "Student") }));
+      }
     } catch {}
     return [];
   },
 
   getAllTutors: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("tutor_profiles")
-        .select("*, profiles!tutor_profiles_id_fkey(display_name, email, avatar_url)")
-        .eq("is_deleted", false);
-      if (data) return data.map((t: any) => ({
-        id: t.id,
-        name: t.profiles?.display_name || "Certified Tutor",
-        email: t.profiles?.email,
-        avatar_url: t.profiles?.avatar_url,
-        headline: t.headline,
-        about: t.about,
-        hourly_rate: t.hourly_rate,
-        rating_avg: t.rating_avg,
-        rating_count: t.rating_count,
-        years_experience: t.years_experience,
-        languages: t.languages || [],
-        is_featured: t.is_featured,
-        is_verified: t.is_verified,
-        is_active: t.is_active,
-        slug: t.slug,
-      }));
+      const docs = await listDocuments(COLLECTIONS.TUTOR_PROFILES, [Query.equal("active", true)]);
+      if (docs.length > 0) {
+        return docs.map((t: any) => ({
+          id: t.$id || t.id,
+          name: t.displayName || "Certified Tutor",
+          email: t.contactEmail || null,
+          avatar_url: t.avatarUrl || avatarFor(t.displayName || "Tutor"),
+          headline: t.headline,
+          about: t.fullBio || t.shortBio || "",
+          hourly_rate: t.hourlyRate,
+          rating_avg: t.rating,
+          rating_count: t.reviewCount,
+          years_experience: t.experienceYears,
+          languages: t.languages || [],
+          is_featured: t.featured,
+          is_verified: t.verified,
+          is_active: t.active,
+          slug: t.slug,
+        }));
+      }
     } catch {}
     return getLocal<Tutor[]>(KEYS.TUTORS, defaultTutors);
   },
 
   getTutorApplicationsFromDB: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("tutor_applications")
-        .select("*")
-        .eq("is_deleted", false)
-        .order("created_at", { ascending: false });
-      if (data) return data;
+      const docs = await listDocuments(COLLECTIONS.TUTOR_APPLICATIONS, [Query.orderDesc("$createdAt"), Query.limit(200)]);
+      if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>(KEYS.APPLICATIONS, []);
   },
 
   getRecruitmentApplicationsFromDB: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("recruitment_applications")
-        .select("*")
-        .eq("is_deleted", false)
-        .order("created_at", { ascending: false });
-      if (data) return data;
+      const docs = await listDocuments(COLLECTIONS.RECRUITMENT_APPLICATIONS, [Query.orderDesc("$createdAt"), Query.limit(200)]);
+      if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>(KEYS.RECRUITMENT, []);
   },
 
-  // --- AVAILABILITY (Section 15.9) ---
+  // --- AVAILABILITY ---
   getTutorAvailability: async (tutorId: string): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("schedules")
-        .select("*")
-        .eq("tutor_id", tutorId)
-        .eq("is_active", true)
-        .order("day_of_week");
-      if (data) return data;
-    } catch {}
-    return [];
+      return await listDocuments(COLLECTIONS.SCHEDULES, [Query.equal("tutorId", tutorId), Query.equal("isActive", true), Query.orderAsc("dayOfWeek")]);
+    } catch {
+      return [];
+    }
   },
 
   saveTutorAvailability: async (tutorId: string, schedules: { day_of_week: number; start_time: string; end_time: string; timezone: string }[]): Promise<void> => {
     try {
-      await supabase.from("schedules").delete().eq("tutor_id", tutorId);
+      const existing = await listDocuments(COLLECTIONS.SCHEDULES, [Query.equal("tutorId", tutorId)]);
+      for (const doc of existing) {
+        await deleteDocument(COLLECTIONS.SCHEDULES, doc.$id || doc.id);
+      }
       if (schedules.length > 0) {
-        await supabase.from("schedules").insert(schedules.map(s => ({ ...s, tutor_id: tutorId, is_active: true })));
+        for (const schedule of schedules) {
+          await createDocument(COLLECTIONS.SCHEDULES, {
+            tutorId,
+            dayOfWeek: schedule.day_of_week,
+            startTime: schedule.start_time,
+            endTime: schedule.end_time,
+            timezone: schedule.timezone,
+            isActive: true,
+          });
+        }
       }
     } catch {}
   },
 
-  // --- ADVERTISEMENTS (enhanced) ---
+  // --- ADVERTISEMENTS ---
   getAdvertisements: async (): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("advertisements")
-        .select("*, tutor:profiles!advertisements_tutor_id_fkey(display_name)")
-        .eq("is_deleted", false)
-        .order("created_at", { ascending: false });
-      if (data) return data;
-    } catch {}
-    return [];
+      return await listDocuments(COLLECTIONS.TUTOR_ADS, [Query.equal("isDeleted", false), Query.orderDesc("$createdAt")]);
+    } catch {
+      return [];
+    }
   },
 
   getTutorAdvertisements: async (tutorId: string): Promise<any[]> => {
     try {
-      const { data } = await supabase
-        .from("advertisements")
-        .select("*")
-        .eq("tutor_id", tutorId)
-        .eq("is_deleted", false);
-      if (data) return data;
-    } catch {}
-    return [];
+      return await listDocuments(COLLECTIONS.TUTOR_ADS, [Query.equal("tutorId", tutorId), Query.equal("isDeleted", false), Query.orderDesc("$createdAt")]);
+    } catch {
+      return [];
+    }
   },
 
-  saveAdvertisement: async (ad: {
-    tutor_id: string;
-    title: string;
-    description?: string;
-    price?: number;
-    monthly_price?: number;
-    teaching_format?: string;
-    is_active?: boolean;
-    is_featured?: boolean;
-    advertisement_status?: string;
-  }): Promise<void> => {
-    try {
-      await supabase.from("advertisements").upsert({
-        tutor_id: ad.tutor_id,
-        title: ad.title,
-        description: ad.description,
-        price: ad.price,
-        monthly_price: ad.monthly_price,
-        teaching_format: ad.teaching_format || "online",
-        is_active: ad.is_active ?? true,
-        is_featured: ad.is_featured ?? false,
-        advertisement_status: ad.advertisement_status || "pending",
-      });
-    } catch {}
+  saveAdvertisement: async (ad: { tutor_id: string; title: string; description?: string; price?: number; monthly_price?: number; teaching_format?: string; is_active?: boolean; is_featured?: boolean; advertisement_status?: string }): Promise<void> => {
+    const data = {
+      title: ad.title,
+      body: ad.description || "",
+      description: ad.description || "",
+      status: ad.advertisement_status || "pending",
+      Source: "app",
+      messageId: null,
+      createdBy: ad.tutor_id,
+      subject: "General",
+      level: "General",
+      createdAt: new Date().toISOString(),
+      tutor: ad.tutor_id,
+      tutorId: ad.tutor_id,
+      teaching_format: ad.teaching_format || "online",
+      monthly_price: ad.monthly_price ?? ad.price ?? null,
+      price: ad.price ?? null,
+      isFeatured: ad.is_featured ?? false,
+      isActive: ad.is_active ?? true,
+      isDeleted: false,
+    };
+    await upsertDocument(COLLECTIONS.TUTOR_ADS, ad.tutor_id, data);
   },
 };
+
+export type { Tutor as TutorData };

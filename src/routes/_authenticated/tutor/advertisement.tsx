@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { DataStore } from "@/lib/data-store";
-import { supabase } from "@/integrations/supabase/client";
+import { appwrite } from "@/integrations/appwrite/client";
 
 export const Route = createFileRoute("/_authenticated/tutor/advertisement")({
   component: TutorAdvertisement,
@@ -34,7 +34,7 @@ function TutorAdvertisement() {
 
   useEffect(() => {
     (async () => {
-      const { data: userData } = await supabase.auth.getUser();
+      const { data: userData } = await appwrite.auth.getUser();
       const uid = userData.user?.id || null;
       setTutorId(uid);
       if (uid) {

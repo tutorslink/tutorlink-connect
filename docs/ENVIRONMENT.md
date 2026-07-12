@@ -9,7 +9,7 @@ Implements SRS §23.4.
 | Public config    | `VITE_*` in `.env` / Lovable Cloud      | Yes (build-time inline) |
 | Server secrets   | Lovable Cloud → Backend → Secrets       | No (server only)        |
 | Feature flags    | `src/lib/config.ts` (+ optional env)    | Depends on prefix       |
-| DB / auth config | Managed by Lovable Cloud                | No                      |
+| DB / auth config | Appwrite Cloud / Lovable Cloud secrets   | No                      |
 
 ## Rules
 
@@ -24,10 +24,10 @@ Implements SRS §23.4.
 
 See `.env.example` for the canonical list. Present today:
 
-- `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
-  `SUPABASE_DB_URL`, `LOVABLE_API_KEY` (server)
-- `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`,
-  `VITE_SUPABASE_PROJECT_ID` (client)
+- `APPWRITE_ENDPOINT`, `APPWRITE_PROJECT_ID`, `APPWRITE_DATABASE_ID`,
+  `APPWRITE_API_KEY`, `LOVABLE_API_KEY` (server)
+- `VITE_APPWRITE_ENDPOINT`, `VITE_APPWRITE_PROJECT_ID`,
+  `VITE_APPWRITE_DATABASE_ID` (client)
 
 ## Adding a New Integration
 

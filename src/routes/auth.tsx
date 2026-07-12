@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+import { appwrite, getCurrentUser } from "@/integrations/appwrite/client";
+import { DataStore } from "@/lib/data-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,10 +28,10 @@ function AuthPage() {
   const [displayName, setDisplayName] = useState("");
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    appwrite.auth.getSession().then(({ data }) => {
       if (data.session) navigate({ to: "/dashboard" });
     });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+    const { data: sub } = appwrite.auth.onAuthStateChange((_e, session) => {
       if (session) navigate({ to: "/dashboard" });
     });
     return () => sub.subscription.unsubscribe();
@@ -40,7 +40,7 @@ function AuthPage() {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await appwrite.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) toast.error(error.message);
     else toast.success("Welcome back");
@@ -49,7 +49,7 @@ function AuthPage() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { error } = await appwrite.auth.signUp({
       email,
       password,
       options: {
@@ -59,12 +59,23 @@ function AuthPage() {
     });
     setLoading(false);
     if (error) toast.error(error.message);
-    else toast.success("Account created");
+    else {
+      const user = await getCurrentUser();
+      if (user) {
+        await DataStore.saveUserRecord({
+          id: user.$id,
+          email: user.email,
+          displayName: user.name || displayName || email.split("@")[0],
+          role: "student",
+        });
+      }
+      toast.success("Account created");
+    }
   };
 
   const handleGoogle = async () => {
     setLoading(true);
-    const res = await lovable.auth.signInWithOAuth("google", {
+    const res = await appwrite.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
     if (res.error) {

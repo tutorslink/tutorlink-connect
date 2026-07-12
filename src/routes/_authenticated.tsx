@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { appwrite } from "@/integrations/appwrite/client";
+import { DataStore } from "@/lib/data-store";
 import { PortalLayout, type NavItem } from "@/components/portal-layout";
 import {
   LayoutDashboard,
@@ -30,7 +31,7 @@ type Role = "student" | "tutor" | "recruitment" | "website_manager" | "owner";
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async () => {
-    const { data } = await supabase.auth.getSession();
+    const { data } = await appwrite.auth.getSession();
     if (!data.session) {
       throw redirect({ to: "/auth" });
     }
@@ -98,23 +99,19 @@ function AuthLayout() {
 
   useEffect(() => {
     (async () => {
-      const { data: userData } = await supabase.auth.getUser();
+      const { data: userData } = await appwrite.auth.getUser();
       const uid = userData.user?.id;
       setEmail(userData.user?.email ?? null);
       if (!uid) {
         setLoading(false);
         return;
       }
-      const { data: roleData } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", uid);
-      const userRoles = (roleData ?? []).map((r) => r.role as Role);
+      const userRoles = (await DataStore.getUserRoles(uid)) as Role[];
       setRoles(userRoles);
       setLoading(false);
     })();
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+    const { data: sub } = appwrite.auth.onAuthStateChange((_e, session) => {
       if (!session) navigate({ to: "/auth", replace: true });
       else setEmail(session.user.email ?? null);
     });
@@ -122,7 +119,7 @@ function AuthLayout() {
   }, [navigate]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    await appwrite.auth.signOut();
     navigate({ to: "/auth", replace: true });
   };
 

@@ -1,25 +1,24 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Menu, X, GraduationCap, LayoutDashboard, LogOut, User as UserIcon } from "lucide-react";
+import { Menu, X, GraduationCap, LayoutDashboard, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import { Session } from "@supabase/supabase-js";
+import { appwrite } from "@/integrations/appwrite/client";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<any | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSession(data.session));
-    const { data: authSub } = supabase.auth.onAuthStateChange((_e, sesh) => {
+    appwrite.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: authSub } = appwrite.auth.onAuthStateChange((_e, sesh) => {
       setSession(sesh);
     });
     return () => authSub.subscription.unsubscribe();
   }, []);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    await appwrite.auth.signOut();
     navigate({ to: "/", replace: true });
   };
 

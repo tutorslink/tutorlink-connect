@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { DataStore } from "@/lib/data-store";
-import { supabase } from "@/integrations/supabase/client";
+import { appwrite } from "@/integrations/appwrite/client";
 
 export const Route = createFileRoute("/_authenticated/tutor/availability")({
   component: TutorAvailability,
@@ -36,7 +36,7 @@ function TutorAvailability() {
 
   useEffect(() => {
     (async () => {
-      const { data: userData } = await supabase.auth.getUser();
+      const { data: userData } = await appwrite.auth.getUser();
       const uid = userData.user?.id;
       setTutorId(uid || null);
       if (uid) {

@@ -5,7 +5,7 @@ import { PageHeader, StatusBadge, EmptyState } from "@/components/portal-shared"
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DataStore } from "@/lib/data-store";
-import { supabase } from "@/integrations/supabase/client";
+import { appwrite } from "@/integrations/appwrite/client";
 
 export const Route = createFileRoute("/_authenticated/tutor/schedule")({
   component: TutorSchedule,
@@ -22,7 +22,7 @@ function TutorSchedule() {
 
   useEffect(() => {
     (async () => {
-      const { data: userData } = await supabase.auth.getUser();
+      const { data: userData } = await appwrite.auth.getUser();
       const uid = userData.user?.id;
       setTutorId(uid || null);
       if (uid) {
