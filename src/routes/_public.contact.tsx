@@ -20,12 +20,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { AIChatbot } from "@/components/AIChatbot";
 import { DataStore, Tutor, CMSContent } from "@/lib/data-store";
 
-export const Route = createFileRoute("/contact")({
+export const Route = createFileRoute("/_public/contact")({
   head: () => ({
     meta: [
       { title: "Contact Us · Tutors Link" },
@@ -45,11 +42,10 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const searchParams = useSearch({ from: "/contact" });
+  const searchParams = useSearch({ from: "/_public/contact" });
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [cms, setCms] = useState<CMSContent | null>(null);
 
-  // Form states
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -126,9 +122,7 @@ function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
-
+    <>
       {/* Header Intro */}
       <section className="bg-slate-50 dark:bg-slate-900/10 py-12 border-b border-border/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left">
@@ -378,9 +372,6 @@ function ContactPage() {
           )}
         </main>
       </div>
-
-      <Footer />
-      <AIChatbot />
-    </div>
+    </>
   );
 }

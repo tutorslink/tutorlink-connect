@@ -14,12 +14,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { AIChatbot } from "@/components/AIChatbot";
 import { DataStore, Tutor, Testimonial, CMSContent } from "@/lib/data-store";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_public/")({
   head: () => ({
     meta: [
       { title: "Tutors Link · Premium Private Academic Tutoring" },
@@ -112,16 +109,14 @@ function Index() {
 
   if (!cms) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="flex items-center justify-center py-20">
         <div className="h-8 w-8 rounded-full border-4 border-blue-600 border-t-transparent animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background selection:bg-blue-100 selection:text-blue-950">
-      <Navbar />
-
+    <>
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 lg:py-28 bg-gradient-to-b from-blue-50/50 via-background to-background dark:from-slate-950/10 dark:via-background">
         <div className="absolute top-0 right-0 -z-10 translate-x-1/3 -translate-y-1/3 w-[600px] h-[600px] bg-blue-400/10 rounded-full blur-3xl" />
@@ -499,9 +494,6 @@ function Index() {
           </Button>
         </div>
       </section>
-
-      <Footer />
-      <AIChatbot />
-    </div>
+    </>
   );
 }

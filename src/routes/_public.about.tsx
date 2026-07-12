@@ -1,11 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ShieldCheck, HeartHandshake, Award, Sparkles, GraduationCap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { AIChatbot } from "@/components/AIChatbot";
 
-export const Route = createFileRoute("/about")({
+export const Route = createFileRoute("/_public/about")({
   head: () => ({
     meta: [
       { title: "About Us · Premium Tutoring Pillars · Tutors Link" },
@@ -39,9 +36,7 @@ function AboutPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
-
+    <>
       {/* Hero Header */}
       <section className="bg-slate-50 dark:bg-slate-900/10 py-16 md:py-24 border-b border-border/40">
         <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
@@ -113,9 +108,6 @@ function AboutPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-      <AIChatbot />
-    </div>
+    </>
   );
 }

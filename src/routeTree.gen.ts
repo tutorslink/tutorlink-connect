@@ -9,22 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WorkWithUsRouteImport } from './routes/work-with-us'
-import { Route as FindATutorRouteImport } from './routes/find-a-tutor'
-import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as ApplyRouteImport } from './routes/apply'
-import { Route as AboutRouteImport } from './routes/about'
+import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as TutorsTutorIdRouteImport } from './routes/tutors.$tutorId'
+import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as ApiChatbotRouteImport } from './routes/api/chatbot'
+import { Route as PublicWorkWithUsRouteImport } from './routes/_public.work-with-us'
+import { Route as PublicFindATutorRouteImport } from './routes/_public.find-a-tutor'
+import { Route as PublicContactRouteImport } from './routes/_public.contact'
+import { Route as PublicApplyRouteImport } from './routes/_public.apply'
+import { Route as PublicAboutRouteImport } from './routes/_public.about'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedCmsRouteImport } from './routes/_authenticated.cms'
 import { Route as AuthenticatedTutorIndexRouteImport } from './routes/_authenticated/tutor/index'
 import { Route as AuthenticatedRecruitmentIndexRouteImport } from './routes/_authenticated/recruitment/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
+import { Route as PublicTutorsTutorIdRouteImport } from './routes/_public.tutors.$tutorId'
 import { Route as AuthenticatedTutorStudentsRouteImport } from './routes/_authenticated/tutor/students'
 import { Route as AuthenticatedTutorSettingsRouteImport } from './routes/_authenticated/tutor/settings'
 import { Route as AuthenticatedTutorScheduleRouteImport } from './routes/_authenticated/tutor/schedule'
@@ -55,54 +56,53 @@ import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminAiAssistantRouteImport } from './routes/_authenticated/admin/ai-assistant'
 import { Route as AuthenticatedAdminAdvertisementsRouteImport } from './routes/_authenticated/admin/advertisements'
 
-const WorkWithUsRoute = WorkWithUsRouteImport.update({
-  id: '/work-with-us',
-  path: '/work-with-us',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FindATutorRoute = FindATutorRouteImport.update({
-  id: '/find-a-tutor',
-  path: '/find-a-tutor',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApplyRoute = ApplyRouteImport.update({
-  id: '/apply',
-  path: '/apply',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TutorsTutorIdRoute = TutorsTutorIdRouteImport.update({
-  id: '/tutors/$tutorId',
-  path: '/tutors/$tutorId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
 } as any)
 const ApiChatbotRoute = ApiChatbotRouteImport.update({
   id: '/api/chatbot',
   path: '/api/chatbot',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PublicWorkWithUsRoute = PublicWorkWithUsRouteImport.update({
+  id: '/work-with-us',
+  path: '/work-with-us',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicFindATutorRoute = PublicFindATutorRouteImport.update({
+  id: '/find-a-tutor',
+  path: '/find-a-tutor',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicContactRoute = PublicContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicApplyRoute = PublicApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicAboutRoute = PublicAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => PublicRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -134,6 +134,11 @@ const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
   id: '/api/public/health',
   path: '/api/public/health',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PublicTutorsTutorIdRoute = PublicTutorsTutorIdRouteImport.update({
+  id: '/tutors/$tutorId',
+  path: '/tutors/$tutorId',
+  getParentRoute: () => PublicRoute,
 } as any)
 const AuthenticatedTutorStudentsRoute =
   AuthenticatedTutorStudentsRouteImport.update({
@@ -310,17 +315,16 @@ const AuthenticatedAdminAdvertisementsRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/apply': typeof ApplyRoute
+  '/': typeof PublicIndexRoute
   '/auth': typeof AuthRoute
-  '/contact': typeof ContactRoute
-  '/find-a-tutor': typeof FindATutorRoute
-  '/work-with-us': typeof WorkWithUsRoute
   '/cms': typeof AuthenticatedCmsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/about': typeof PublicAboutRoute
+  '/apply': typeof PublicApplyRoute
+  '/contact': typeof PublicContactRoute
+  '/find-a-tutor': typeof PublicFindATutorRoute
+  '/work-with-us': typeof PublicWorkWithUsRoute
   '/api/chatbot': typeof ApiChatbotRoute
-  '/tutors/$tutorId': typeof TutorsTutorIdRoute
   '/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
   '/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -350,23 +354,23 @@ export interface FileRoutesByFullPath {
   '/tutor/schedule': typeof AuthenticatedTutorScheduleRoute
   '/tutor/settings': typeof AuthenticatedTutorSettingsRoute
   '/tutor/students': typeof AuthenticatedTutorStudentsRoute
+  '/tutors/$tutorId': typeof PublicTutorsTutorIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/recruitment/': typeof AuthenticatedRecruitmentIndexRoute
   '/tutor/': typeof AuthenticatedTutorIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/apply': typeof ApplyRoute
+  '/': typeof PublicIndexRoute
   '/auth': typeof AuthRoute
-  '/contact': typeof ContactRoute
-  '/find-a-tutor': typeof FindATutorRoute
-  '/work-with-us': typeof WorkWithUsRoute
   '/cms': typeof AuthenticatedCmsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/about': typeof PublicAboutRoute
+  '/apply': typeof PublicApplyRoute
+  '/contact': typeof PublicContactRoute
+  '/find-a-tutor': typeof PublicFindATutorRoute
+  '/work-with-us': typeof PublicWorkWithUsRoute
   '/api/chatbot': typeof ApiChatbotRoute
-  '/tutors/$tutorId': typeof TutorsTutorIdRoute
   '/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
   '/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -396,6 +400,7 @@ export interface FileRoutesByTo {
   '/tutor/schedule': typeof AuthenticatedTutorScheduleRoute
   '/tutor/settings': typeof AuthenticatedTutorSettingsRoute
   '/tutor/students': typeof AuthenticatedTutorStudentsRoute
+  '/tutors/$tutorId': typeof PublicTutorsTutorIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/recruitment': typeof AuthenticatedRecruitmentIndexRoute
@@ -403,18 +408,18 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/about': typeof AboutRoute
-  '/apply': typeof ApplyRoute
+  '/_public': typeof PublicRouteWithChildren
   '/auth': typeof AuthRoute
-  '/contact': typeof ContactRoute
-  '/find-a-tutor': typeof FindATutorRoute
-  '/work-with-us': typeof WorkWithUsRoute
   '/_authenticated/cms': typeof AuthenticatedCmsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_public/about': typeof PublicAboutRoute
+  '/_public/apply': typeof PublicApplyRoute
+  '/_public/contact': typeof PublicContactRoute
+  '/_public/find-a-tutor': typeof PublicFindATutorRoute
+  '/_public/work-with-us': typeof PublicWorkWithUsRoute
   '/api/chatbot': typeof ApiChatbotRoute
-  '/tutors/$tutorId': typeof TutorsTutorIdRoute
+  '/_public/': typeof PublicIndexRoute
   '/_authenticated/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
   '/_authenticated/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -444,6 +449,7 @@ export interface FileRoutesById {
   '/_authenticated/tutor/schedule': typeof AuthenticatedTutorScheduleRoute
   '/_authenticated/tutor/settings': typeof AuthenticatedTutorSettingsRoute
   '/_authenticated/tutor/students': typeof AuthenticatedTutorStudentsRoute
+  '/_public/tutors/$tutorId': typeof PublicTutorsTutorIdRoute
   '/api/public/health': typeof ApiPublicHealthRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/recruitment/': typeof AuthenticatedRecruitmentIndexRoute
@@ -453,16 +459,15 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
+    | '/cms'
+    | '/dashboard'
     | '/about'
     | '/apply'
-    | '/auth'
     | '/contact'
     | '/find-a-tutor'
     | '/work-with-us'
-    | '/cms'
-    | '/dashboard'
     | '/api/chatbot'
-    | '/tutors/$tutorId'
     | '/admin/advertisements'
     | '/admin/ai-assistant'
     | '/admin/analytics'
@@ -492,6 +497,7 @@ export interface FileRouteTypes {
     | '/tutor/schedule'
     | '/tutor/settings'
     | '/tutor/students'
+    | '/tutors/$tutorId'
     | '/api/public/health'
     | '/admin/'
     | '/recruitment/'
@@ -499,16 +505,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
+    | '/cms'
+    | '/dashboard'
     | '/about'
     | '/apply'
-    | '/auth'
     | '/contact'
     | '/find-a-tutor'
     | '/work-with-us'
-    | '/cms'
-    | '/dashboard'
     | '/api/chatbot'
-    | '/tutors/$tutorId'
     | '/admin/advertisements'
     | '/admin/ai-assistant'
     | '/admin/analytics'
@@ -538,24 +543,25 @@ export interface FileRouteTypes {
     | '/tutor/schedule'
     | '/tutor/settings'
     | '/tutor/students'
+    | '/tutors/$tutorId'
     | '/api/public/health'
     | '/admin'
     | '/recruitment'
     | '/tutor'
   id:
     | '__root__'
-    | '/'
     | '/_authenticated'
-    | '/about'
-    | '/apply'
+    | '/_public'
     | '/auth'
-    | '/contact'
-    | '/find-a-tutor'
-    | '/work-with-us'
     | '/_authenticated/cms'
     | '/_authenticated/dashboard'
+    | '/_public/about'
+    | '/_public/apply'
+    | '/_public/contact'
+    | '/_public/find-a-tutor'
+    | '/_public/work-with-us'
     | '/api/chatbot'
-    | '/tutors/$tutorId'
+    | '/_public/'
     | '/_authenticated/admin/advertisements'
     | '/_authenticated/admin/ai-assistant'
     | '/_authenticated/admin/analytics'
@@ -585,6 +591,7 @@ export interface FileRouteTypes {
     | '/_authenticated/tutor/schedule'
     | '/_authenticated/tutor/settings'
     | '/_authenticated/tutor/students'
+    | '/_public/tutors/$tutorId'
     | '/api/public/health'
     | '/_authenticated/admin/'
     | '/_authenticated/recruitment/'
@@ -592,42 +599,15 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  AboutRoute: typeof AboutRoute
-  ApplyRoute: typeof ApplyRoute
+  PublicRoute: typeof PublicRouteWithChildren
   AuthRoute: typeof AuthRoute
-  ContactRoute: typeof ContactRoute
-  FindATutorRoute: typeof FindATutorRoute
-  WorkWithUsRoute: typeof WorkWithUsRoute
   ApiChatbotRoute: typeof ApiChatbotRoute
-  TutorsTutorIdRoute: typeof TutorsTutorIdRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/work-with-us': {
-      id: '/work-with-us'
-      path: '/work-with-us'
-      fullPath: '/work-with-us'
-      preLoaderRoute: typeof WorkWithUsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/find-a-tutor': {
-      id: '/find-a-tutor'
-      path: '/find-a-tutor'
-      fullPath: '/find-a-tutor'
-      preLoaderRoute: typeof FindATutorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -635,18 +615,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/apply': {
-      id: '/apply'
-      path: '/apply'
-      fullPath: '/apply'
-      preLoaderRoute: typeof ApplyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -656,19 +629,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tutors/$tutorId': {
-      id: '/tutors/$tutorId'
-      path: '/tutors/$tutorId'
-      fullPath: '/tutors/$tutorId'
-      preLoaderRoute: typeof TutorsTutorIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/api/chatbot': {
       id: '/api/chatbot'
@@ -676,6 +642,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/chatbot'
       preLoaderRoute: typeof ApiChatbotRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_public/work-with-us': {
+      id: '/_public/work-with-us'
+      path: '/work-with-us'
+      fullPath: '/work-with-us'
+      preLoaderRoute: typeof PublicWorkWithUsRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/find-a-tutor': {
+      id: '/_public/find-a-tutor'
+      path: '/find-a-tutor'
+      fullPath: '/find-a-tutor'
+      preLoaderRoute: typeof PublicFindATutorRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/contact': {
+      id: '/_public/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof PublicContactRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/apply': {
+      id: '/_public/apply'
+      path: '/apply'
+      fullPath: '/apply'
+      preLoaderRoute: typeof PublicApplyRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/about': {
+      id: '/_public/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof PublicAboutRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -718,6 +719,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/health'
       preLoaderRoute: typeof ApiPublicHealthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_public/tutors/$tutorId': {
+      id: '/_public/tutors/$tutorId'
+      path: '/tutors/$tutorId'
+      fullPath: '/tutors/$tutorId'
+      preLoaderRoute: typeof PublicTutorsTutorIdRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/_authenticated/tutor/students': {
       id: '/_authenticated/tutor/students'
@@ -1009,17 +1017,34 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface PublicRouteChildren {
+  PublicAboutRoute: typeof PublicAboutRoute
+  PublicApplyRoute: typeof PublicApplyRoute
+  PublicContactRoute: typeof PublicContactRoute
+  PublicFindATutorRoute: typeof PublicFindATutorRoute
+  PublicWorkWithUsRoute: typeof PublicWorkWithUsRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+  PublicTutorsTutorIdRoute: typeof PublicTutorsTutorIdRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicAboutRoute: PublicAboutRoute,
+  PublicApplyRoute: PublicApplyRoute,
+  PublicContactRoute: PublicContactRoute,
+  PublicFindATutorRoute: PublicFindATutorRoute,
+  PublicWorkWithUsRoute: PublicWorkWithUsRoute,
+  PublicIndexRoute: PublicIndexRoute,
+  PublicTutorsTutorIdRoute: PublicTutorsTutorIdRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  AboutRoute: AboutRoute,
-  ApplyRoute: ApplyRoute,
+  PublicRoute: PublicRouteWithChildren,
   AuthRoute: AuthRoute,
-  ContactRoute: ContactRoute,
-  FindATutorRoute: FindATutorRoute,
-  WorkWithUsRoute: WorkWithUsRoute,
   ApiChatbotRoute: ApiChatbotRoute,
-  TutorsTutorIdRoute: TutorsTutorIdRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
 }
 export const routeTree = rootRouteImport

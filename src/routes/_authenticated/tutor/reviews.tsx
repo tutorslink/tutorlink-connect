@@ -1,60 +1,122 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Star, MessageSquare } from "lucide-react";
-import { PageHeader, EmptyState, StatusBadge } from "@/components/portal-shared";
+import { useEffect, useState } from "react";
+import { Star, MessageSquare, Send } from "lucide-react";
+import { PageHeader, StatusBadge, EmptyState } from "@/components/portal-shared";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { DataStore } from "@/lib/data-store";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/tutor/reviews")({
   component: TutorReviews,
 });
 
-const mockReviews = [
-  { id: "r1", student: "Emma Wilson", rating: 5, comment: "Excellent teaching style. Really helped me understand calculus fundamentals.", date: "2026-07-08", status: "approved", response: null },
-  { id: "r2", student: "James Park", rating: 5, comment: "Dr. Sterling's approach to problem-solving is incredible. Highly recommend!", date: "2026-07-02", status: "approved", response: "Thank you James, it's been a pleasure teaching you!" },
-  { id: "r3", student: "Sofia Garcia", rating: 4, comment: "Very helpful sessions, though I wish we had more time for practice problems.", date: "2026-06-28", status: "pending", response: null },
-];
-
 function TutorReviews() {
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [respondingTo, setRespondingTo] = useState<string | null>(null);
+  const [responseText, setResponseText] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      const uid = userData.user?.id;
+      if (uid) {
+        const data = await DataStore.getReviewsForTutor(uid);
+        setReviews(data);
+      }
+      setLoading(false);
+    })();
+  }, []);
+
+  const handleResponse = async (reviewId: string) => {
+    if (!responseText.trim()) return;
+    await DataStore.addTutorResponse(reviewId, responseText);
+    toast.success("Response published");
+    setRespondingTo(null);
+    setResponseText("");
+    const { data: userData } = await supabase.auth.getUser();
+    if (userData.user?.id) {
+      const data = await DataStore.getReviewsForTutor(userData.user.id);
+      setReviews(data);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="h-8 w-8 rounded-full border-4 border-blue-600 border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div>
-      <PageHeader title="Reviews" description="Feedback submitted by your students." />
+      <PageHeader title="Reviews" description="Feedback from your students. Respond to reviews to build trust." />
 
-      {mockReviews.length === 0 ? (
-        <EmptyState icon={Star} title="You haven't received any reviews." description="Student reviews will appear here once submitted." />
+      {reviews.length === 0 ? (
+        <EmptyState icon={Star} title="No Reviews Yet" description="Once students submit reviews, they'll appear here." />
       ) : (
-        <div className="space-y-4">
-          {mockReviews.map((review) => (
-            <Card key={review.id}>
-              <CardContent className="p-5 space-y-3">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center text-sm font-bold">
-                      {review.student.charAt(0)}
+        <div className="space-y-3">
+          {reviews.map((r) => (
+            <Card key={r.id}>
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold text-sm">
+                      {(r.student?.display_name || "S").split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
                     </div>
                     <div>
-                      <p className="font-semibold text-sm">{review.student}</p>
-                      <p className="text-xs text-muted-foreground">{new Date(review.date).toLocaleDateString()}</p>
+                      <p className="font-semibold text-sm">{r.student?.display_name || "Anonymous Student"}</p>
+                      <div className="flex items-center gap-1 text-amber-500 mt-0.5">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className={`h-3.5 w-3.5 ${i < r.rating ? "fill-amber-500" : "text-muted-foreground"}`} />
+                        ))}
+                        <span className="text-xs text-muted-foreground ml-1">
+                          {new Date(r.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex gap-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`h-4 w-4 ${i < review.rating ? "text-amber-500 fill-amber-500" : "text-muted-foreground"}`} />
-                      ))}
-                    </div>
-                    <StatusBadge status={review.status} />
-                  </div>
+                  <StatusBadge status={r.status} />
                 </div>
-                <p className="text-sm text-muted-foreground italic">"{review.comment}"</p>
-                {review.response && (
-                  <div className="ml-6 p-3 bg-muted/30 rounded-lg border-l-2 border-blue-400">
-                    <p className="text-xs font-semibold text-muted-foreground mb-1">Your Response</p>
-                    <p className="text-sm">{review.response}</p>
+
+                <p className="text-sm text-muted-foreground italic mt-2">"{r.comment}"</p>
+
+                {r.tutor_response && (
+                  <div className="mt-3 p-3 bg-muted/30 rounded-lg border-l-2 border-blue-500">
+                    <p className="text-xs font-semibold text-muted-foreground mb-1">Your Response:</p>
+                    <p className="text-sm text-muted-foreground">{r.tutor_response}</p>
                   </div>
                 )}
-                {!review.response && review.status === "approved" && (
-                  <button className="text-xs text-blue-600 hover:underline flex items-center gap-1">
-                    <MessageSquare className="h-3.5 w-3.5" /> Write a response
-                  </button>
+
+                {!r.tutor_response && r.status === "approved" && (
+                  <div className="mt-3 pt-3 border-t">
+                    {respondingTo === r.id ? (
+                      <div className="space-y-2">
+                        <Textarea
+                          placeholder="Write a professional response..."
+                          value={responseText}
+                          onChange={(e) => setResponseText(e.target.value)}
+                          rows={3}
+                        />
+                        <div className="flex gap-2">
+                          <Button size="sm" className="gap-1.5" onClick={() => handleResponse(r.id)}>
+                            <Send className="h-3.5 w-3.5" /> Publish Response
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => { setRespondingTo(null); setResponseText(""); }}>
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setRespondingTo(r.id)}>
+                        <MessageSquare className="h-4 w-4" /> Respond
+                      </Button>
+                    )}
+                  </div>
                 )}
               </CardContent>
             </Card>

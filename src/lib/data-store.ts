@@ -498,6 +498,30 @@ export const DataStore = {
     return newInquiry;
   },
 
+  updateApplicationStatus: async (id: string, status: string) => {
+    try {
+      await supabase.from("tutor_applications").update({ status, reviewed_at: new Date().toISOString() }).eq("id", id);
+    } catch {}
+    const list = getLocal<any[]>(KEYS.APPLICATIONS, []);
+    const idx = list.findIndex((a) => a.id === id);
+    if (idx !== -1) {
+      list[idx].status = status;
+      setLocal(KEYS.APPLICATIONS, list);
+    }
+  },
+
+  updateRecruitmentStatus: async (id: string, status: string) => {
+    try {
+      await supabase.from("recruitment_applications").update({ status, reviewed_at: new Date().toISOString() }).eq("id", id);
+    } catch {}
+    const list = getLocal<any[]>(KEYS.RECRUITMENT, []);
+    const idx = list.findIndex((a) => a.id === id);
+    if (idx !== -1) {
+      list[idx].status = status;
+      setLocal(KEYS.RECRUITMENT, list);
+    }
+  },
+
   getTutorApplications: async (): Promise<any[]> => {
     try {
       const { data } = await supabase.from("tutor_applications").select("*");
@@ -854,6 +878,548 @@ export const DataStore = {
   },
 
   getAuditLogs: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("audit_log")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (data) return data;
+    } catch {}
     return getLocal<any[]>("tl_audit_logs", []);
+  },
+
+  // --- SUBJECT CATEGORIES (Section 13.10) ---
+  getSubjectCategories: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("subject_categories")
+        .select("*")
+        .eq("is_active", true)
+        .order("display_order");
+      if (data) return data;
+    } catch {}
+    return [];
+  },
+
+  // --- PAGES (Section 13.14) ---
+  getPages: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("pages")
+        .select("*")
+        .eq("is_deleted", false)
+        .order("updated_at", { ascending: false });
+      if (data) return data;
+    } catch {}
+    return getLocal<any[]>("tl_pages", []);
+  },
+
+  getPage: async (slug: string): Promise<any | null> => {
+    try {
+      const { data } = await supabase
+        .from("pages")
+        .select("*")
+        .eq("slug", slug)
+        .eq("status", "published")
+        .eq("is_deleted", false)
+        .maybeSingle();
+      if (data) return data;
+    } catch {}
+    return null;
+  },
+
+  savePage: async (page: { id?: string; title: string; slug: string; content?: string; seo_title?: string; seo_description?: string; status?: string }) => {
+    try {
+      if (page.id) {
+        await supabase.from("pages").update({
+          title: page.title,
+          slug: page.slug,
+          content: page.content,
+          seo_title: page.seo_title,
+          seo_description: page.seo_description,
+          status: page.status || "draft",
+          published_at: page.status === "published" ? new Date().toISOString() : undefined,
+        }).eq("id", page.id);
+      } else {
+        await supabase.from("pages").insert({
+          title: page.title,
+          slug: page.slug,
+          content: page.content,
+          seo_title: page.seo_title,
+          seo_description: page.seo_description,
+          status: page.status || "draft",
+        });
+      }
+    } catch {}
+  },
+
+  // --- HOMEPAGE CONTENT (Section 13.15) ---
+  getHomepageContent: async (): Promise<any | null> => {
+    try {
+      const { data } = await supabase
+        .from("homepage_content")
+        .select("*")
+        .eq("is_published", true)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (data) return data;
+    } catch {}
+    return null;
+  },
+
+  saveHomepageContent: async (content: { hero_headline?: string; hero_subheadline?: string; cta_primary?: string; cta_secondary?: string; stats?: any }) => {
+    try {
+      const { data: existing } = await supabase
+        .from("homepage_content")
+        .select("id")
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (existing) {
+        await supabase.from("homepage_content").update({
+          hero_headline: content.hero_headline,
+          hero_subheadline: content.hero_subheadline,
+          cta_primary: content.cta_primary,
+          cta_secondary: content.cta_secondary,
+          stats: content.stats,
+        }).eq("id", existing.id);
+      } else {
+        await supabase.from("homepage_content").insert({
+          hero_headline: content.hero_headline,
+          hero_subheadline: content.hero_subheadline,
+          cta_primary: content.cta_primary,
+          cta_secondary: content.cta_secondary,
+          stats: content.stats,
+          is_published: true,
+        });
+      }
+    } catch {}
+  },
+
+  // --- PLATFORM SETTINGS (Section 13.17) ---
+  getPlatformSetting: async (key: string): Promise<any | null> => {
+    try {
+      const { data } = await supabase
+        .from("platform_settings")
+        .select("value")
+        .eq("key", key)
+        .maybeSingle();
+      if (data) return data.value;
+    } catch {}
+    return null;
+  },
+
+  savePlatformSetting: async (key: string, value: any): Promise<void> => {
+    try {
+      await supabase.from("platform_settings").upsert({
+        key,
+        value,
+        updated_by: (await supabase.auth.getUser()).data.user?.id || null,
+      }, { onConflict: "key" });
+    } catch {}
+  },
+
+  // --- NOTIFICATION PREFERENCES (Section 17.11) ---
+  getNotificationPreferences: async (userId: string): Promise<any | null> => {
+    try {
+      const { data } = await supabase
+        .from("notification_preferences")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (data) return data;
+    } catch {}
+    return null;
+  },
+
+  saveNotificationPreferences: async (prefs: {
+    user_id: string;
+    email_notifications?: boolean;
+    push_notifications?: boolean;
+    lesson_reminders?: boolean;
+    announcements?: boolean;
+    marketing?: boolean;
+  }): Promise<void> => {
+    try {
+      await supabase.from("notification_preferences").upsert({
+        user_id: prefs.user_id,
+        email_notifications: prefs.email_notifications ?? true,
+        push_notifications: prefs.push_notifications ?? true,
+        lesson_reminders: prefs.lesson_reminders ?? true,
+        announcements: prefs.announcements ?? true,
+        marketing: prefs.marketing ?? false,
+      }, { onConflict: "user_id" });
+    } catch {}
+  },
+
+  // --- NOTIFICATIONS (Section 17) ---
+  getNotifications: async (userId: string): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("notifications")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("is_deleted", false)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (data) return data;
+    } catch {}
+    return getLocal<any[]>(KEYS.NOTIFICATIONS, []);
+  },
+
+  getUnreadNotificationCount: async (userId: string): Promise<number> => {
+    try {
+      const { count } = await supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", userId)
+        .eq("is_read", false)
+        .eq("is_deleted", false);
+      if (count !== null) return count;
+    } catch {}
+    return 0;
+  },
+
+  createNotification: async (notif: {
+    user_id: string;
+    type?: string;
+    title: string;
+    body?: string;
+    link?: string;
+  }): Promise<void> => {
+    try {
+      await supabase.from("notifications").insert({
+        user_id: notif.user_id,
+        type: notif.type || "info",
+        title: notif.title,
+        body: notif.body,
+        link: notif.link,
+        is_read: false,
+      });
+    } catch {}
+  },
+
+  markNotificationRead: async (id: string): Promise<void> => {
+    try {
+      await supabase.from("notifications").update({ is_read: true }).eq("id", id);
+    } catch {}
+  },
+
+  markAllNotificationsRead: async (userId: string): Promise<void> => {
+    try {
+      await supabase.from("notifications").update({ is_read: true }).eq("user_id", userId).eq("is_read", false);
+    } catch {}
+  },
+
+  // --- LESSONS (Section 15 - enhanced) ---
+  getLessonsForUser: async (userId: string, isTutor = false): Promise<any[]> => {
+    try {
+      const query = supabase
+        .from("lessons")
+        .select("*")
+        .eq("is_deleted", false)
+        .order("starts_at", { ascending: true });
+
+      if (isTutor) {
+        query.eq("tutor_id", userId);
+      } else {
+        query.eq("student_id", userId);
+      }
+
+      const { data } = await query;
+      if (data) return data;
+    } catch {}
+    return getLocal<any[]>(KEYS.LESSONS, []);
+  },
+
+  getAllLessons: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("lessons")
+        .select("*, student:profiles!lessons_student_id_fkey(display_name), tutor:profiles!lessons_tutor_id_fkey(display_name)")
+        .eq("is_deleted", false)
+        .order("starts_at", { ascending: false })
+        .limit(100);
+      if (data) return data;
+    } catch {}
+    return [];
+  },
+
+  createLesson: async (lesson: {
+    tutor_id: string;
+    student_id: string;
+    starts_at: string;
+    ends_at: string;
+    subject?: string;
+    academic_level?: string;
+    notes?: string;
+    created_by?: string;
+  }): Promise<any | null> => {
+    try {
+      const { data } = await supabase.from("lessons").insert({
+        tutor_id: lesson.tutor_id,
+        student_id: lesson.student_id,
+        starts_at: lesson.starts_at,
+        ends_at: lesson.ends_at,
+        subject: lesson.subject,
+        academic_level: lesson.academic_level,
+        notes: lesson.notes,
+        created_by: lesson.created_by,
+        status: "scheduled",
+      }).select("*").single();
+      if (data) {
+        await DataStore.createNotification({
+          user_id: lesson.student_id,
+          type: "info",
+          title: "Lesson Scheduled",
+          body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}`,
+        });
+        await DataStore.createNotification({
+          user_id: lesson.tutor_id,
+          type: "info",
+          title: "Lesson Scheduled",
+          body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}`,
+        });
+        return data;
+      }
+    } catch {}
+    return null;
+  },
+
+  updateLessonStatus: async (id: string, status: string): Promise<void> => {
+    try {
+      await supabase.from("lessons").update({ status }).eq("id", id);
+    } catch {}
+  },
+
+  cancelLesson: async (id: string): Promise<void> => {
+    try {
+      await supabase.from("lessons").update({ status: "cancelled" }).eq("id", id);
+    } catch {}
+  },
+
+  // --- REVIEWS (Section 16 - enhanced) ---
+  getReviewsForTutor: async (tutorId: string): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("reviews")
+        .select("*, student:profiles!reviews_student_id_fkey(display_name, avatar_url)")
+        .eq("tutor_id", tutorId)
+        .eq("is_deleted", false)
+        .order("created_at", { ascending: false });
+      if (data) return data;
+    } catch {}
+    return getLocal<Review[]>(KEYS.REVIEWS, []);
+  },
+
+  getAllReviews: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("reviews")
+        .select("*, student:profiles!reviews_student_id_fkey(display_name), tutor:profiles!reviews_tutor_id_fkey(display_name)")
+        .eq("is_deleted", false)
+        .order("created_at", { ascending: false });
+      if (data) return data;
+    } catch {}
+    return getLocal<Review[]>(KEYS.REVIEWS, []);
+  },
+
+  moderateReview: async (id: string, status: "pending" | "approved" | "rejected"): Promise<void> => {
+    try {
+      await supabase.from("reviews").update({ status }).eq("id", id);
+    } catch {}
+    const list = getLocal<Review[]>(KEYS.REVIEWS, []);
+    const idx = list.findIndex((r) => r.id === id);
+    if (idx !== -1) {
+      list[idx].status = status;
+      setLocal(KEYS.REVIEWS, list);
+    }
+  },
+
+  addTutorResponse: async (reviewId: string, response: string): Promise<void> => {
+    try {
+      await supabase.from("reviews").update({ tutor_response: response }).eq("id", reviewId);
+    } catch {}
+  },
+
+  // --- DISCORD LINKS (Section 18) ---
+  getDiscordLink: async (userId: string): Promise<any | null> => {
+    try {
+      const { data } = await supabase
+        .from("discord_links")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (data) return data;
+    } catch {}
+    return null;
+  },
+
+  linkDiscordAccount: async (userId: string, discordId: string, discordUsername: string): Promise<void> => {
+    try {
+      await supabase.from("discord_links").upsert({
+        user_id: userId,
+        discord_id: discordId,
+        discord_username: discordUsername,
+      }, { onConflict: "user_id" });
+    } catch {}
+  },
+
+  unlinkDiscordAccount: async (userId: string): Promise<void> => {
+    try {
+      await supabase.from("discord_links").delete().eq("user_id", userId);
+    } catch {}
+  },
+
+  // --- STUDENT ASSIGNMENTS (enhanced) ---
+  getStudentAssignmentsFromDB: async (studentId: string): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("student_tutor_assignments")
+        .select("*, tutor:profiles!student_tutor_assignments_tutor_id_fkey(display_name, avatar_url)")
+        .eq("student_id", studentId)
+        .eq("is_active", true);
+      if (data) return data;
+    } catch {}
+    return DataStore.getStudentAssignments(studentId);
+  },
+
+  getAllStudents: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("user_id, profiles!user_roles_user_id_fkey(display_name, email, avatar_url)")
+        .eq("role", "student");
+      if (data) return data.map((r: any) => ({ id: r.user_id, name: r.profiles?.display_name, email: r.profiles?.email, avatar_url: r.profiles?.avatar_url }));
+    } catch {}
+    return [];
+  },
+
+  getAllTutors: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("tutor_profiles")
+        .select("*, profiles!tutor_profiles_id_fkey(display_name, email, avatar_url)")
+        .eq("is_deleted", false);
+      if (data) return data.map((t: any) => ({
+        id: t.id,
+        name: t.profiles?.display_name || "Certified Tutor",
+        email: t.profiles?.email,
+        avatar_url: t.profiles?.avatar_url,
+        headline: t.headline,
+        about: t.about,
+        hourly_rate: t.hourly_rate,
+        rating_avg: t.rating_avg,
+        rating_count: t.rating_count,
+        years_experience: t.years_experience,
+        languages: t.languages || [],
+        is_featured: t.is_featured,
+        is_verified: t.is_verified,
+        is_active: t.is_active,
+        slug: t.slug,
+      }));
+    } catch {}
+    return getLocal<Tutor[]>(KEYS.TUTORS, defaultTutors);
+  },
+
+  getTutorApplicationsFromDB: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("tutor_applications")
+        .select("*")
+        .eq("is_deleted", false)
+        .order("created_at", { ascending: false });
+      if (data) return data;
+    } catch {}
+    return getLocal<any[]>(KEYS.APPLICATIONS, []);
+  },
+
+  getRecruitmentApplicationsFromDB: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("recruitment_applications")
+        .select("*")
+        .eq("is_deleted", false)
+        .order("created_at", { ascending: false });
+      if (data) return data;
+    } catch {}
+    return getLocal<any[]>(KEYS.RECRUITMENT, []);
+  },
+
+  // --- AVAILABILITY (Section 15.9) ---
+  getTutorAvailability: async (tutorId: string): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("schedules")
+        .select("*")
+        .eq("tutor_id", tutorId)
+        .eq("is_active", true)
+        .order("day_of_week");
+      if (data) return data;
+    } catch {}
+    return [];
+  },
+
+  saveTutorAvailability: async (tutorId: string, schedules: { day_of_week: number; start_time: string; end_time: string; timezone: string }[]): Promise<void> => {
+    try {
+      await supabase.from("schedules").delete().eq("tutor_id", tutorId);
+      if (schedules.length > 0) {
+        await supabase.from("schedules").insert(schedules.map(s => ({ ...s, tutor_id: tutorId, is_active: true })));
+      }
+    } catch {}
+  },
+
+  // --- ADVERTISEMENTS (enhanced) ---
+  getAdvertisements: async (): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("advertisements")
+        .select("*, tutor:profiles!advertisements_tutor_id_fkey(display_name)")
+        .eq("is_deleted", false)
+        .order("created_at", { ascending: false });
+      if (data) return data;
+    } catch {}
+    return [];
+  },
+
+  getTutorAdvertisements: async (tutorId: string): Promise<any[]> => {
+    try {
+      const { data } = await supabase
+        .from("advertisements")
+        .select("*")
+        .eq("tutor_id", tutorId)
+        .eq("is_deleted", false);
+      if (data) return data;
+    } catch {}
+    return [];
+  },
+
+  saveAdvertisement: async (ad: {
+    tutor_id: string;
+    title: string;
+    description?: string;
+    price?: number;
+    monthly_price?: number;
+    teaching_format?: string;
+    is_active?: boolean;
+    is_featured?: boolean;
+    advertisement_status?: string;
+  }): Promise<void> => {
+    try {
+      await supabase.from("advertisements").upsert({
+        tutor_id: ad.tutor_id,
+        title: ad.title,
+        description: ad.description,
+        price: ad.price,
+        monthly_price: ad.monthly_price,
+        teaching_format: ad.teaching_format || "online",
+        is_active: ad.is_active ?? true,
+        is_featured: ad.is_featured ?? false,
+        advertisement_status: ad.advertisement_status || "pending",
+      });
+    } catch {}
   },
 };

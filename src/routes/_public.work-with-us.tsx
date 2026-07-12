@@ -11,11 +11,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { AIChatbot } from "@/components/AIChatbot";
 
-export const Route = createFileRoute("/work-with-us")({
+export const Route = createFileRoute("/_public/work-with-us")({
   head: () => ({
     meta: [
       { title: "Work With Us · Educator Recruitment · Tutors Link" },
@@ -44,7 +41,7 @@ function WorkWithUsPage() {
     {
       icon: <Award className="h-6 w-6 text-purple-600" />,
       title: "Elite Academic Pedigree",
-      desc: "Join a prestigious community of PhD candidates, Ivy League graduates, Oxbridge scholars, and certified curriculum examiners.",
+      desc: "Join a prestigious community of PhD candidates, Ivy League graduates, Oxbridge scholars, and certified curriculum examers.",
     },
     {
       icon: <ShieldCheck className="h-6 w-6 text-indigo-600" />,
@@ -81,9 +78,7 @@ function WorkWithUsPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
-
+    <>
       {/* Hero Header */}
       <section className="bg-slate-900 text-white py-20 relative overflow-hidden border-b border-slate-800">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.12),transparent_45%)]" />
@@ -214,9 +209,6 @@ function WorkWithUsPage() {
           </Button>
         </div>
       </section>
-
-      <Footer />
-      <AIChatbot />
-    </div>
+    </>
   );
 }

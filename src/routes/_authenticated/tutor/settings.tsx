@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Settings, Moon, Sun, Key, Shield } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Moon, Bell, Shield, Save } from "lucide-react";
 import { PageHeader } from "@/components/portal-shared";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { DataStore } from "@/lib/data-store";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/tutor/settings")({
   component: TutorSettings,
@@ -14,88 +16,133 @@ export const Route = createFileRoute("/_authenticated/tutor/settings")({
 
 function TutorSettings() {
   const [darkMode, setDarkMode] = useState(false);
-  const [notifEmail, setNotifEmail] = useState(true);
-  const [notifLessons, setNotifLessons] = useState(true);
-  const [notifReviews, setNotifReviews] = useState(true);
-  const [notifAnnouncements, setNotifAnnouncements] = useState(false);
-  const [oldPw, setOldPw] = useState("");
-  const [newPw, setNewPw] = useState("");
+  const [prefs, setPrefs] = useState({
+    email_notifications: true,
+    push_notifications: true,
+    lesson_reminders: true,
+    announcements: true,
+    marketing: false,
+  });
+  const [saving, setSaving] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  const handleChangePassword = () => {
-    if (!oldPw || !newPw) {
-      toast.error("Please fill in both password fields.");
-      return;
+  useEffect(() => {
+    (async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      const uid = userData.user?.id || null;
+      setUserId(uid);
+      if (uid) {
+        const saved = await DataStore.getNotificationPreferences(uid);
+        if (saved) {
+          setPrefs({
+            email_notifications: saved.email_notifications,
+            push_notifications: saved.push_notifications,
+            lesson_reminders: saved.lesson_reminders,
+            announcements: saved.announcements,
+            marketing: saved.marketing,
+          });
+        }
+      }
+    })();
+  }, []);
+
+  const handleSavePrefs = async () => {
+    if (!userId) return;
+    setSaving(true);
+    try {
+      await DataStore.saveNotificationPreferences({ user_id: userId, ...prefs });
+      toast.success("Settings saved");
+    } catch {
+      toast.error("Failed to save settings");
+    } finally {
+      setSaving(false);
     }
-    toast.success("Password changed successfully.");
-    setOldPw("");
-    setNewPw("");
   };
 
   return (
     <div>
-      <PageHeader title="Settings" description="Manage your preferences and account security." />
+      <PageHeader title="Settings" description="Manage your preferences and account settings." />
 
-      <div className="space-y-6">
+      <div className="grid lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              {darkMode ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />} Appearance
+              <Bell className="h-4 w-4 text-blue-600" /> Notification Preferences
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">Dark Mode</p>
-                <p className="text-xs text-muted-foreground">Switch between light and dark themes.</p>
+                <p className="text-sm font-medium">Email Notifications</p>
+                <p className="text-xs text-muted-foreground">Receive lesson updates and alerts via email</p>
               </div>
-              <Switch checked={darkMode} onCheckedChange={setDarkMode} />
+              <Switch
+                checked={prefs.email_notifications}
+                onCheckedChange={(v) => setPrefs({ ...prefs, email_notifications: v })}
+              />
             </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">Push Notifications</p>
+                <p className="text-xs text-muted-foreground">Browser push for real-time alerts</p>
+              </div>
+              <Switch
+                checked={prefs.push_notifications}
+                onCheckedChange={(v) => setPrefs({ ...prefs, push_notifications: v })}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">Lesson Reminders</p>
+                <p className="text-xs text-muted-foreground">Reminders before scheduled lessons</p>
+              </div>
+              <Switch
+                checked={prefs.lesson_reminders}
+                onCheckedChange={(v) => setPrefs({ ...prefs, lesson_reminders: v })}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">Platform Announcements</p>
+                <p className="text-xs text-muted-foreground">Important platform-wide updates</p>
+              </div>
+              <Switch
+                checked={prefs.announcements}
+                onCheckedChange={(v) => setPrefs({ ...prefs, announcements: v })}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">Marketing Communications</p>
+                <p className="text-xs text-muted-foreground">Tips, newsletters, and promotional content</p>
+              </div>
+              <Switch
+                checked={prefs.marketing}
+                onCheckedChange={(v) => setPrefs({ ...prefs, marketing: v })}
+              />
+            </div>
+            <Button size="sm" className="gap-2" onClick={handleSavePrefs} disabled={saving}>
+              <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Preferences"}
+            </Button>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <Settings className="h-4 w-4" /> Notification Preferences
+              <Shield className="h-4 w-4 text-blue-600" /> Security
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {[
-              { label: "Email Notifications", desc: "Receive notifications via email", value: notifEmail, setter: setNotifEmail },
-              { label: "Lesson Reminders", desc: "Get reminded about upcoming lessons", value: notifLessons, setter: setNotifLessons },
-              { label: "Review Alerts", desc: "Notify when a student leaves a review", value: notifReviews, setter: setNotifReviews },
-              { label: "Platform Announcements", desc: "General platform updates and news", value: notifAnnouncements, setter: setNotifAnnouncements },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">{item.label}</p>
-                  <p className="text-xs text-muted-foreground">{item.desc}</p>
-                </div>
-                <Switch checked={item.value} onCheckedChange={item.setter} />
-              </div>
-            ))}
-            <p className="text-xs text-muted-foreground pt-2 border-t">
-              Some critical security notifications cannot be disabled.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              <Key className="h-4 w-4" /> Change Password
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Current Password</label>
-              <Input type="password" value={oldPw} onChange={(e) => setOldPw(e.target.value)} className="rounded-xl" />
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Current Password</label>
+              <Input type="password" placeholder="••••••••" />
             </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">New Password</label>
-              <Input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} className="rounded-xl" />
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">New Password</label>
+              <Input type="password" placeholder="••••••••" />
             </div>
-            <Button onClick={handleChangePassword} variant="outline">
+            <Button variant="outline" size="sm" onClick={() => toast.success("Password updated")}>
               Update Password
             </Button>
           </CardContent>
@@ -104,16 +151,16 @@ function TutorSettings() {
         <Card>
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <Shield className="h-4 w-4" /> Connected Authentication
+              <Moon className="h-4 w-4 text-blue-600" /> Appearance
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">Google</p>
-                <p className="text-xs text-muted-foreground">Connected</p>
+                <p className="text-sm font-medium">Dark Mode</p>
+                <p className="text-xs text-muted-foreground">Use dark theme across the portal</p>
               </div>
-              <Button variant="outline" size="sm">Disconnect</Button>
+              <Switch checked={darkMode} onCheckedChange={setDarkMode} />
             </div>
           </CardContent>
         </Card>

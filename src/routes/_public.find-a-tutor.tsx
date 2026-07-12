@@ -14,12 +14,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { AIChatbot } from "@/components/AIChatbot";
 import { DataStore, Tutor } from "@/lib/data-store";
 
-export const Route = createFileRoute("/find-a-tutor")({
+export const Route = createFileRoute("/_public/find-a-tutor")({
   head: () => ({
     meta: [
       { title: "Find a Tutor · Tutors Link" },
@@ -40,13 +37,12 @@ export const Route = createFileRoute("/find-a-tutor")({
 });
 
 function FindATutorPage() {
-  const searchParams = useSearch({ from: "/find-a-tutor" });
+  const searchParams = useSearch({ from: "/_public/find-a-tutor" });
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [filteredTutors, setFilteredTutors] = useState<Tutor[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
   const [levels, setLevels] = useState<string[]>([]);
 
-  // Filter States
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSubject, setSelectedSubject] = useState(searchParams.subject || "All");
   const [selectedLevel, setSelectedLevel] = useState(searchParams.level || "All");
@@ -68,17 +64,14 @@ function FindATutorPage() {
     })();
   }, []);
 
-  // Set URL search params if present
   useEffect(() => {
     if (searchParams.level) setSelectedLevel(searchParams.level);
     if (searchParams.subject) setSelectedSubject(searchParams.subject);
   }, [searchParams]);
 
-  // Combine Search, Filters, and Sorting
   useEffect(() => {
     let result = [...tutors];
 
-    // 1. Text Query Search
     if (searchQuery.trim() !== "") {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -90,30 +83,24 @@ function FindATutorPage() {
       );
     }
 
-    // 2. Subject Filter
     if (selectedSubject !== "All") {
       result = result.filter((t) => t.subjects.includes(selectedSubject));
     }
 
-    // 3. Level Filter
     if (selectedLevel !== "All") {
       result = result.filter((t) => t.levels.includes(selectedLevel));
     }
 
-    // 4. Language Filter
     if (selectedLanguage !== "All") {
       result = result.filter((t) => t.languages.includes(selectedLanguage));
     }
 
-    // 5. Max Hourly Price Filter
     result = result.filter((t) => t.hourly_rate <= maxPrice);
 
-    // 6. Only Verified Filter
     if (onlyVerified) {
       result = result.filter((t) => t.is_verified);
     }
 
-    // 7. Sorting
     if (sortBy === "highest_rated") {
       result.sort((a, b) => b.rating_avg - a.rating_avg);
     } else if (sortBy === "lowest_price") {
@@ -125,7 +112,6 @@ function FindATutorPage() {
     } else if (sortBy === "alphabetical") {
       result.sort((a, b) => a.name.localeCompare(b.name));
     } else {
-      // "featured" default
       result.sort((a, b) => (b.is_featured ? 1 : 0) - (a.is_featured ? 1 : 0));
     }
 
@@ -152,9 +138,7 @@ function FindATutorPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
-
+    <>
       {/* Hero Header */}
       <section className="bg-slate-50 dark:bg-slate-900/10 py-12 border-b border-border/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3 text-center md:text-left md:flex md:items-center md:justify-between">
@@ -501,9 +485,6 @@ function FindATutorPage() {
           )}
         </main>
       </div>
-
-      <Footer />
-      <AIChatbot />
-    </div>
+    </>
   );
 }
