@@ -1,0 +1,92 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Save, Sparkles, Eye } from "lucide-react";
+import { PageHeader } from "@/components/portal-shared";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/_authenticated/admin/homepage")({
+  component: AdminHomepage,
+});
+
+function AdminHomepage() {
+  const [hero, setHero] = useState({
+    headline: "Unlock Your Academic Potential with Premier Private Tutors",
+    subheadline: "Connect with certified Ivy League and Oxbridge tutors for personalized, high-impact learning.",
+    ctaPrimary: "Find the Perfect Tutor",
+    ctaSecondary: "Apply as a Tutor",
+  });
+  const [stats, setStats] = useState({ tutors: 124, students: 1450, lessons: 9240, subjects: 45, rating: 4.9 });
+
+  const handleSave = () => {
+    toast.success("Homepage content saved");
+  };
+
+  return (
+    <div>
+      <PageHeader title="Homepage Content" description="Edit the homepage hero section and statistics." action={
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="gap-1.5"><Eye className="h-4 w-4" /> Preview</Button>
+          <Button size="sm" className="gap-1.5" onClick={handleSave}><Save className="h-4 w-4" /> Save Changes</Button>
+        </div>
+      } />
+
+      <div className="grid lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader><CardTitle className="text-base flex items-center gap-2"><Sparkles className="h-4 w-4 text-blue-600" /> Hero Section</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Headline</label>
+              <Input value={hero.headline} onChange={e => setHero({ ...hero, headline: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Subheadline</label>
+              <Textarea value={hero.subheadline} onChange={e => setHero({ ...hero, subheadline: e.target.value })} rows={3} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Primary CTA</label>
+                <Input value={hero.ctaPrimary} onChange={e => setHero({ ...hero, ctaPrimary: e.target.value })} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Secondary CTA</label>
+                <Input value={hero.ctaSecondary} onChange={e => setHero({ ...hero, ctaSecondary: e.target.value })} />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle className="text-base">Statistics Section</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Active Tutors</label>
+                <Input type="number" value={stats.tutors} onChange={e => setStats({ ...stats, tutors: Number(e.target.value) })} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Students</label>
+                <Input type="number" value={stats.students} onChange={e => setStats({ ...stats, students: Number(e.target.value) })} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Lessons</label>
+                <Input type="number" value={stats.lessons} onChange={e => setStats({ ...stats, lessons: Number(e.target.value) })} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Subjects</label>
+                <Input type="number" value={stats.subjects} onChange={e => setStats({ ...stats, subjects: Number(e.target.value) })} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Avg Rating</label>
+                <Input type="number" step="0.1" value={stats.rating} onChange={e => setStats({ ...stats, rating: Number(e.target.value) })} />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}

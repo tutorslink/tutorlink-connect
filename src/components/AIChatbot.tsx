@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-export default function AIChatbot() {
+export function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ role: "user" | "ai"; content: string }[]>([
     { role: "ai", content: "Hi! I'm the Tutors Link Assistant. How can I help you find the right tutor today?" }

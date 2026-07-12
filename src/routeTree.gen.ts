@@ -9,15 +9,80 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkWithUsRouteImport } from './routes/work-with-us'
+import { Route as FindATutorRouteImport } from './routes/find-a-tutor'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ApplyRouteImport } from './routes/apply'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TutorsTutorIdRouteImport } from './routes/tutors.$tutorId'
+import { Route as ApiChatbotRouteImport } from './routes/api/chatbot'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
+import { Route as AuthenticatedCmsRouteImport } from './routes/_authenticated.cms'
+import { Route as AuthenticatedTutorIndexRouteImport } from './routes/_authenticated/tutor/index'
+import { Route as AuthenticatedRecruitmentIndexRouteImport } from './routes/_authenticated/recruitment/index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
+import { Route as AuthenticatedTutorStudentsRouteImport } from './routes/_authenticated/tutor/students'
+import { Route as AuthenticatedTutorSettingsRouteImport } from './routes/_authenticated/tutor/settings'
+import { Route as AuthenticatedTutorScheduleRouteImport } from './routes/_authenticated/tutor/schedule'
+import { Route as AuthenticatedTutorReviewsRouteImport } from './routes/_authenticated/tutor/reviews'
+import { Route as AuthenticatedTutorProfileRouteImport } from './routes/_authenticated/tutor/profile'
+import { Route as AuthenticatedTutorNotificationsRouteImport } from './routes/_authenticated/tutor/notifications'
+import { Route as AuthenticatedTutorEarningsRouteImport } from './routes/_authenticated/tutor/earnings'
+import { Route as AuthenticatedTutorAvailabilityRouteImport } from './routes/_authenticated/tutor/availability'
+import { Route as AuthenticatedTutorAdvertisementRouteImport } from './routes/_authenticated/tutor/advertisement'
+import { Route as AuthenticatedTutorAccountRouteImport } from './routes/_authenticated/tutor/account'
+import { Route as AuthenticatedRecruitmentNotificationsRouteImport } from './routes/_authenticated/recruitment/notifications'
+import { Route as AuthenticatedRecruitmentNotesRouteImport } from './routes/_authenticated/recruitment/notes'
+import { Route as AuthenticatedRecruitmentDocumentsRouteImport } from './routes/_authenticated/recruitment/documents'
+import { Route as AuthenticatedRecruitmentCandidatesRouteImport } from './routes/_authenticated/recruitment/candidates'
+import { Route as AuthenticatedRecruitmentApplicationsRouteImport } from './routes/_authenticated/recruitment/applications'
+import { Route as AuthenticatedRecruitmentActivityRouteImport } from './routes/_authenticated/recruitment/activity'
+import { Route as AuthenticatedAdminTutorsRouteImport } from './routes/_authenticated/admin/tutors'
+import { Route as AuthenticatedAdminTutorApplicationsRouteImport } from './routes/_authenticated/admin/tutor-applications'
+import { Route as AuthenticatedAdminStudentsRouteImport } from './routes/_authenticated/admin/students'
+import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin/settings'
+import { Route as AuthenticatedAdminSchedulingRouteImport } from './routes/_authenticated/admin/scheduling'
+import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin/reviews'
+import { Route as AuthenticatedAdminRecruitmentApplicationsRouteImport } from './routes/_authenticated/admin/recruitment-applications'
+import { Route as AuthenticatedAdminPagesRouteImport } from './routes/_authenticated/admin/pages'
+import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin/notifications'
+import { Route as AuthenticatedAdminHomepageRouteImport } from './routes/_authenticated/admin/homepage'
+import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin/analytics'
+import { Route as AuthenticatedAdminAiAssistantRouteImport } from './routes/_authenticated/admin/ai-assistant'
+import { Route as AuthenticatedAdminAdvertisementsRouteImport } from './routes/_authenticated/admin/advertisements'
 
+const WorkWithUsRoute = WorkWithUsRouteImport.update({
+  id: '/work-with-us',
+  path: '/work-with-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindATutorRoute = FindATutorRouteImport.update({
+  id: '/find-a-tutor',
+  path: '/find-a-tutor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplyRoute = ApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -29,9 +94,40 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TutorsTutorIdRoute = TutorsTutorIdRouteImport.update({
+  id: '/tutors/$tutorId',
+  path: '/tutors/$tutorId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatbotRoute = ApiChatbotRouteImport.update({
+  id: '/api/chatbot',
+  path: '/api/chatbot',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedCmsRoute = AuthenticatedCmsRouteImport.update({
+  id: '/cms',
+  path: '/cms',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedTutorIndexRoute = AuthenticatedTutorIndexRouteImport.update({
+  id: '/tutor/',
+  path: '/tutor/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedRecruitmentIndexRoute =
+  AuthenticatedRecruitmentIndexRouteImport.update({
+    id: '/recruitment/',
+    path: '/recruitment/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
@@ -39,55 +135,518 @@ const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
   path: '/api/public/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedTutorStudentsRoute =
+  AuthenticatedTutorStudentsRouteImport.update({
+    id: '/tutor/students',
+    path: '/tutor/students',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTutorSettingsRoute =
+  AuthenticatedTutorSettingsRouteImport.update({
+    id: '/tutor/settings',
+    path: '/tutor/settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTutorScheduleRoute =
+  AuthenticatedTutorScheduleRouteImport.update({
+    id: '/tutor/schedule',
+    path: '/tutor/schedule',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTutorReviewsRoute =
+  AuthenticatedTutorReviewsRouteImport.update({
+    id: '/tutor/reviews',
+    path: '/tutor/reviews',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTutorProfileRoute =
+  AuthenticatedTutorProfileRouteImport.update({
+    id: '/tutor/profile',
+    path: '/tutor/profile',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTutorNotificationsRoute =
+  AuthenticatedTutorNotificationsRouteImport.update({
+    id: '/tutor/notifications',
+    path: '/tutor/notifications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTutorEarningsRoute =
+  AuthenticatedTutorEarningsRouteImport.update({
+    id: '/tutor/earnings',
+    path: '/tutor/earnings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTutorAvailabilityRoute =
+  AuthenticatedTutorAvailabilityRouteImport.update({
+    id: '/tutor/availability',
+    path: '/tutor/availability',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTutorAdvertisementRoute =
+  AuthenticatedTutorAdvertisementRouteImport.update({
+    id: '/tutor/advertisement',
+    path: '/tutor/advertisement',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTutorAccountRoute =
+  AuthenticatedTutorAccountRouteImport.update({
+    id: '/tutor/account',
+    path: '/tutor/account',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecruitmentNotificationsRoute =
+  AuthenticatedRecruitmentNotificationsRouteImport.update({
+    id: '/recruitment/notifications',
+    path: '/recruitment/notifications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecruitmentNotesRoute =
+  AuthenticatedRecruitmentNotesRouteImport.update({
+    id: '/recruitment/notes',
+    path: '/recruitment/notes',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecruitmentDocumentsRoute =
+  AuthenticatedRecruitmentDocumentsRouteImport.update({
+    id: '/recruitment/documents',
+    path: '/recruitment/documents',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecruitmentCandidatesRoute =
+  AuthenticatedRecruitmentCandidatesRouteImport.update({
+    id: '/recruitment/candidates',
+    path: '/recruitment/candidates',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecruitmentApplicationsRoute =
+  AuthenticatedRecruitmentApplicationsRouteImport.update({
+    id: '/recruitment/applications',
+    path: '/recruitment/applications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedRecruitmentActivityRoute =
+  AuthenticatedRecruitmentActivityRouteImport.update({
+    id: '/recruitment/activity',
+    path: '/recruitment/activity',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminTutorsRoute =
+  AuthenticatedAdminTutorsRouteImport.update({
+    id: '/admin/tutors',
+    path: '/admin/tutors',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminTutorApplicationsRoute =
+  AuthenticatedAdminTutorApplicationsRouteImport.update({
+    id: '/admin/tutor-applications',
+    path: '/admin/tutor-applications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminStudentsRoute =
+  AuthenticatedAdminStudentsRouteImport.update({
+    id: '/admin/students',
+    path: '/admin/students',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSettingsRoute =
+  AuthenticatedAdminSettingsRouteImport.update({
+    id: '/admin/settings',
+    path: '/admin/settings',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSchedulingRoute =
+  AuthenticatedAdminSchedulingRouteImport.update({
+    id: '/admin/scheduling',
+    path: '/admin/scheduling',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminReviewsRoute =
+  AuthenticatedAdminReviewsRouteImport.update({
+    id: '/admin/reviews',
+    path: '/admin/reviews',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminRecruitmentApplicationsRoute =
+  AuthenticatedAdminRecruitmentApplicationsRouteImport.update({
+    id: '/admin/recruitment-applications',
+    path: '/admin/recruitment-applications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminPagesRoute = AuthenticatedAdminPagesRouteImport.update({
+  id: '/admin/pages',
+  path: '/admin/pages',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAdminNotificationsRoute =
+  AuthenticatedAdminNotificationsRouteImport.update({
+    id: '/admin/notifications',
+    path: '/admin/notifications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminHomepageRoute =
+  AuthenticatedAdminHomepageRouteImport.update({
+    id: '/admin/homepage',
+    path: '/admin/homepage',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAnalyticsRoute =
+  AuthenticatedAdminAnalyticsRouteImport.update({
+    id: '/admin/analytics',
+    path: '/admin/analytics',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAiAssistantRoute =
+  AuthenticatedAdminAiAssistantRouteImport.update({
+    id: '/admin/ai-assistant',
+    path: '/admin/ai-assistant',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminAdvertisementsRoute =
+  AuthenticatedAdminAdvertisementsRouteImport.update({
+    id: '/admin/advertisements',
+    path: '/admin/advertisements',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/apply': typeof ApplyRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/find-a-tutor': typeof FindATutorRoute
+  '/work-with-us': typeof WorkWithUsRoute
+  '/cms': typeof AuthenticatedCmsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/api/chatbot': typeof ApiChatbotRoute
+  '/tutors/$tutorId': typeof TutorsTutorIdRoute
+  '/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
+  '/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/homepage': typeof AuthenticatedAdminHomepageRoute
+  '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/pages': typeof AuthenticatedAdminPagesRoute
+  '/admin/recruitment-applications': typeof AuthenticatedAdminRecruitmentApplicationsRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/admin/scheduling': typeof AuthenticatedAdminSchedulingRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/students': typeof AuthenticatedAdminStudentsRoute
+  '/admin/tutor-applications': typeof AuthenticatedAdminTutorApplicationsRoute
+  '/admin/tutors': typeof AuthenticatedAdminTutorsRoute
+  '/recruitment/activity': typeof AuthenticatedRecruitmentActivityRoute
+  '/recruitment/applications': typeof AuthenticatedRecruitmentApplicationsRoute
+  '/recruitment/candidates': typeof AuthenticatedRecruitmentCandidatesRoute
+  '/recruitment/documents': typeof AuthenticatedRecruitmentDocumentsRoute
+  '/recruitment/notes': typeof AuthenticatedRecruitmentNotesRoute
+  '/recruitment/notifications': typeof AuthenticatedRecruitmentNotificationsRoute
+  '/tutor/account': typeof AuthenticatedTutorAccountRoute
+  '/tutor/advertisement': typeof AuthenticatedTutorAdvertisementRoute
+  '/tutor/availability': typeof AuthenticatedTutorAvailabilityRoute
+  '/tutor/earnings': typeof AuthenticatedTutorEarningsRoute
+  '/tutor/notifications': typeof AuthenticatedTutorNotificationsRoute
+  '/tutor/profile': typeof AuthenticatedTutorProfileRoute
+  '/tutor/reviews': typeof AuthenticatedTutorReviewsRoute
+  '/tutor/schedule': typeof AuthenticatedTutorScheduleRoute
+  '/tutor/settings': typeof AuthenticatedTutorSettingsRoute
+  '/tutor/students': typeof AuthenticatedTutorStudentsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/recruitment/': typeof AuthenticatedRecruitmentIndexRoute
+  '/tutor/': typeof AuthenticatedTutorIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/apply': typeof ApplyRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/find-a-tutor': typeof FindATutorRoute
+  '/work-with-us': typeof WorkWithUsRoute
+  '/cms': typeof AuthenticatedCmsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/api/chatbot': typeof ApiChatbotRoute
+  '/tutors/$tutorId': typeof TutorsTutorIdRoute
+  '/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
+  '/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/homepage': typeof AuthenticatedAdminHomepageRoute
+  '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/pages': typeof AuthenticatedAdminPagesRoute
+  '/admin/recruitment-applications': typeof AuthenticatedAdminRecruitmentApplicationsRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/admin/scheduling': typeof AuthenticatedAdminSchedulingRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/students': typeof AuthenticatedAdminStudentsRoute
+  '/admin/tutor-applications': typeof AuthenticatedAdminTutorApplicationsRoute
+  '/admin/tutors': typeof AuthenticatedAdminTutorsRoute
+  '/recruitment/activity': typeof AuthenticatedRecruitmentActivityRoute
+  '/recruitment/applications': typeof AuthenticatedRecruitmentApplicationsRoute
+  '/recruitment/candidates': typeof AuthenticatedRecruitmentCandidatesRoute
+  '/recruitment/documents': typeof AuthenticatedRecruitmentDocumentsRoute
+  '/recruitment/notes': typeof AuthenticatedRecruitmentNotesRoute
+  '/recruitment/notifications': typeof AuthenticatedRecruitmentNotificationsRoute
+  '/tutor/account': typeof AuthenticatedTutorAccountRoute
+  '/tutor/advertisement': typeof AuthenticatedTutorAdvertisementRoute
+  '/tutor/availability': typeof AuthenticatedTutorAvailabilityRoute
+  '/tutor/earnings': typeof AuthenticatedTutorEarningsRoute
+  '/tutor/notifications': typeof AuthenticatedTutorNotificationsRoute
+  '/tutor/profile': typeof AuthenticatedTutorProfileRoute
+  '/tutor/reviews': typeof AuthenticatedTutorReviewsRoute
+  '/tutor/schedule': typeof AuthenticatedTutorScheduleRoute
+  '/tutor/settings': typeof AuthenticatedTutorSettingsRoute
+  '/tutor/students': typeof AuthenticatedTutorStudentsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/recruitment': typeof AuthenticatedRecruitmentIndexRoute
+  '/tutor': typeof AuthenticatedTutorIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/about': typeof AboutRoute
+  '/apply': typeof ApplyRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/find-a-tutor': typeof FindATutorRoute
+  '/work-with-us': typeof WorkWithUsRoute
+  '/_authenticated/cms': typeof AuthenticatedCmsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/api/chatbot': typeof ApiChatbotRoute
+  '/tutors/$tutorId': typeof TutorsTutorIdRoute
+  '/_authenticated/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
+  '/_authenticated/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
+  '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/_authenticated/admin/homepage': typeof AuthenticatedAdminHomepageRoute
+  '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/_authenticated/admin/pages': typeof AuthenticatedAdminPagesRoute
+  '/_authenticated/admin/recruitment-applications': typeof AuthenticatedAdminRecruitmentApplicationsRoute
+  '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/_authenticated/admin/scheduling': typeof AuthenticatedAdminSchedulingRoute
+  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/admin/students': typeof AuthenticatedAdminStudentsRoute
+  '/_authenticated/admin/tutor-applications': typeof AuthenticatedAdminTutorApplicationsRoute
+  '/_authenticated/admin/tutors': typeof AuthenticatedAdminTutorsRoute
+  '/_authenticated/recruitment/activity': typeof AuthenticatedRecruitmentActivityRoute
+  '/_authenticated/recruitment/applications': typeof AuthenticatedRecruitmentApplicationsRoute
+  '/_authenticated/recruitment/candidates': typeof AuthenticatedRecruitmentCandidatesRoute
+  '/_authenticated/recruitment/documents': typeof AuthenticatedRecruitmentDocumentsRoute
+  '/_authenticated/recruitment/notes': typeof AuthenticatedRecruitmentNotesRoute
+  '/_authenticated/recruitment/notifications': typeof AuthenticatedRecruitmentNotificationsRoute
+  '/_authenticated/tutor/account': typeof AuthenticatedTutorAccountRoute
+  '/_authenticated/tutor/advertisement': typeof AuthenticatedTutorAdvertisementRoute
+  '/_authenticated/tutor/availability': typeof AuthenticatedTutorAvailabilityRoute
+  '/_authenticated/tutor/earnings': typeof AuthenticatedTutorEarningsRoute
+  '/_authenticated/tutor/notifications': typeof AuthenticatedTutorNotificationsRoute
+  '/_authenticated/tutor/profile': typeof AuthenticatedTutorProfileRoute
+  '/_authenticated/tutor/reviews': typeof AuthenticatedTutorReviewsRoute
+  '/_authenticated/tutor/schedule': typeof AuthenticatedTutorScheduleRoute
+  '/_authenticated/tutor/settings': typeof AuthenticatedTutorSettingsRoute
+  '/_authenticated/tutor/students': typeof AuthenticatedTutorStudentsRoute
   '/api/public/health': typeof ApiPublicHealthRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/recruitment/': typeof AuthenticatedRecruitmentIndexRoute
+  '/_authenticated/tutor/': typeof AuthenticatedTutorIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/api/public/health'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/apply'
+    | '/auth'
+    | '/contact'
+    | '/find-a-tutor'
+    | '/work-with-us'
+    | '/cms'
+    | '/dashboard'
+    | '/api/chatbot'
+    | '/tutors/$tutorId'
+    | '/admin/advertisements'
+    | '/admin/ai-assistant'
+    | '/admin/analytics'
+    | '/admin/homepage'
+    | '/admin/notifications'
+    | '/admin/pages'
+    | '/admin/recruitment-applications'
+    | '/admin/reviews'
+    | '/admin/scheduling'
+    | '/admin/settings'
+    | '/admin/students'
+    | '/admin/tutor-applications'
+    | '/admin/tutors'
+    | '/recruitment/activity'
+    | '/recruitment/applications'
+    | '/recruitment/candidates'
+    | '/recruitment/documents'
+    | '/recruitment/notes'
+    | '/recruitment/notifications'
+    | '/tutor/account'
+    | '/tutor/advertisement'
+    | '/tutor/availability'
+    | '/tutor/earnings'
+    | '/tutor/notifications'
+    | '/tutor/profile'
+    | '/tutor/reviews'
+    | '/tutor/schedule'
+    | '/tutor/settings'
+    | '/tutor/students'
+    | '/api/public/health'
+    | '/admin/'
+    | '/recruitment/'
+    | '/tutor/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/api/public/health'
+  to:
+    | '/'
+    | '/about'
+    | '/apply'
+    | '/auth'
+    | '/contact'
+    | '/find-a-tutor'
+    | '/work-with-us'
+    | '/cms'
+    | '/dashboard'
+    | '/api/chatbot'
+    | '/tutors/$tutorId'
+    | '/admin/advertisements'
+    | '/admin/ai-assistant'
+    | '/admin/analytics'
+    | '/admin/homepage'
+    | '/admin/notifications'
+    | '/admin/pages'
+    | '/admin/recruitment-applications'
+    | '/admin/reviews'
+    | '/admin/scheduling'
+    | '/admin/settings'
+    | '/admin/students'
+    | '/admin/tutor-applications'
+    | '/admin/tutors'
+    | '/recruitment/activity'
+    | '/recruitment/applications'
+    | '/recruitment/candidates'
+    | '/recruitment/documents'
+    | '/recruitment/notes'
+    | '/recruitment/notifications'
+    | '/tutor/account'
+    | '/tutor/advertisement'
+    | '/tutor/availability'
+    | '/tutor/earnings'
+    | '/tutor/notifications'
+    | '/tutor/profile'
+    | '/tutor/reviews'
+    | '/tutor/schedule'
+    | '/tutor/settings'
+    | '/tutor/students'
+    | '/api/public/health'
+    | '/admin'
+    | '/recruitment'
+    | '/tutor'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/about'
+    | '/apply'
     | '/auth'
+    | '/contact'
+    | '/find-a-tutor'
+    | '/work-with-us'
+    | '/_authenticated/cms'
     | '/_authenticated/dashboard'
+    | '/api/chatbot'
+    | '/tutors/$tutorId'
+    | '/_authenticated/admin/advertisements'
+    | '/_authenticated/admin/ai-assistant'
+    | '/_authenticated/admin/analytics'
+    | '/_authenticated/admin/homepage'
+    | '/_authenticated/admin/notifications'
+    | '/_authenticated/admin/pages'
+    | '/_authenticated/admin/recruitment-applications'
+    | '/_authenticated/admin/reviews'
+    | '/_authenticated/admin/scheduling'
+    | '/_authenticated/admin/settings'
+    | '/_authenticated/admin/students'
+    | '/_authenticated/admin/tutor-applications'
+    | '/_authenticated/admin/tutors'
+    | '/_authenticated/recruitment/activity'
+    | '/_authenticated/recruitment/applications'
+    | '/_authenticated/recruitment/candidates'
+    | '/_authenticated/recruitment/documents'
+    | '/_authenticated/recruitment/notes'
+    | '/_authenticated/recruitment/notifications'
+    | '/_authenticated/tutor/account'
+    | '/_authenticated/tutor/advertisement'
+    | '/_authenticated/tutor/availability'
+    | '/_authenticated/tutor/earnings'
+    | '/_authenticated/tutor/notifications'
+    | '/_authenticated/tutor/profile'
+    | '/_authenticated/tutor/reviews'
+    | '/_authenticated/tutor/schedule'
+    | '/_authenticated/tutor/settings'
+    | '/_authenticated/tutor/students'
     | '/api/public/health'
+    | '/_authenticated/admin/'
+    | '/_authenticated/recruitment/'
+    | '/_authenticated/tutor/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  ApplyRoute: typeof ApplyRoute
   AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
+  FindATutorRoute: typeof FindATutorRoute
+  WorkWithUsRoute: typeof WorkWithUsRoute
+  ApiChatbotRoute: typeof ApiChatbotRoute
+  TutorsTutorIdRoute: typeof TutorsTutorIdRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/work-with-us': {
+      id: '/work-with-us'
+      path: '/work-with-us'
+      fullPath: '/work-with-us'
+      preLoaderRoute: typeof WorkWithUsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/find-a-tutor': {
+      id: '/find-a-tutor'
+      path: '/find-a-tutor'
+      fullPath: '/find-a-tutor'
+      preLoaderRoute: typeof FindATutorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apply': {
+      id: '/apply'
+      path: '/apply'
+      fullPath: '/apply'
+      preLoaderRoute: typeof ApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -104,11 +663,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tutors/$tutorId': {
+      id: '/tutors/$tutorId'
+      path: '/tutors/$tutorId'
+      fullPath: '/tutors/$tutorId'
+      preLoaderRoute: typeof TutorsTutorIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chatbot': {
+      id: '/api/chatbot'
+      path: '/api/chatbot'
+      fullPath: '/api/chatbot'
+      preLoaderRoute: typeof ApiChatbotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/cms': {
+      id: '/_authenticated/cms'
+      path: '/cms'
+      fullPath: '/cms'
+      preLoaderRoute: typeof AuthenticatedCmsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/': {
+      id: '/_authenticated/tutor/'
+      path: '/tutor'
+      fullPath: '/tutor/'
+      preLoaderRoute: typeof AuthenticatedTutorIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recruitment/': {
+      id: '/_authenticated/recruitment/'
+      path: '/recruitment'
+      fullPath: '/recruitment/'
+      preLoaderRoute: typeof AuthenticatedRecruitmentIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/api/public/health': {
@@ -118,15 +719,290 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/tutor/students': {
+      id: '/_authenticated/tutor/students'
+      path: '/tutor/students'
+      fullPath: '/tutor/students'
+      preLoaderRoute: typeof AuthenticatedTutorStudentsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/settings': {
+      id: '/_authenticated/tutor/settings'
+      path: '/tutor/settings'
+      fullPath: '/tutor/settings'
+      preLoaderRoute: typeof AuthenticatedTutorSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/schedule': {
+      id: '/_authenticated/tutor/schedule'
+      path: '/tutor/schedule'
+      fullPath: '/tutor/schedule'
+      preLoaderRoute: typeof AuthenticatedTutorScheduleRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/reviews': {
+      id: '/_authenticated/tutor/reviews'
+      path: '/tutor/reviews'
+      fullPath: '/tutor/reviews'
+      preLoaderRoute: typeof AuthenticatedTutorReviewsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/profile': {
+      id: '/_authenticated/tutor/profile'
+      path: '/tutor/profile'
+      fullPath: '/tutor/profile'
+      preLoaderRoute: typeof AuthenticatedTutorProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/notifications': {
+      id: '/_authenticated/tutor/notifications'
+      path: '/tutor/notifications'
+      fullPath: '/tutor/notifications'
+      preLoaderRoute: typeof AuthenticatedTutorNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/earnings': {
+      id: '/_authenticated/tutor/earnings'
+      path: '/tutor/earnings'
+      fullPath: '/tutor/earnings'
+      preLoaderRoute: typeof AuthenticatedTutorEarningsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/availability': {
+      id: '/_authenticated/tutor/availability'
+      path: '/tutor/availability'
+      fullPath: '/tutor/availability'
+      preLoaderRoute: typeof AuthenticatedTutorAvailabilityRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/advertisement': {
+      id: '/_authenticated/tutor/advertisement'
+      path: '/tutor/advertisement'
+      fullPath: '/tutor/advertisement'
+      preLoaderRoute: typeof AuthenticatedTutorAdvertisementRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tutor/account': {
+      id: '/_authenticated/tutor/account'
+      path: '/tutor/account'
+      fullPath: '/tutor/account'
+      preLoaderRoute: typeof AuthenticatedTutorAccountRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recruitment/notifications': {
+      id: '/_authenticated/recruitment/notifications'
+      path: '/recruitment/notifications'
+      fullPath: '/recruitment/notifications'
+      preLoaderRoute: typeof AuthenticatedRecruitmentNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recruitment/notes': {
+      id: '/_authenticated/recruitment/notes'
+      path: '/recruitment/notes'
+      fullPath: '/recruitment/notes'
+      preLoaderRoute: typeof AuthenticatedRecruitmentNotesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recruitment/documents': {
+      id: '/_authenticated/recruitment/documents'
+      path: '/recruitment/documents'
+      fullPath: '/recruitment/documents'
+      preLoaderRoute: typeof AuthenticatedRecruitmentDocumentsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recruitment/candidates': {
+      id: '/_authenticated/recruitment/candidates'
+      path: '/recruitment/candidates'
+      fullPath: '/recruitment/candidates'
+      preLoaderRoute: typeof AuthenticatedRecruitmentCandidatesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recruitment/applications': {
+      id: '/_authenticated/recruitment/applications'
+      path: '/recruitment/applications'
+      fullPath: '/recruitment/applications'
+      preLoaderRoute: typeof AuthenticatedRecruitmentApplicationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/recruitment/activity': {
+      id: '/_authenticated/recruitment/activity'
+      path: '/recruitment/activity'
+      fullPath: '/recruitment/activity'
+      preLoaderRoute: typeof AuthenticatedRecruitmentActivityRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/tutors': {
+      id: '/_authenticated/admin/tutors'
+      path: '/admin/tutors'
+      fullPath: '/admin/tutors'
+      preLoaderRoute: typeof AuthenticatedAdminTutorsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/tutor-applications': {
+      id: '/_authenticated/admin/tutor-applications'
+      path: '/admin/tutor-applications'
+      fullPath: '/admin/tutor-applications'
+      preLoaderRoute: typeof AuthenticatedAdminTutorApplicationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/students': {
+      id: '/_authenticated/admin/students'
+      path: '/admin/students'
+      fullPath: '/admin/students'
+      preLoaderRoute: typeof AuthenticatedAdminStudentsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/settings': {
+      id: '/_authenticated/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/scheduling': {
+      id: '/_authenticated/admin/scheduling'
+      path: '/admin/scheduling'
+      fullPath: '/admin/scheduling'
+      preLoaderRoute: typeof AuthenticatedAdminSchedulingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/reviews': {
+      id: '/_authenticated/admin/reviews'
+      path: '/admin/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AuthenticatedAdminReviewsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/recruitment-applications': {
+      id: '/_authenticated/admin/recruitment-applications'
+      path: '/admin/recruitment-applications'
+      fullPath: '/admin/recruitment-applications'
+      preLoaderRoute: typeof AuthenticatedAdminRecruitmentApplicationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/pages': {
+      id: '/_authenticated/admin/pages'
+      path: '/admin/pages'
+      fullPath: '/admin/pages'
+      preLoaderRoute: typeof AuthenticatedAdminPagesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/notifications': {
+      id: '/_authenticated/admin/notifications'
+      path: '/admin/notifications'
+      fullPath: '/admin/notifications'
+      preLoaderRoute: typeof AuthenticatedAdminNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/homepage': {
+      id: '/_authenticated/admin/homepage'
+      path: '/admin/homepage'
+      fullPath: '/admin/homepage'
+      preLoaderRoute: typeof AuthenticatedAdminHomepageRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/analytics': {
+      id: '/_authenticated/admin/analytics'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AuthenticatedAdminAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/ai-assistant': {
+      id: '/_authenticated/admin/ai-assistant'
+      path: '/admin/ai-assistant'
+      fullPath: '/admin/ai-assistant'
+      preLoaderRoute: typeof AuthenticatedAdminAiAssistantRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/advertisements': {
+      id: '/_authenticated/admin/advertisements'
+      path: '/admin/advertisements'
+      fullPath: '/admin/advertisements'
+      preLoaderRoute: typeof AuthenticatedAdminAdvertisementsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedCmsRoute: typeof AuthenticatedCmsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedAdminAdvertisementsRoute: typeof AuthenticatedAdminAdvertisementsRoute
+  AuthenticatedAdminAiAssistantRoute: typeof AuthenticatedAdminAiAssistantRoute
+  AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
+  AuthenticatedAdminHomepageRoute: typeof AuthenticatedAdminHomepageRoute
+  AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
+  AuthenticatedAdminPagesRoute: typeof AuthenticatedAdminPagesRoute
+  AuthenticatedAdminRecruitmentApplicationsRoute: typeof AuthenticatedAdminRecruitmentApplicationsRoute
+  AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
+  AuthenticatedAdminSchedulingRoute: typeof AuthenticatedAdminSchedulingRoute
+  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminStudentsRoute: typeof AuthenticatedAdminStudentsRoute
+  AuthenticatedAdminTutorApplicationsRoute: typeof AuthenticatedAdminTutorApplicationsRoute
+  AuthenticatedAdminTutorsRoute: typeof AuthenticatedAdminTutorsRoute
+  AuthenticatedRecruitmentActivityRoute: typeof AuthenticatedRecruitmentActivityRoute
+  AuthenticatedRecruitmentApplicationsRoute: typeof AuthenticatedRecruitmentApplicationsRoute
+  AuthenticatedRecruitmentCandidatesRoute: typeof AuthenticatedRecruitmentCandidatesRoute
+  AuthenticatedRecruitmentDocumentsRoute: typeof AuthenticatedRecruitmentDocumentsRoute
+  AuthenticatedRecruitmentNotesRoute: typeof AuthenticatedRecruitmentNotesRoute
+  AuthenticatedRecruitmentNotificationsRoute: typeof AuthenticatedRecruitmentNotificationsRoute
+  AuthenticatedTutorAccountRoute: typeof AuthenticatedTutorAccountRoute
+  AuthenticatedTutorAdvertisementRoute: typeof AuthenticatedTutorAdvertisementRoute
+  AuthenticatedTutorAvailabilityRoute: typeof AuthenticatedTutorAvailabilityRoute
+  AuthenticatedTutorEarningsRoute: typeof AuthenticatedTutorEarningsRoute
+  AuthenticatedTutorNotificationsRoute: typeof AuthenticatedTutorNotificationsRoute
+  AuthenticatedTutorProfileRoute: typeof AuthenticatedTutorProfileRoute
+  AuthenticatedTutorReviewsRoute: typeof AuthenticatedTutorReviewsRoute
+  AuthenticatedTutorScheduleRoute: typeof AuthenticatedTutorScheduleRoute
+  AuthenticatedTutorSettingsRoute: typeof AuthenticatedTutorSettingsRoute
+  AuthenticatedTutorStudentsRoute: typeof AuthenticatedTutorStudentsRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedRecruitmentIndexRoute: typeof AuthenticatedRecruitmentIndexRoute
+  AuthenticatedTutorIndexRoute: typeof AuthenticatedTutorIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedCmsRoute: AuthenticatedCmsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedAdminAdvertisementsRoute: AuthenticatedAdminAdvertisementsRoute,
+  AuthenticatedAdminAiAssistantRoute: AuthenticatedAdminAiAssistantRoute,
+  AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
+  AuthenticatedAdminHomepageRoute: AuthenticatedAdminHomepageRoute,
+  AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
+  AuthenticatedAdminPagesRoute: AuthenticatedAdminPagesRoute,
+  AuthenticatedAdminRecruitmentApplicationsRoute:
+    AuthenticatedAdminRecruitmentApplicationsRoute,
+  AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
+  AuthenticatedAdminSchedulingRoute: AuthenticatedAdminSchedulingRoute,
+  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminStudentsRoute: AuthenticatedAdminStudentsRoute,
+  AuthenticatedAdminTutorApplicationsRoute:
+    AuthenticatedAdminTutorApplicationsRoute,
+  AuthenticatedAdminTutorsRoute: AuthenticatedAdminTutorsRoute,
+  AuthenticatedRecruitmentActivityRoute: AuthenticatedRecruitmentActivityRoute,
+  AuthenticatedRecruitmentApplicationsRoute:
+    AuthenticatedRecruitmentApplicationsRoute,
+  AuthenticatedRecruitmentCandidatesRoute:
+    AuthenticatedRecruitmentCandidatesRoute,
+  AuthenticatedRecruitmentDocumentsRoute:
+    AuthenticatedRecruitmentDocumentsRoute,
+  AuthenticatedRecruitmentNotesRoute: AuthenticatedRecruitmentNotesRoute,
+  AuthenticatedRecruitmentNotificationsRoute:
+    AuthenticatedRecruitmentNotificationsRoute,
+  AuthenticatedTutorAccountRoute: AuthenticatedTutorAccountRoute,
+  AuthenticatedTutorAdvertisementRoute: AuthenticatedTutorAdvertisementRoute,
+  AuthenticatedTutorAvailabilityRoute: AuthenticatedTutorAvailabilityRoute,
+  AuthenticatedTutorEarningsRoute: AuthenticatedTutorEarningsRoute,
+  AuthenticatedTutorNotificationsRoute: AuthenticatedTutorNotificationsRoute,
+  AuthenticatedTutorProfileRoute: AuthenticatedTutorProfileRoute,
+  AuthenticatedTutorReviewsRoute: AuthenticatedTutorReviewsRoute,
+  AuthenticatedTutorScheduleRoute: AuthenticatedTutorScheduleRoute,
+  AuthenticatedTutorSettingsRoute: AuthenticatedTutorSettingsRoute,
+  AuthenticatedTutorStudentsRoute: AuthenticatedTutorStudentsRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedRecruitmentIndexRoute: AuthenticatedRecruitmentIndexRoute,
+  AuthenticatedTutorIndexRoute: AuthenticatedTutorIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -136,9 +1012,26 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AboutRoute: AboutRoute,
+  ApplyRoute: ApplyRoute,
   AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
+  FindATutorRoute: FindATutorRoute,
+  WorkWithUsRoute: WorkWithUsRoute,
+  ApiChatbotRoute: ApiChatbotRoute,
+  TutorsTutorIdRoute: TutorsTutorIdRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

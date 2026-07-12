@@ -419,30 +419,37 @@ export const DataStore = {
 
   // --- APPLICATIONS (TUTOR) ---
   submitTutorApplication: async (app: {
-    fullName: string;
+    name: string;
     email: string;
     phone: string;
+    bio?: string;
+    expected_rate?: number;
     subjects: string[];
     levels: string[];
-    languages: string[];
-    yearsExperience: number;
-    coverLetter: string;
+    languages?: string[];
+    years_experience?: number;
+    cover_letter?: string;
+    cv_name?: string;
     userId?: string;
   }) => {
     const id = "app_" + Math.random().toString(36).substr(2, 9);
     const newApp = {
       id,
       applicant_user_id: app.userId || null,
-      full_name: app.fullName,
+      full_name: app.name,
       email: app.email,
       phone: app.phone,
       subjects: app.subjects,
       levels: app.levels,
-      languages: app.languages,
-      years_experience: app.yearsExperience,
-      cover_letter: app.coverLetter,
+      languages: app.languages || ["English"],
+      years_experience: app.years_experience || 0,
+      cover_letter: app.cover_letter || app.bio || "",
+      internal_notes: null as string | null,
       status: "pending" as const,
       created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      reviewed_at: null as string | null,
+      reviewed_by: null as string | null,
     };
 
     const list = getLocal<any[]>(KEYS.APPLICATIONS, []);
@@ -452,19 +459,43 @@ export const DataStore = {
     try {
       await supabase.from("tutor_applications").insert({
         applicant_user_id: app.userId || null,
-        full_name: app.fullName,
+        full_name: app.name,
         email: app.email,
         phone: app.phone,
         subjects: app.subjects,
         levels: app.levels,
-        languages: app.languages,
-        years_experience: app.yearsExperience,
-        cover_letter: app.coverLetter,
+        languages: app.languages || ["English"],
+        years_experience: app.years_experience || 0,
+        cover_letter: app.cover_letter || app.bio || "",
         status: "pending",
       });
     } catch {}
 
     return newApp;
+  },
+
+  submitContactInquiry: async (inquiry: {
+    name: string;
+    email: string;
+    phone: string;
+    subject?: string;
+    level?: string;
+    tutor_id?: string;
+    message: string;
+  }) => {
+    const id = "inquiry_" + Math.random().toString(36).substr(2, 9);
+    const newInquiry = {
+      id,
+      ...inquiry,
+      status: "new" as const,
+      created_at: new Date().toISOString(),
+    };
+
+    const list = getLocal<any[]>("tl_contact_inquiries", []);
+    list.push(newInquiry);
+    setLocal("tl_contact_inquiries", list);
+
+    return newInquiry;
   },
 
   getTutorApplications: async (): Promise<any[]> => {

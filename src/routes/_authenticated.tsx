@@ -1,8 +1,31 @@
 import { createFileRoute, Outlet, redirect, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Users, Calendar, Clock, Star, Bell, User, Settings, LogOut, Menu } from "lucide-react";
+import { PortalLayout, type NavItem } from "@/components/portal-layout";
+import {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  Clock,
+  Star,
+  Bell,
+  User,
+  Settings,
+  DollarSign,
+  Megaphone,
+  FileText,
+  IdCard,
+  Briefcase,
+  GraduationCap,
+  BookOpen,
+  FileEdit,
+  MessageSquare,
+  BarChart3,
+  ShieldCheck,
+  LogOut,
+} from "lucide-react";
+
+type Role = "student" | "tutor" | "recruitment" | "website_manager" | "owner";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -15,13 +38,82 @@ export const Route = createFileRoute("/_authenticated")({
   component: AuthLayout,
 });
 
+const studentNav: NavItem[] = [
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "My Tutors", href: "/dashboard/my-tutors", icon: Users },
+  { name: "Schedule", href: "/dashboard/schedule", icon: Calendar },
+  { name: "Lesson History", href: "/dashboard/lessons", icon: Clock },
+  { name: "Reviews", href: "/dashboard/reviews", icon: Star },
+  { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
+  { name: "Profile", href: "/dashboard/profile", icon: User },
+  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+];
+
+const tutorNav: NavItem[] = [
+  { name: "Dashboard", href: "/tutor", icon: LayoutDashboard },
+  { name: "My Students", href: "/tutor/students", icon: Users },
+  { name: "Schedule", href: "/tutor/schedule", icon: Calendar },
+  { name: "Availability", href: "/tutor/availability", icon: Clock },
+  { name: "Advertisement", href: "/tutor/advertisement", icon: Megaphone },
+  { name: "Public Profile", href: "/tutor/profile", icon: IdCard },
+  { name: "Reviews", href: "/tutor/reviews", icon: Star },
+  { name: "Earnings", href: "/tutor/earnings", icon: DollarSign },
+  { name: "Notifications", href: "/tutor/notifications", icon: Bell },
+  { name: "Profile", href: "/tutor/account", icon: User },
+  { name: "Settings", href: "/tutor/settings", icon: Settings },
+];
+
+const recruitmentNav: NavItem[] = [
+  { name: "Dashboard", href: "/recruitment", icon: LayoutDashboard },
+  { name: "Applications", href: "/recruitment/applications", icon: FileText },
+  { name: "Candidate Details", href: "/recruitment/candidates", icon: Users },
+  { name: "Documents", href: "/recruitment/documents", icon: FileEdit },
+  { name: "Internal Notes", href: "/recruitment/notes", icon: MessageSquare },
+  { name: "Notifications", href: "/recruitment/notifications", icon: Bell },
+  { name: "Activity Log", href: "/recruitment/activity", icon: Clock },
+];
+
+const adminNav: NavItem[] = [
+  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { name: "Students", href: "/admin/students", icon: Users },
+  { name: "Tutors", href: "/admin/tutors", icon: GraduationCap },
+  { name: "Tutor Applications", href: "/admin/tutor-applications", icon: FileText },
+  { name: "Recruitment Applications", href: "/admin/recruitment-applications", icon: Briefcase },
+  { name: "Advertisements", href: "/admin/advertisements", icon: Megaphone },
+  { name: "Reviews", href: "/admin/reviews", icon: Star },
+  { name: "Scheduling", href: "/admin/scheduling", icon: Calendar },
+  { name: "Notifications", href: "/admin/notifications", icon: Bell },
+  { name: "Pages", href: "/admin/pages", icon: BookOpen },
+  { name: "Homepage", href: "/admin/homepage", icon: FileEdit },
+  { name: "AI Assistant", href: "/admin/ai-assistant", icon: MessageSquare },
+  { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+  { name: "Settings", href: "/admin/settings", icon: Settings },
+];
+
 function AuthLayout() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
+    (async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      const uid = userData.user?.id;
+      setEmail(userData.user?.email ?? null);
+      if (!uid) {
+        setLoading(false);
+        return;
+      }
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", uid);
+      const userRoles = (roleData ?? []).map((r) => r.role as Role);
+      setRoles(userRoles);
+      setLoading(false);
+    })();
+
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
       if (!session) navigate({ to: "/auth", replace: true });
       else setEmail(session.user.email ?? null);
@@ -34,83 +126,44 @@ function AuthLayout() {
     navigate({ to: "/auth", replace: true });
   };
 
-  const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { name: "My Tutors", href: "/dashboard", icon: Users }, // Mocked routes
-    { name: "Schedule", href: "/dashboard", icon: Calendar },
-    { name: "Lesson History", href: "/dashboard", icon: Clock },
-    { name: "Reviews", href: "/dashboard", icon: Star },
-    { name: "Notifications", href: "/dashboard", icon: Bell },
-    { name: "Profile", href: "/dashboard", icon: User },
-    { name: "Settings", href: "/dashboard", icon: Settings },
-  ];
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="h-8 w-8 rounded-full border-4 border-blue-600 border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  const isTutor = roles.includes("tutor");
+  const isRecruitment = roles.includes("recruitment");
+  const isManager = roles.includes("website_manager");
+  const isOwner = roles.includes("owner");
+  const isAdmin = isManager || isOwner;
+
+  let navItems = studentNav;
+  let roleLabel = "Student Portal";
+  if (isOwner) {
+    navItems = adminNav;
+    roleLabel = "Owner Dashboard";
+  } else if (isManager) {
+    navItems = adminNav;
+    roleLabel = "Admin Dashboard";
+  } else if (isRecruitment) {
+    navItems = recruitmentNav;
+    roleLabel = "Recruitment Portal";
+  } else if (isTutor) {
+    navItems = tutorNav;
+    roleLabel = "Tutor Portal";
+  }
 
   return (
-    <div className="min-h-screen bg-background flex">
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 border-r bg-card min-h-screen">
-        <div className="h-16 flex items-center px-6 border-b">
-          <Link to="/" className="font-bold text-xl text-primary">Tutors Link</Link>
-        </div>
-        <div className="flex-1 py-6 px-4 space-y-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.href}
-              className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-            >
-              <item.icon className="h-4 w-4" />
-              {item.name}
-            </Link>
-          ))}
-        </div>
-        <div className="p-4 border-t">
-          <div className="text-sm font-medium mb-4 truncate text-muted-foreground">{email}</div>
-          <Button variant="outline" className="w-full justify-start text-destructive" onClick={signOut}>
-            <LogOut className="mr-2 h-4 w-4" /> Sign Out
-          </Button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
-        {/* Mobile Header */}
-        <header className="md:hidden h-16 border-b flex items-center justify-between px-4 bg-card">
-          <Link to="/" className="font-bold text-xl text-primary">Tutors Link</Link>
-          <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            <Menu className="h-5 w-5" />
-          </Button>
-        </header>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 border-b bg-card z-50 p-4 shadow-lg flex flex-col gap-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <item.icon className="h-4 w-4" />
-                {item.name}
-              </Link>
-            ))}
-            <div className="border-t my-2 pt-2">
-              <Button variant="outline" className="w-full justify-start text-destructive" onClick={signOut}>
-                <LogOut className="mr-2 h-4 w-4" /> Sign Out
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-auto bg-muted/10 p-4 md:p-8">
-          <div className="max-w-5xl mx-auto">
-            <Outlet />
-          </div>
-        </main>
-      </div>
-    </div>
+    <PortalLayout
+      email={email}
+      roleLabel={roleLabel}
+      navItems={navItems}
+      onSignOut={signOut}
+    >
+      <Outlet />
+    </PortalLayout>
   );
 }
