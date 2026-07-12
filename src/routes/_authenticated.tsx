@@ -39,7 +39,9 @@ function AuthLayout() {
           <div className="font-semibold">Tutors Link</div>
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <span>{email}</span>
-            <Button variant="outline" size="sm" onClick={signOut}>Sign out</Button>
+            <Button variant="outline" size="sm" onClick={signOut}>
+              Sign out
+            </Button>
           </div>
         </div>
       </header>

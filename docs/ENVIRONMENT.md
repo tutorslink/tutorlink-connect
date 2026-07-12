@@ -4,12 +4,12 @@ Implements SRS §23.4.
 
 ## Categories
 
-| Category         | Where it lives                          | Exposed to browser?     |
-| ---------------- | --------------------------------------- | ----------------------- |
-| Public config    | `VITE_*` in `.env` / Lovable Cloud      | Yes (build-time inline) |
-| Server secrets   | Lovable Cloud → Backend → Secrets       | No (server only)        |
-| Feature flags    | `src/lib/config.ts` (+ optional env)    | Depends on prefix       |
-| DB / auth config | Managed by Lovable Cloud                | No                      |
+| Category         | Where it lives                       | Exposed to browser?     |
+| ---------------- | ------------------------------------ | ----------------------- |
+| Public config    | `VITE_*` in `.env` / Lovable Cloud   | Yes (build-time inline) |
+| Server secrets   | Lovable Cloud → Backend → Secrets    | No (server only)        |
+| Feature flags    | `src/lib/config.ts` (+ optional env) | Depends on prefix       |
+| DB / auth config | Managed by Lovable Cloud             | No                      |
 
 ## Rules
 
