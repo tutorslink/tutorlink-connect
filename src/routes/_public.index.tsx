@@ -47,36 +47,18 @@ function Index() {
           variants={staggerContainer}
           className="max-w-4xl mx-auto space-y-6 relative z-10"
         >
-          <motion.h1
-            variants={fadeInUp}
-            className="text-5xl md:text-6xl font-extrabold tracking-tight text-foreground"
-          >
-            Master your potential with{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              Tutors Link
-            </span>
+          <motion.h1 variants={fadeInUp} className="text-5xl md:text-6xl font-extrabold tracking-tight text-foreground">
+            Master your potential with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Tutors Link</span>
           </motion.h1>
           <motion.p variants={fadeInUp} className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Connecting ambitious students with world-class tutors. Start your personalized learning
             journey today.
           </motion.p>
-          <motion.div
-            variants={fadeInUp}
-            className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
-          >
-            <Button
-              size="lg"
-              asChild
-              className="text-lg px-8 shadow-lg shadow-blue-500/20 rounded-xl transition-transform hover:scale-105"
-            >
+          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+            <Button size="lg" asChild className="text-lg px-8 shadow-lg shadow-blue-500/20 rounded-xl transition-transform hover:scale-105">
               <Link to="/find-tutor">Find a Tutor</Link>
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              asChild
-              className="text-lg px-8 rounded-xl transition-transform hover:scale-105"
-            >
+            <Button size="lg" variant="outline" asChild className="text-lg px-8 rounded-xl transition-transform hover:scale-105">
               <Link to="/apply">Apply as a Tutor</Link>
             </Button>
           </motion.div>
@@ -85,7 +67,7 @@ function Index() {
 
       {/* Statistics Section */}
       <section className="py-20 bg-muted/30">
-        <motion.div
+        <motion.div 
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
@@ -96,12 +78,10 @@ function Index() {
             { value: "500+", label: "Qualified Tutors" },
             { value: "10,000+", label: "Students" },
             { value: "40+", label: "Subjects" },
-            { value: "4.9/5", label: "Average Rating" },
+            { value: "4.9/5", label: "Average Rating" }
           ].map((stat, i) => (
             <motion.div key={i} variants={fadeInUp} className="space-y-2">
-              <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                {stat.value}
-              </div>
+              <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{stat.value}</div>
               <div className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
                 {stat.label}
               </div>
@@ -112,7 +92,7 @@ function Index() {
 
       {/* Browse by Academic Level */}
       <section className="py-24 px-4 max-w-7xl mx-auto">
-        <motion.div
+        <motion.div 
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
@@ -124,7 +104,7 @@ function Index() {
             Find specialists for your specific educational journey
           </p>
         </motion.div>
-        <motion.div
+        <motion.div 
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
@@ -142,13 +122,9 @@ function Index() {
             "Professional",
           ].map((level) => (
             <motion.div key={level} variants={fadeInUp} whileHover={{ y: -5 }}>
-              <Link to="/find-tutor" search={{ level: level.toLowerCase() }}>
-                <Card className="hover:border-blue-500/50 hover:shadow-lg transition-all cursor-pointer h-full border-blue-100 bg-blue-50/50 hover:bg-blue-50 backdrop-blur-sm rounded-2xl">
-                  <CardContent className="p-8 text-center font-semibold text-lg text-blue-900">
-                    {level}
-                  </CardContent>
-                </Card>
-              </Link>
+              <Card className="hover:border-blue-500/50 hover:shadow-lg transition-all cursor-pointer h-full border-border/50 bg-background/50 backdrop-blur-sm rounded-2xl">
+                <CardContent className="p-8 text-center font-semibold text-lg">{level}</CardContent>
+              </Card>
             </motion.div>
           ))}
         </motion.div>
@@ -157,7 +133,7 @@ function Index() {
       {/* How it Works */}
       <section className="py-32 px-4 bg-muted/10">
         <div className="max-w-7xl mx-auto text-center">
-          <motion.h2
+          <motion.h2 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -166,7 +142,7 @@ function Index() {
           >
             How Tutors Link Works
           </motion.h2>
-          <motion.div
+          <motion.div 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -174,22 +150,10 @@ function Index() {
             className="grid md:grid-cols-4 gap-12 relative"
           >
             {[
-              {
-                step: "1",
-                title: "Search Tutors",
-                desc: "Browse our marketplace of vetted professionals.",
-              },
-              {
-                step: "2",
-                title: "Choose a Tutor",
-                desc: "Review profiles, ratings, and experience.",
-              },
-              {
-                step: "3",
-                title: "Contact Us",
-                desc: "We facilitate the connection and scheduling.",
-              },
-              { step: "4", title: "Begin Learning", desc: "Achieve your academic goals." },
+              { step: "1", title: "Search Tutors", desc: "Browse our marketplace of vetted professionals." },
+              { step: "2", title: "Choose a Tutor", desc: "Review profiles, ratings, and experience." },
+              { step: "3", title: "Contact Us", desc: "We facilitate the connection and scheduling." },
+              { step: "4", title: "Begin Learning", desc: "Achieve your academic goals." }
             ].map((item, i) => (
               <motion.div key={i} variants={fadeInUp} className="space-y-6 relative">
                 <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-3xl font-bold mx-auto shadow-sm transform rotate-3 transition-transform hover:rotate-0">
@@ -197,7 +161,9 @@ function Index() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-xl mb-2">{item.title}</h3>
-                  <p className="text-base text-muted-foreground">{item.desc}</p>
+                  <p className="text-base text-muted-foreground">
+                    {item.desc}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -208,7 +174,7 @@ function Index() {
       {/* Call to Action */}
       <section className="py-32 px-4 bg-blue-600 text-white text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
-        <motion.div
+        <motion.div 
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -221,12 +187,7 @@ function Index() {
             Link.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-            <Button
-              size="lg"
-              variant="secondary"
-              asChild
-              className="text-lg px-10 rounded-xl font-semibold shadow-xl hover:scale-105 transition-transform text-blue-600"
-            >
+            <Button size="lg" variant="secondary" asChild className="text-lg px-10 rounded-xl font-semibold shadow-xl hover:scale-105 transition-transform text-blue-600">
               <Link to="/find-tutor">Find a Tutor</Link>
             </Button>
             <Button

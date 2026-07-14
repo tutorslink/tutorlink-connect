@@ -12,8 +12,7 @@ export function Navbar() {
 
   useEffect(() => {
     // Check initial theme
-    const isDarkMode =
-      document.documentElement.classList.contains("dark") ||
+    const isDarkMode = document.documentElement.classList.contains("dark") || 
       (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches);
     setIsDark(isDarkMode);
     if (isDarkMode) {
@@ -86,12 +85,7 @@ export function Navbar() {
 
         {/* Auth CTA Buttons */}
         <div className="hidden md:flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className="rounded-xl text-muted-foreground hover:text-foreground"
-          >
+          <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-xl text-muted-foreground hover:text-foreground">
             {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
           {session ? (
@@ -140,12 +134,7 @@ export function Navbar() {
 
         {/* Mobile Hamburger Toggle */}
         <div className="md:hidden flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className="h-9 w-9 text-muted-foreground hover:text-foreground rounded-xl"
-          >
+          <Button variant="ghost" size="icon" onClick={toggleTheme} className="h-9 w-9 text-muted-foreground hover:text-foreground rounded-xl">
             {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
           {session && (

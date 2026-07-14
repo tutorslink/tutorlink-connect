@@ -10,13 +10,7 @@ import { appwrite } from "@/integrations/appwrite/client";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "motion/react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/_public/work-with-us")({
   component: WorkWithUs,
@@ -32,10 +26,10 @@ function WorkWithUs() {
   const [emailAddress, setEmailAddress] = useState("");
   const [countryOfResidence, setCountryOfResidence] = useState("");
   const [languagesFluentIn, setLanguagesFluentIn] = useState("");
-
+  
   const [currentEducationLevel, setCurrentEducationLevel] = useState("");
   const [otherEducation, setOtherEducation] = useState("");
-
+  
   const [role, setRole] = useState("");
   const [reasonToApply, setReasonToApply] = useState("");
   const [experience, setExperience] = useState("");
@@ -56,33 +50,35 @@ function WorkWithUs() {
 
     setLoading(true);
     try {
-      const languages = languagesFluentIn
-        .split(",")
-        .map((l) => l.trim())
-        .filter(Boolean);
+      const languages = languagesFluentIn.split(",").map(l => l.trim()).filter(Boolean);
       const education = currentEducationLevel === "Other" ? otherEducation : currentEducationLevel;
-
-      await appwrite.databases.createDocument("Database", "volunteer_applications", ID.unique(), {
-        Full_name: fullName,
-        Discord_username: discordUsername,
-        Instagram_handle: instagramHandle,
-        Email_address: emailAddress,
-        Country_of_residence: countryOfResidence,
-        Languages_fluent_in: languages.length > 0 ? languages : [languagesFluentIn],
-        Current_education_level: education,
-        Role_you_want_to_apply_for: role,
-        Reason_to_apply: reasonToApply,
-        Experience: experience,
-        projectLinks: projectLinks || undefined,
-        hoursPerWeek,
-        Why_good_fit: whyGoodFit,
-        status: "pending",
-      });
+      
+      await appwrite.databases.createDocument(
+        "Database",
+        "volunteer_applications",
+        ID.unique(),
+        {
+          Full_name: fullName,
+          Discord_username: discordUsername,
+          Instagram_handle: instagramHandle,
+          Email_address: emailAddress,
+          Country_of_residence: countryOfResidence,
+          Languages_fluent_in: languages.length > 0 ? languages : [languagesFluentIn],
+          Current_education_level: education,
+          Role_you_want_to_apply_for: role,
+          Reason_to_apply: reasonToApply,
+          Experience: experience,
+          projectLinks: projectLinks || undefined,
+          hoursPerWeek,
+          Why_good_fit: whyGoodFit,
+          status: "pending"
+        }
+      );
       setSuccess(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error(err);
-      toast.error(err instanceof Error ? err.message : "Failed to submit application");
+      toast.error(err.message || "Failed to submit application");
     } finally {
       setLoading(false);
     }
@@ -92,12 +88,9 @@ function WorkWithUs() {
     return (
       <div className="max-w-3xl mx-auto px-4 py-32 text-center">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
-          <h1 className="text-4xl font-bold mb-6 text-emerald-600 dark:text-emerald-500">
-            Application Submitted!
-          </h1>
+          <h1 className="text-4xl font-bold mb-6 text-emerald-600 dark:text-emerald-500">Application Submitted!</h1>
           <p className="text-xl text-muted-foreground mb-8">
-            Thank you for applying to be a volunteer at Tutors Link. We will review your application
-            and contact you soon.
+            Thank you for applying to be a volunteer at Tutors Link. We will review your application and contact you soon.
           </p>
         </motion.div>
       </div>
@@ -107,88 +100,44 @@ function WorkWithUs() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-24">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-extrabold mb-4 tracking-tight">
-          Student Volunteer Application
-        </h1>
+        <h1 className="text-4xl font-extrabold mb-4 tracking-tight">Student Volunteer Application</h1>
         <p className="text-lg text-muted-foreground">
-          Welcome to Tutors Link! We are seeking passionate student volunteers to join our team and
-          help us connect students with tutors. Selected volunteers will gain valuable experience
-          and receive a certificate of completion.
+          Welcome to Tutors Link! We are seeking passionate student volunteers to join our team and help us connect students with tutors. Selected volunteers will gain valuable experience and receive a certificate of completion.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="bg-card border rounded-2xl p-8 shadow-sm space-y-8">
+        
         <div className="space-y-4">
           <h2 className="text-2xl font-semibold border-b pb-2">Personal Information</h2>
           <div>
-            <Label>
-              Full Name <span className="text-destructive">*</span>
-            </Label>
-            <Input required value={fullName} onChange={(e) => setFullName(e.target.value)} />
+            <Label>Full Name <span className="text-destructive">*</span></Label>
+            <Input required value={fullName} onChange={e => setFullName(e.target.value)} />
           </div>
           <div>
-            <Label>
-              Discord Username <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              required
-              value={discordUsername}
-              onChange={(e) => setDiscordUsername(e.target.value)}
-            />
+            <Label>Discord Username <span className="text-destructive">*</span></Label>
+            <Input required value={discordUsername} onChange={e => setDiscordUsername(e.target.value)} />
           </div>
           <div>
-            <Label>
-              Instagram Handle <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              required
-              value={instagramHandle}
-              onChange={(e) => setInstagramHandle(e.target.value)}
-            />
+            <Label>Instagram Handle <span className="text-destructive">*</span></Label>
+            <Input required value={instagramHandle} onChange={e => setInstagramHandle(e.target.value)} />
           </div>
           <div>
-            <Label>
-              Email Address <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              type="email"
-              required
-              value={emailAddress}
-              onChange={(e) => setEmailAddress(e.target.value)}
-            />
+            <Label>Email Address <span className="text-destructive">*</span></Label>
+            <Input type="email" required value={emailAddress} onChange={e => setEmailAddress(e.target.value)} />
           </div>
           <div>
-            <Label>
-              Country of Residence <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              required
-              value={countryOfResidence}
-              onChange={(e) => setCountryOfResidence(e.target.value)}
-            />
+            <Label>Country of Residence <span className="text-destructive">*</span></Label>
+            <Input required value={countryOfResidence} onChange={e => setCountryOfResidence(e.target.value)} />
           </div>
           <div>
-            <Label>
-              Languages Fluent In <span className="text-destructive">*</span>
-            </Label>
-            <p className="text-xs text-muted-foreground mb-2">
-              Please list all languages you speak fluently (comma separated)
-            </p>
-            <Input
-              required
-              value={languagesFluentIn}
-              onChange={(e) => setLanguagesFluentIn(e.target.value)}
-            />
+            <Label>Languages Fluent In <span className="text-destructive">*</span></Label>
+            <p className="text-xs text-muted-foreground mb-2">Please list all languages you speak fluently (comma separated)</p>
+            <Input required value={languagesFluentIn} onChange={e => setLanguagesFluentIn(e.target.value)} />
           </div>
           <div>
-            <Label>
-              Current Education Level <span className="text-destructive">*</span>
-            </Label>
-            <RadioGroup
-              value={currentEducationLevel}
-              onValueChange={setCurrentEducationLevel}
-              className="mt-2 space-y-2"
-            >
+            <Label>Current Education Level <span className="text-destructive">*</span></Label>
+            <RadioGroup value={currentEducationLevel} onValueChange={setCurrentEducationLevel} className="mt-2 space-y-2">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="High School Student" id="ed-1" />
                 <Label htmlFor="ed-1">High School Student</Label>
@@ -207,13 +156,7 @@ function WorkWithUs() {
               </div>
             </RadioGroup>
             {currentEducationLevel === "Other" && (
-              <Input
-                className="mt-3"
-                placeholder="Please specify"
-                required
-                value={otherEducation}
-                onChange={(e) => setOtherEducation(e.target.value)}
-              />
+              <Input className="mt-3" placeholder="Please specify" required value={otherEducation} onChange={e => setOtherEducation(e.target.value)} />
             )}
           </div>
         </div>
@@ -221,13 +164,9 @@ function WorkWithUs() {
         <div className="space-y-4 pt-4">
           <h2 className="text-2xl font-semibold border-b pb-2">Role & Experience</h2>
           <div>
-            <Label>
-              Which role would you like to apply for? <span className="text-destructive">*</span>
-            </Label>
+            <Label>Which role would you like to apply for? <span className="text-destructive">*</span></Label>
             <Select value={role} onValueChange={setRole} required>
-              <SelectTrigger className="mt-2">
-                <SelectValue placeholder="Select a role" />
-              </SelectTrigger>
+              <SelectTrigger className="mt-2"><SelectValue placeholder="Select a role" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="Recruitment Team">Recruitment Team</SelectItem>
                 <SelectItem value="Social Media">Social Media</SelectItem>
@@ -239,58 +178,26 @@ function WorkWithUs() {
               </SelectContent>
             </Select>
           </div>
-
+          
           <div>
-            <Label>
-              Why do you want to apply for the selected role?{" "}
-              <span className="text-destructive">*</span>
-            </Label>
-            <Textarea
-              required
-              className="min-h-[100px]"
-              value={reasonToApply}
-              onChange={(e) => setReasonToApply(e.target.value)}
-            />
+            <Label>Why do you want to apply for the selected role? <span className="text-destructive">*</span></Label>
+            <Textarea required className="min-h-[100px]" value={reasonToApply} onChange={e => setReasonToApply(e.target.value)} />
           </div>
 
           <div>
-            <Label>
-              What relevant experience do you have in this specific field or related areas?{" "}
-              <span className="text-destructive">*</span>
-            </Label>
-            <Textarea
-              required
-              className="min-h-[100px]"
-              value={experience}
-              onChange={(e) => setExperience(e.target.value)}
-            />
+            <Label>What relevant experience do you have in this specific field or related areas? <span className="text-destructive">*</span></Label>
+            <Textarea required className="min-h-[100px]" value={experience} onChange={e => setExperience(e.target.value)} />
           </div>
 
           <div>
-            <Label>
-              Please share any of your projects or work relating to the field you are choosing.
-              (link) <span className="text-destructive">*</span>
-            </Label>
-            <p className="text-xs text-muted-foreground mb-2">
-              If you dont have any you may type "NA"
-            </p>
-            <Input
-              required
-              value={projectLinks}
-              onChange={(e) => setProjectLinks(e.target.value)}
-            />
+            <Label>Please share any of your projects or work relating to the field you are choosing. (link) <span className="text-destructive">*</span></Label>
+            <p className="text-xs text-muted-foreground mb-2">If you dont have any you may type "NA"</p>
+            <Input required value={projectLinks} onChange={e => setProjectLinks(e.target.value)} />
           </div>
 
           <div>
-            <Label>
-              How many hours a week can you give comfortably for this role?{" "}
-              <span className="text-destructive">*</span>
-            </Label>
-            <RadioGroup
-              value={hoursPerWeek}
-              onValueChange={setHoursPerWeek}
-              className="mt-2 space-y-2"
-            >
+            <Label>How many hours a week can you give comfortably for this role? <span className="text-destructive">*</span></Label>
+            <RadioGroup value={hoursPerWeek} onValueChange={setHoursPerWeek} className="mt-2 space-y-2">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="0-3" id="hr-1" />
                 <Label htmlFor="hr-1">0-3</Label>
@@ -311,33 +218,14 @@ function WorkWithUs() {
           </div>
 
           <div>
-            <Label>
-              Tell us a little about what you think makes you a good fit for this opportunity.{" "}
-              <span className="text-destructive">*</span>
-            </Label>
-            <Textarea
-              required
-              className="min-h-[100px]"
-              value={whyGoodFit}
-              onChange={(e) => setWhyGoodFit(e.target.value)}
-            />
+            <Label>Tell us a little about what you think makes you a good fit for this opportunity. <span className="text-destructive">*</span></Label>
+            <Textarea required className="min-h-[100px]" value={whyGoodFit} onChange={e => setWhyGoodFit(e.target.value)} />
           </div>
         </div>
 
         <div className="flex justify-end pt-6 border-t">
-          <Button
-            type="submit"
-            size="lg"
-            disabled={loading}
-            className="w-full sm:w-auto px-12 text-lg rounded-xl"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Submitting...
-              </>
-            ) : (
-              "Submit Application"
-            )}
+          <Button type="submit" size="lg" disabled={loading} className="w-full sm:w-auto px-12 text-lg rounded-xl">
+            {loading ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Submitting...</> : "Submit Application"}
           </Button>
         </div>
       </form>
