@@ -14,22 +14,23 @@ Implements SRS §23.8–§23.14.
 ## Logging (§23.9)
 
 Use `src/lib/logger.ts` (`log.info` / `log.warn` / `log.error`). Never log:
+
 - Passwords, tokens, session JSON
 - Full PII (email OK for auth events; redact elsewhere)
 - Service-role keys or any `SUPABASE_SERVICE_ROLE_KEY`-derived values
 
 ## Routine Maintenance (§23.10) — cadence
 
-| Task                          | Cadence      | Owner            |
-| ----------------------------- | ------------ | ---------------- |
-| Dependency updates (patch)    | Monthly      | Website Manager  |
-| Dependency updates (major)    | Quarterly    | Website Manager  |
-| Security scan                 | Every deploy | Website Manager  |
-| Credential rotation           | Semi-annual  | Owner            |
-| Permission / role review      | Quarterly    | Owner            |
-| Backup restore drill          | Quarterly    | Owner            |
-| Slow-query review             | Monthly      | Website Manager  |
-| Audit-log spot check          | Monthly      | Owner            |
+| Task                       | Cadence      | Owner           |
+| -------------------------- | ------------ | --------------- |
+| Dependency updates (patch) | Monthly      | Website Manager |
+| Dependency updates (major) | Quarterly    | Website Manager |
+| Security scan              | Every deploy | Website Manager |
+| Credential rotation        | Semi-annual  | Owner           |
+| Permission / role review   | Quarterly    | Owner           |
+| Backup restore drill       | Quarterly    | Owner           |
+| Slow-query review          | Monthly      | Website Manager |
+| Audit-log spot check       | Monthly      | Owner           |
 
 ## Backups (§23.11)
 

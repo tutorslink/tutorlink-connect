@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/admin/advertisements")({
 });
 
 function AdminAdvertisements() {
-  const [ads, setAds] = useState<any[]>([]);
+  const [ads, setAds] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,7 +34,11 @@ function AdminAdvertisements() {
     <div>
       <PageHeader title="Advertisements" description="Manage tutor advertisements and listings." />
       {ads.length === 0 ? (
-        <EmptyState icon={Megaphone} title="No Advertisements" description="No tutor advertisements have been created yet." />
+        <EmptyState
+          icon={Megaphone}
+          title="No Advertisements"
+          description="No tutor advertisements have been created yet."
+        />
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {ads.map((ad) => (
@@ -43,19 +47,31 @@ function AdminAdvertisements() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="font-semibold text-sm">{ad.title}</p>
-                    <p className="text-xs text-muted-foreground">by {ad.tutor?.display_name || "Tutor"}</p>
+                    <p className="text-xs text-muted-foreground">
+                      by{" "}
+                      {((ad.tutor as Record<string, unknown>)?.display_name as string) || "Tutor"}
+                    </p>
                     <p className="text-sm font-bold mt-1">
-                      ${ad.monthly_price || ad.price}{ad.monthly_price ? "/mo" : "/hr"}
+                      ${ad.monthly_price || ad.price}
+                      {ad.monthly_price ? "/mo" : "/hr"}
                     </p>
                     {ad.teaching_format && (
-                      <p className="text-xs text-muted-foreground capitalize">{ad.teaching_format}</p>
+                      <p className="text-xs text-muted-foreground capitalize">
+                        {ad.teaching_format}
+                      </p>
                     )}
                   </div>
-                  <StatusBadge status={ad.advertisement_status || (ad.is_active ? "active" : "paused")} />
+                  <StatusBadge
+                    status={ad.advertisement_status || (ad.is_active ? "active" : "paused")}
+                  />
                 </div>
-                {ad.description && <p className="text-xs text-muted-foreground line-clamp-2">{ad.description}</p>}
+                {ad.description && (
+                  <p className="text-xs text-muted-foreground line-clamp-2">{ad.description}</p>
+                )}
                 <div className="flex gap-2 pt-2 border-t">
-                  <Button variant="outline" size="sm" className="gap-1.5 flex-1"><Eye className="h-4 w-4" /> View</Button>
+                  <Button variant="outline" size="sm" className="gap-1.5 flex-1">
+                    <Eye className="h-4 w-4" /> View
+                  </Button>
                   <Button variant="outline" size="sm" className="gap-1.5 flex-1">
                     <Power className="h-4 w-4" /> {ad.is_active ? "Deactivate" : "Activate"}
                   </Button>

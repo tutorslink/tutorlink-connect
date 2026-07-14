@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/admin/tutor-applications")
 });
 
 function AdminTutorApplications() {
-  const [applications, setApplications] = useState<any[]>([]);
+  const [applications, setApplications] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,7 +50,11 @@ function AdminTutorApplications() {
     <div>
       <PageHeader title="Tutor Applications" description="Review and approve tutor applications." />
       {applications.length === 0 ? (
-        <EmptyState icon={FileText} title="No Applications" description="There are no tutor applications to review." />
+        <EmptyState
+          icon={FileText}
+          title="No Applications"
+          description="There are no tutor applications to review."
+        />
       ) : (
         <div className="space-y-3">
           {applications.map((app) => (
@@ -58,23 +62,42 @@ function AdminTutorApplications() {
               <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold text-sm">
-                    {(app.full_name || "A").split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
+                    {(app.full_name || "A")
+                      .split(" ")
+                      .map((n: string) => n[0])
+                      .join("")
+                      .slice(0, 2)}
                   </div>
                   <div>
                     <p className="font-semibold text-sm">{app.full_name}</p>
-                    <p className="text-xs text-muted-foreground">{app.email} · {(app.subjects || []).join(", ")}</p>
-                    <p className="text-xs text-muted-foreground">Applied {new Date(app.created_at).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {app.email} · {(app.subjects || []).join(", ")}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Applied {new Date(app.created_at).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <StatusBadge status={app.status} />
-                  <Button variant="outline" size="sm" className="gap-1.5"><Eye className="h-4 w-4" /> Review</Button>
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <Eye className="h-4 w-4" /> Review
+                  </Button>
                   {app.status === "pending" || app.status === "under_review" ? (
                     <>
-                      <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 gap-1.5" onClick={() => handleApprove(app.id)}>
+                      <Button
+                        size="sm"
+                        className="bg-emerald-600 hover:bg-emerald-700 gap-1.5"
+                        onClick={() => handleApprove(app.id)}
+                      >
                         <CheckCircle className="h-4 w-4" /> Approve
                       </Button>
-                      <Button variant="outline" size="sm" className="text-red-600 gap-1.5" onClick={() => handleReject(app.id)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-red-600 gap-1.5"
+                        onClick={() => handleReject(app.id)}
+                      >
                         <XCircle className="h-4 w-4" /> Reject
                       </Button>
                     </>

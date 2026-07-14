@@ -154,12 +154,7 @@ function AuthLayout() {
   }
 
   return (
-    <PortalLayout
-      email={email}
-      roleLabel={roleLabel}
-      navItems={navItems}
-      onSignOut={signOut}
-    >
+    <PortalLayout email={email} roleLabel={roleLabel} navItems={navItems} onSignOut={signOut}>
       <Outlet />
     </PortalLayout>
   );

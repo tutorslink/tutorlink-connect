@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/tutor/schedule")({
 type ViewMode = "day" | "week" | "month";
 
 function TutorSchedule() {
-  const [lessons, setLessons] = useState<any[]>([]);
+  const [lessons, setLessons] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>("week");
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -45,7 +45,7 @@ function TutorSchedule() {
 
   const filteredLessons = useMemo(() => {
     return lessons.filter((l) => {
-      const lessonDate = new Date(l.starts_at);
+      const lessonDate = new Date(l.starts_at as string);
       if (viewMode === "day") {
         return lessonDate.toDateString() === currentDate.toDateString();
       } else if (viewMode === "week") {
@@ -55,14 +55,22 @@ function TutorSchedule() {
         weekEnd.setDate(weekEnd.getDate() + 7);
         return lessonDate >= weekStart && lessonDate < weekEnd;
       } else {
-        return lessonDate.getMonth() === currentDate.getMonth() && lessonDate.getFullYear() === currentDate.getFullYear();
+        return (
+          lessonDate.getMonth() === currentDate.getMonth() &&
+          lessonDate.getFullYear() === currentDate.getFullYear()
+        );
       }
     });
   }, [lessons, currentDate, viewMode]);
 
   const formatDateRange = () => {
     if (viewMode === "day") {
-      return currentDate.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+      return currentDate.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
     } else if (viewMode === "week") {
       const start = new Date(currentDate);
       start.setDate(start.getDate() - start.getDay());
@@ -93,7 +101,10 @@ function TutorSchedule() {
 
   return (
     <div>
-      <PageHeader title="Schedule" description={`All times shown in your timezone: ${userTimezone}`} />
+      <PageHeader
+        title="Schedule"
+        description={`All times shown in your timezone: ${userTimezone}`}
+      />
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <div className="flex items-center gap-2">
@@ -104,7 +115,9 @@ function TutorSchedule() {
           <Button variant="outline" size="icon" onClick={() => navigateDate(1)}>
             <ChevronRight className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => setCurrentDate(new Date())}>Today</Button>
+          <Button variant="ghost" size="sm" onClick={() => setCurrentDate(new Date())}>
+            Today
+          </Button>
         </div>
         <div className="flex gap-1 border rounded-lg p-1">
           {(["day", "week", "month"] as ViewMode[]).map((mode) => (
@@ -122,7 +135,11 @@ function TutorSchedule() {
       </div>
 
       {filteredLessons.length === 0 ? (
-        <EmptyState icon={Calendar} title="No Lessons" description={`No lessons scheduled for this ${viewMode}.`} />
+        <EmptyState
+          icon={Calendar}
+          title="No Lessons"
+          description={`No lessons scheduled for this ${viewMode}.`}
+        />
       ) : (
         <div className="space-y-3">
           {filteredLessons.map((l) => (
@@ -133,14 +150,16 @@ function TutorSchedule() {
                     <Calendar className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="font-semibold text-sm">{l.subject || "Lesson"}</p>
-                    {l.academic_level && <p className="text-xs text-muted-foreground">{l.academic_level}</p>}
+                    <p className="font-semibold text-sm">{(l.subject as string) || "Lesson"}</p>
+                    {l.academic_level && (
+                      <p className="text-xs text-muted-foreground">{l.academic_level as string}</p>
+                    )}
                     <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                      <Clock className="h-3 w-3" /> {formatLessonTime(l.starts_at)}
+                      <Clock className="h-3 w-3" /> {formatLessonTime(l.starts_at as string)}
                     </p>
                   </div>
                 </div>
-                <StatusBadge status={l.status} />
+                <StatusBadge status={l.status as string} />
               </CardContent>
             </Card>
           ))}

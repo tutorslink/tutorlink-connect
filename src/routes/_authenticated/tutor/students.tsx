@@ -13,7 +13,8 @@ const mockStudents = [
   {
     id: "s1",
     name: "Emma Wilson",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
     subjects: ["Mathematics", "Calculus"],
     level: "A-Level",
     status: "active",
@@ -24,7 +25,8 @@ const mockStudents = [
   {
     id: "s2",
     name: "James Park",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
     subjects: ["Calculus"],
     level: "University",
     status: "active",
@@ -35,7 +37,8 @@ const mockStudents = [
   {
     id: "s3",
     name: "Sofia Garcia",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80",
+    avatar:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80",
     subjects: ["Statistics"],
     level: "IB",
     status: "active",
@@ -54,14 +57,22 @@ function TutorStudents() {
       <PageHeader title="My Students" description="Students currently assigned to you." />
 
       {mockStudents.length === 0 ? (
-        <EmptyState icon={Users} title="No students have been assigned yet." description="New student assignments will appear here." />
+        <EmptyState
+          icon={Users}
+          title="No students have been assigned yet."
+          description="New student assignments will appear here."
+        />
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {mockStudents.map((student) => (
             <Card key={student.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center gap-3">
-                  <img src={student.avatar} alt={student.name} className="h-12 w-12 rounded-full object-cover border" />
+                  <img
+                    src={student.avatar}
+                    alt={student.name}
+                    className="h-12 w-12 rounded-full object-cover border"
+                  />
                   <div className="min-w-0">
                     <h3 className="font-semibold truncate">{student.name}</h3>
                     <p className="text-xs text-muted-foreground">{student.level}</p>
@@ -69,7 +80,10 @@ function TutorStudents() {
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {student.subjects.map((s) => (
-                    <span key={s} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400">
+                    <span
+                      key={s}
+                      className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400"
+                    >
                       {s}
                     </span>
                   ))}
@@ -98,11 +112,18 @@ function TutorStudents() {
       )}
 
       {selectedStudent && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setSelected(null)}>
+        <div
+          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          onClick={() => setSelected(null)}
+        >
           <Card className="w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center gap-4">
-                <img src={selectedStudent.avatar} alt={selectedStudent.name} className="h-16 w-16 rounded-full object-cover border" />
+                <img
+                  src={selectedStudent.avatar}
+                  alt={selectedStudent.name}
+                  className="h-16 w-16 rounded-full object-cover border"
+                />
                 <div>
                   <h2 className="text-xl font-bold">{selectedStudent.name}</h2>
                   <p className="text-sm text-muted-foreground">{selectedStudent.level}</p>

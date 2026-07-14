@@ -21,7 +21,11 @@ const SUGGESTED_PROMPTS = [
 const CONTEXT_PROMPTS: Record<string, string[]> = {
   "/find-a-tutor": ["Find a math tutor", "Show me English tutors", "Who teaches computer science?"],
   "/apply": ["How do I apply?", "What documents do I need?", "What's the approval process?"],
-  "/work-with-us": ["What positions are open?", "How do I join the team?", "Tell me about recruitment"],
+  "/work-with-us": [
+    "What positions are open?",
+    "How do I join the team?",
+    "Tell me about recruitment",
+  ],
   "/about": ["What is Tutors Link?", "Tell me about your mission", "How are tutors vetted?"],
   "/contact": ["How do I contact support?", "What are your response times?"],
 };
@@ -33,7 +37,10 @@ function getContextualPrompts(pathname: string): string[] {
 export function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Hi! I'm the Tutors Link Assistant. How can I help you find the right tutor today?" },
+    {
+      role: "assistant",
+      content: "Hi! I'm the Tutors Link Assistant. How can I help you find the right tutor today?",
+    },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -51,49 +58,56 @@ export function AIChatbot() {
     }
   }, [messages, isLoading]);
 
-  const handleSend = useCallback(async (text?: string) => {
-    const content = (text || input).trim();
-    if (!content || isLoading) return;
+  const handleSend = useCallback(
+    async (text?: string) => {
+      const content = (text || input).trim();
+      if (!content || isLoading) return;
 
-    setMessages((prev) => [...prev, { role: "user", content }]);
-    setInput("");
-    setIsLoading(true);
-    setShowSuggestions(false);
+      setMessages((prev) => [...prev, { role: "user", content }]);
+      setInput("");
+      setIsLoading(true);
+      setShowSuggestions(false);
 
-    try {
-      const response = await fetch("/api/chatbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [...messages, { role: "user", content }].map((m) => ({
-            role: m.role === "assistant" ? "assistant" : "user",
-            content: m.content,
-          })),
-          currentUrl: currentPath,
-        }),
-      });
+      try {
+        const response = await fetch("/api/chatbot", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [...messages, { role: "user", content }].map((m) => ({
+              role: m.role === "assistant" ? "assistant" : "user",
+              content: m.content,
+            })),
+            currentUrl: currentPath,
+          }),
+        });
 
-      if (!response.ok) throw new Error("Request failed");
+        if (!response.ok) throw new Error("Request failed");
 
-      const data = await response.json();
-      if (data.error) throw new Error(data.error);
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
 
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: data.text || "I'm here to help! What would you like to know?" },
-      ]);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "I'm having trouble connecting right now. Please try again or visit our Contact page at /contact.",
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [input, isLoading, messages, currentPath]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: data.text || "I'm here to help! What would you like to know?",
+          },
+        ]);
+      } catch {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content:
+              "I'm having trouble connecting right now. Please try again or visit our Contact page at /contact.",
+          },
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [input, isLoading, messages, currentPath],
+  );
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -158,7 +172,10 @@ export function AIChatbot() {
           <CardContent className="p-4 flex-1 overflow-hidden">
             <div ref={scrollRef} className="h-[350px] overflow-y-auto flex flex-col gap-3 pr-1">
               {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div
+                  key={i}
+                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                >
                   <div
                     className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed ${
                       msg.role === "user"
@@ -182,7 +199,9 @@ export function AIChatbot() {
 
             {showSuggestions && messages.length <= 1 && (
               <div className="mt-3 pt-3 border-t">
-                <p className="text-xs font-semibold text-muted-foreground mb-2">Suggested questions:</p>
+                <p className="text-xs font-semibold text-muted-foreground mb-2">
+                  Suggested questions:
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {suggestions.map((prompt) => (
                     <button

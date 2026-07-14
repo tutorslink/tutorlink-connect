@@ -1,6 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Settings, Moon, Bell, Shield, Globe, Save, MessageCircle, Link2, Unlink, RefreshCw } from "lucide-react";
+import {
+  Settings,
+  Moon,
+  Bell,
+  Shield,
+  Globe,
+  Save,
+  MessageCircle,
+  Link2,
+  Unlink,
+  RefreshCw,
+} from "lucide-react";
 import { PageHeader } from "@/components/portal-shared";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,7 +43,7 @@ function AdminSettings() {
     announcement_channel: "",
   });
 
-  const [discordLink, setDiscordLink] = useState<any>(null);
+  const [discordLink, setDiscordLink] = useState<Record<string, unknown> | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -84,7 +95,10 @@ function AdminSettings() {
 
   return (
     <div>
-      <PageHeader title="Settings" description="Configure platform-wide settings, Discord integration, and preferences." />
+      <PageHeader
+        title="Settings"
+        description="Configure platform-wide settings, Discord integration, and preferences."
+      />
 
       <div className="grid lg:grid-cols-2 gap-6">
         <Card>
@@ -95,11 +109,15 @@ function AdminSettings() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Platform Name</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Platform Name
+              </label>
               <Input defaultValue="Tutors Link" />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Support Email</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Support Email
+              </label>
               <Input type="email" defaultValue="support@tutorslink.me" />
             </div>
             <div className="flex items-center justify-between pt-2">
@@ -107,9 +125,14 @@ function AdminSettings() {
                 <p className="text-sm font-medium">Maintenance Mode</p>
                 <p className="text-xs text-muted-foreground">Temporarily disable public access</p>
               </div>
-              <Switch checked={settings.maintenanceMode} onCheckedChange={() => toggle("maintenanceMode")} />
+              <Switch
+                checked={settings.maintenanceMode}
+                onCheckedChange={() => toggle("maintenanceMode")}
+              />
             </div>
-            <Button size="sm" onClick={() => toast.success("Settings saved")}>Save Configuration</Button>
+            <Button size="sm" onClick={() => toast.success("Settings saved")}>
+              Save Configuration
+            </Button>
           </CardContent>
         </Card>
 
@@ -125,21 +148,30 @@ function AdminSettings() {
                 <p className="text-sm font-medium">Email Notifications</p>
                 <p className="text-xs text-muted-foreground">Receive platform alerts via email</p>
               </div>
-              <Switch checked={settings.emailNotifications} onCheckedChange={() => toggle("emailNotifications")} />
+              <Switch
+                checked={settings.emailNotifications}
+                onCheckedChange={() => toggle("emailNotifications")}
+              />
             </div>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Push Notifications</p>
                 <p className="text-xs text-muted-foreground">Browser push for critical alerts</p>
               </div>
-              <Switch checked={settings.pushNotifications} onCheckedChange={() => toggle("pushNotifications")} />
+              <Switch
+                checked={settings.pushNotifications}
+                onCheckedChange={() => toggle("pushNotifications")}
+              />
             </div>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Weekly Reports</p>
                 <p className="text-xs text-muted-foreground">Automated performance summaries</p>
               </div>
-              <Switch checked={settings.weeklyReports} onCheckedChange={() => toggle("weeklyReports")} />
+              <Switch
+                checked={settings.weeklyReports}
+                onCheckedChange={() => toggle("weeklyReports")}
+              />
             </div>
           </CardContent>
         </Card>
@@ -152,14 +184,20 @@ function AdminSettings() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Current Password</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Current Password
+              </label>
               <Input type="password" placeholder="••••••••" />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">New Password</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                New Password
+              </label>
               <Input type="password" placeholder="••••••••" />
             </div>
-            <Button variant="outline" size="sm" onClick={() => toast.success("Password updated")}>Update Password</Button>
+            <Button variant="outline" size="sm" onClick={() => toast.success("Password updated")}>
+              Update Password
+            </Button>
           </CardContent>
         </Card>
 
@@ -191,28 +229,47 @@ function AdminSettings() {
             {/* Account Linking Status */}
             <div className="flex items-center justify-between p-4 border rounded-lg">
               <div className="flex items-center gap-3">
-                <div className={`h-10 w-10 rounded-full flex items-center justify-center ${discordLink ? "bg-indigo-100 dark:bg-indigo-950/30" : "bg-muted"}`}>
-                  {discordLink ? <Link2 className="h-5 w-5 text-indigo-600" /> : <MessageCircle className="h-5 w-5 text-muted-foreground" />}
+                <div
+                  className={`h-10 w-10 rounded-full flex items-center justify-center ${discordLink ? "bg-indigo-100 dark:bg-indigo-950/30" : "bg-muted"}`}
+                >
+                  {discordLink ? (
+                    <Link2 className="h-5 w-5 text-indigo-600" />
+                  ) : (
+                    <MessageCircle className="h-5 w-5 text-muted-foreground" />
+                  )}
                 </div>
                 <div>
                   <p className="text-sm font-medium">
                     Discord Account {discordLink ? "Linked" : "Not Linked"}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {discordLink ? `Connected as @${discordLink.discord_username}` : "Link your Discord account for role synchronization"}
+                    {discordLink
+                      ? `Connected as @${discordLink.discord_username}`
+                      : "Link your Discord account for role synchronization"}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 {discordLink ? (
                   <>
-                    <Badge variant="default" className="bg-indigo-600">Connected</Badge>
-                    <Button variant="outline" size="sm" className="text-red-600 gap-1.5" onClick={handleUnlinkDiscord}>
+                    <Badge variant="default" className="bg-indigo-600">
+                      Connected
+                    </Badge>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 gap-1.5"
+                      onClick={handleUnlinkDiscord}
+                    >
                       <Unlink className="h-4 w-4" /> Unlink
                     </Button>
                   </>
                 ) : (
-                  <Button size="sm" className="gap-1.5 bg-indigo-600 hover:bg-indigo-700" onClick={handleLinkDiscord}>
+                  <Button
+                    size="sm"
+                    className="gap-1.5 bg-indigo-600 hover:bg-indigo-700"
+                    onClick={handleLinkDiscord}
+                  >
                     <Link2 className="h-4 w-4" /> Link Discord
                   </Button>
                 )}
@@ -224,7 +281,9 @@ function AdminSettings() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium">Enable Discord Integration</p>
-                  <p className="text-xs text-muted-foreground">Synchronize roles, applications, and notifications with Discord</p>
+                  <p className="text-xs text-muted-foreground">
+                    Synchronize roles, applications, and notifications with Discord
+                  </p>
                 </div>
                 <Switch
                   checked={discordConfig.enabled}
@@ -234,7 +293,9 @@ function AdminSettings() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium">Role Synchronization</p>
-                  <p className="text-xs text-muted-foreground">Sync platform roles with Discord roles automatically</p>
+                  <p className="text-xs text-muted-foreground">
+                    Sync platform roles with Discord roles automatically
+                  </p>
                 </div>
                 <Switch
                   checked={discordConfig.role_sync}
@@ -244,27 +305,39 @@ function AdminSettings() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium">Application Notifications</p>
-                  <p className="text-xs text-muted-foreground">Send new application alerts to Discord</p>
+                  <p className="text-xs text-muted-foreground">
+                    Send new application alerts to Discord
+                  </p>
                 </div>
                 <Switch
                   checked={discordConfig.application_notifications}
-                  onCheckedChange={(v) => setDiscordConfig({ ...discordConfig, application_notifications: v })}
+                  onCheckedChange={(v) =>
+                    setDiscordConfig({ ...discordConfig, application_notifications: v })
+                  }
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Notification Channel ID</label>
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Notification Channel ID
+                </label>
                 <Input
                   placeholder="Discord channel ID for general notifications"
                   value={discordConfig.notification_channel}
-                  onChange={(e) => setDiscordConfig({ ...discordConfig, notification_channel: e.target.value })}
+                  onChange={(e) =>
+                    setDiscordConfig({ ...discordConfig, notification_channel: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Announcement Channel ID</label>
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Announcement Channel ID
+                </label>
                 <Input
                   placeholder="Discord channel ID for platform announcements"
                   value={discordConfig.announcement_channel}
-                  onChange={(e) => setDiscordConfig({ ...discordConfig, announcement_channel: e.target.value })}
+                  onChange={(e) =>
+                    setDiscordConfig({ ...discordConfig, announcement_channel: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -273,7 +346,12 @@ function AdminSettings() {
               <Button size="sm" className="gap-2" onClick={handleSaveDiscord} disabled={saving}>
                 <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Discord Settings"}
               </Button>
-              <Button variant="outline" size="sm" className="gap-2" onClick={() => toast.info("Testing Discord connection...")}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2"
+                onClick={() => toast.info("Testing Discord connection...")}
+              >
                 <RefreshCw className="h-4 w-4" /> Test Connection
               </Button>
             </div>

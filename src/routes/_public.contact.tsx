@@ -14,12 +14,15 @@ function Contact() {
         <div>
           <h1 className="text-4xl font-bold mb-6">Contact Us</h1>
           <p className="text-xl text-muted-foreground mb-8">
-            Have a question? We're here to help. Send us a message and our support team will get back to you shortly.
+            Have a question? We're here to help. Send us a message and our support team will get
+            back to you shortly.
           </p>
           <div className="space-y-4">
             <div>
               <h3 className="font-semibold">Email</h3>
-              <a href="mailto:support@tutorslink.me" className="text-primary hover:underline">support@tutorslink.me</a>
+              <a href="mailto:support@tutorslink.me" className="text-primary hover:underline">
+                support@tutorslink.me
+              </a>
             </div>
             <div>
               <h3 className="font-semibold">Working Hours</h3>
@@ -40,7 +43,7 @@ function Contact() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Message</label>
-                <textarea 
+                <textarea
                   className="flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   placeholder="How can we help you?"
                 />

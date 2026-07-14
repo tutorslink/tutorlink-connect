@@ -5,7 +5,13 @@ import { PageHeader, EmptyState } from "@/components/portal-shared";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { DataStore } from "@/lib/data-store";
@@ -17,9 +23,20 @@ export const Route = createFileRoute("/_authenticated/tutor/availability")({
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const TIMEZONES = [
-  "UTC", "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
-  "Europe/London", "Europe/Paris", "Europe/Berlin", "Asia/Dubai", "Asia/Kolkata",
-  "Asia/Singapore", "Asia/Tokyo", "Australia/Sydney", "Pacific/Auckland",
+  "UTC",
+  "America/New_York",
+  "America/Chicago",
+  "America/Denver",
+  "America/Los_Angeles",
+  "Europe/London",
+  "Europe/Paris",
+  "Europe/Berlin",
+  "Asia/Dubai",
+  "Asia/Kolkata",
+  "Asia/Singapore",
+  "Asia/Tokyo",
+  "Australia/Sydney",
+  "Pacific/Auckland",
 ];
 
 interface TimeBlock {
@@ -41,11 +58,13 @@ function TutorAvailability() {
       setTutorId(uid || null);
       if (uid) {
         const schedules = await DataStore.getTutorAvailability(uid);
-        setBlocks(schedules.map((s: any) => ({
-          day_of_week: s.day_of_week,
-          start_time: s.start_time,
-          end_time: s.end_time,
-        })));
+        setBlocks(
+          schedules.map((s: Record<string, unknown>) => ({
+            day_of_week: s.day_of_week as number,
+            start_time: s.start_time as string,
+            end_time: s.end_time as string,
+          })),
+        );
       }
       setLoading(false);
     })();
@@ -65,7 +84,10 @@ function TutorAvailability() {
 
   const handleSave = async () => {
     if (!tutorId) return;
-    await DataStore.saveTutorAvailability(tutorId, blocks.map((b) => ({ ...b, timezone })));
+    await DataStore.saveTutorAvailability(
+      tutorId,
+      blocks.map((b) => ({ ...b, timezone })),
+    );
     toast.success("Availability saved");
   };
 
@@ -79,20 +101,32 @@ function TutorAvailability() {
 
   return (
     <div>
-      <PageHeader title="Availability" description="Set your weekly recurring availability for scheduling." action={
-        <Button onClick={handleSave} className="gap-2">Save Availability</Button>
-      } />
+      <PageHeader
+        title="Availability"
+        description="Set your weekly recurring availability for scheduling."
+        action={
+          <Button onClick={handleSave} className="gap-2">
+            Save Availability
+          </Button>
+        }
+      />
 
       <Card className="mb-6">
         <CardContent className="p-4 flex items-center gap-3">
           <Globe className="h-5 w-5 text-blue-600" />
           <div className="flex-1">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Timezone</Label>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Timezone
+            </Label>
             <Select value={timezone} onValueChange={setTimezone}>
-              <SelectTrigger className="w-full sm:w-[280px]"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-full sm:w-[280px]">
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 {TIMEZONES.map((tz) => (
-                  <SelectItem key={tz} value={tz}>{tz}</SelectItem>
+                  <SelectItem key={tz} value={tz}>
+                    {tz}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -108,7 +142,12 @@ function TutorAvailability() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm flex items-center justify-between">
                   {day}
-                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => addBlock(dayIdx)}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7"
+                    onClick={() => addBlock(dayIdx)}
+                  >
                     <Plus className="h-4 w-4" />
                   </Button>
                 </CardTitle>
@@ -120,7 +159,10 @@ function TutorAvailability() {
                   dayBlocks.map((block) => {
                     const globalIdx = blocks.indexOf(block);
                     return (
-                      <div key={globalIdx} className="flex items-center gap-2 p-2 border rounded-lg">
+                      <div
+                        key={globalIdx}
+                        className="flex items-center gap-2 p-2 border rounded-lg"
+                      >
                         <Clock className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                         <Input
                           type="time"
@@ -135,7 +177,12 @@ function TutorAvailability() {
                           onChange={(e) => updateBlock(globalIdx, "end_time", e.target.value)}
                           className="h-8 text-xs"
                         />
-                        <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0" onClick={() => removeBlock(globalIdx)}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 shrink-0"
+                          onClick={() => removeBlock(globalIdx)}
+                        >
                           <X className="h-3.5 w-3.5" />
                         </Button>
                       </div>
@@ -155,7 +202,11 @@ function TutorAvailability() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <EmptyState icon={Calendar} title="No Exceptions" description="Add dates when you're unavailable despite recurring availability." />
+          <EmptyState
+            icon={Calendar}
+            title="No Exceptions"
+            description="Add dates when you're unavailable despite recurring availability."
+          />
         </CardContent>
       </Card>
     </div>

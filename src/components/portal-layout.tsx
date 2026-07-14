@@ -67,7 +67,10 @@ export function PortalLayout({
           })}
         </div>
         <div className="p-4 border-t">
-          <div className="text-xs font-medium mb-3 truncate text-muted-foreground" title={email ?? ""}>
+          <div
+            className="text-xs font-medium mb-3 truncate text-muted-foreground"
+            title={email ?? ""}
+          >
             {email}
           </div>
           <Button
@@ -144,13 +147,4 @@ export function PortalLayout({
       </div>
     </div>
   );
-}
-
-export function usePortalAuth() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState<string | null>(null);
-  const [roles, setRoles] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  return { email, roles, loading, setEmail, setRoles, setLoading, navigate };
 }
