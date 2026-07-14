@@ -14,21 +14,21 @@ export default defineConfig({
         client: {
           vite: {
             build: {
-              outDir: ".dist/client",
+              outDir: "dist/client",
             },
           },
         },
         server: {
           vite: {
             build: {
-              outDir: ".dist/server",
+              outDir: "dist/server",
             },
           },
         },
         ssr: {
           vite: {
             build: {
-              outDir: ".dist/server",
+              outDir: "dist/server",
             },
           },
         },
