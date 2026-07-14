@@ -1,17 +1,56 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { GoogleGenAI } from "@google/genai";
 import { DataStore } from "@/lib/data-store";
 
-const getGeminiClient = () => {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error("Missing GEMINI_API_KEY environment variable.");
-  }
-  return new GoogleGenAI({
-    apiKey,
-    httpOptions: { headers: { "User-Agent": "aistudio-build" } },
-  });
+type ChatMessage = {
+  role: "system" | "user" | "assistant";
+  content: string;
 };
+
+type IncomingMessage = {
+  role: string;
+  content: string;
+};
+
+function normalizeIncomingMessages(body: {
+  message?: unknown;
+  history?: unknown;
+  messages?: unknown;
+}): ChatMessage[] | undefined {
+  if (Array.isArray(body.messages)) {
+    return body.messages
+      .filter((m): m is IncomingMessage => {
+        return (
+          !!m &&
+          typeof m === "object" &&
+          typeof (m as IncomingMessage).role === "string" &&
+          typeof (m as IncomingMessage).content === "string"
+        );
+      })
+      .map((m) => ({
+        role: m.role === "assistant" ? "assistant" : "user",
+        content: m.content,
+      }));
+  }
+
+  if (typeof body.message !== "string") return undefined;
+  const history = Array.isArray(body.history) ? body.history : [];
+  return [
+    ...history
+      .filter((m): m is IncomingMessage => {
+        return (
+          !!m &&
+          typeof m === "object" &&
+          typeof (m as IncomingMessage).role === "string" &&
+          typeof (m as IncomingMessage).content === "string"
+        );
+      })
+      .map((m) => ({
+        role: m.role === "assistant" ? "assistant" : "user",
+        content: m.content,
+      })),
+    { role: "user", content: body.message },
+  ];
+}
 
 export const Route = createFileRoute("/api/chatbot")({
   server: {
@@ -19,11 +58,19 @@ export const Route = createFileRoute("/api/chatbot")({
       POST: async ({ request }) => {
         try {
           const body = await request.json();
-          const { messages, currentUrl } = body;
+          const { currentUrl } = body;
+          const messages = normalizeIncomingMessages(body);
 
-          if (!messages || !Array.isArray(messages)) {
-            return new Response(JSON.stringify({ error: "Invalid messages array." }), {
+          if (!messages?.length) {
+            return new Response(JSON.stringify({ error: "Invalid chat message." }), {
               status: 400,
+              headers: { "content-type": "application/json" },
+            });
+          }
+
+          if (!process.env.OPENAI_API_KEY) {
+            return new Response(JSON.stringify({ error: "AI assistant not configured." }), {
+              status: 503,
               headers: { "content-type": "application/json" },
             });
           }
@@ -117,26 +164,45 @@ ${JSON.stringify(cms.faqs, null, 2)}
 
 Conduct the conversation naturally, professionally, and keep responses relatively concise and structured for a chat widget. Do not use markdown headers larger than h3. Remember the user's stated preferences (subject, level, budget, language) during the conversation.`;
 
-          const formattedContents = messages.map((m: { role: string; content: string }) => ({
-            role: m.role === "assistant" ? "model" : "user",
-            parts: [{ text: m.content }],
-          }));
-
-          const ai = getGeminiClient();
-          const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: formattedContents,
-            config: {
-              systemInstruction,
-              temperature: 0.7,
+          const openAiMessages: ChatMessage[] = [
+            {
+              role: "system",
+              content: systemInstruction,
             },
+            ...messages,
+          ];
+
+          const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            },
+            body: JSON.stringify({
+              model: "gpt-4o-mini",
+              messages: openAiMessages,
+              max_tokens: 500,
+              temperature: 0.7,
+            }),
           });
+
+          if (!response.ok) {
+            const err = await response.json().catch(() => undefined);
+            return new Response(
+              JSON.stringify({ error: err?.error?.message ?? "OpenAI error" }),
+              { status: 500, headers: { "content-type": "application/json" } },
+            );
+          }
+
+          const data = await response.json();
+          const reply =
+            data.choices?.[0]?.message?.content ||
+            "I am here to help you connect with the perfect tutor! How can I assist you today?";
 
           return new Response(
             JSON.stringify({
-              text:
-                response.text ||
-                "I am here to help you connect with the perfect tutor! How can I assist you today?",
+              text: reply,
+              reply,
             }),
             { status: 200, headers: { "content-type": "application/json", "cache-control": "no-store" } },
           );

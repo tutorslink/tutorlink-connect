@@ -13,7 +13,7 @@ export const APP_NAME = "Tutors Link";
 /** Feature flags — flip to gate incomplete or non-essential features. */
 export const features = {
   aiAssistant: true,
-  discordSync: false,
+  discordSync: true,
   payments: false,
   messaging: false,
 } as const;

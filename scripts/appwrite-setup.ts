@@ -1,8 +1,9 @@
+import "dotenv/config";
 import { Client, Databases, Permission, Role, Storage } from "node-appwrite";
 
 const endpoint = process.env.APPWRITE_ENDPOINT || "https://fra.cloud.appwrite.io/v1";
 const projectId = process.env.APPWRITE_PROJECT_ID || "tutorslink";
-const databaseId = process.env.APPWRITE_DATABASE_ID || "TutorsLinkDatabase";
+const databaseId = process.env.APPWRITE_DATABASE_ID || "Database";
 const apiKey = process.env.APPWRITE_API_KEY;
 
 if (!apiKey) {
@@ -142,7 +143,7 @@ async function ensureCollection(def: CollectionDef) {
     } else if (attr.kind === "double") {
       await ignoreExists(
         `${def.id}.${attr.key}`,
-        databases.createDoubleAttribute({
+        databases.createFloatAttribute({
           databaseId,
           collectionId: def.id,
           key: attr.key,
