@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import AIChatbot from "@/components/AIChatbot";
+import { AIChatbot } from "@/components/AIChatbot";
 
 export const Route = createFileRoute("/_public")({
   component: PublicLayout,
