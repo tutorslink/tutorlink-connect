@@ -5,8 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ID } from "node-appwrite";
-import { appwrite } from "@/integrations/appwrite/client";
+import { ID, appwrite } from "@/integrations/appwrite/client";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "motion/react";
@@ -53,11 +52,11 @@ function WorkWithUs() {
       const languages = languagesFluentIn.split(",").map(l => l.trim()).filter(Boolean);
       const education = currentEducationLevel === "Other" ? otherEducation : currentEducationLevel;
       
-      await appwrite.databases.createDocument(
-        "Database",
-        "volunteer_applications",
-        ID.unique(),
-        {
+      await appwrite.databases.createDocument({
+        databaseId: "Database",
+        collectionId: "volunteer_applications",
+        documentId: ID.unique(),
+        data: {
           Full_name: fullName,
           Discord_username: discordUsername,
           Instagram_handle: instagramHandle,
@@ -71,9 +70,9 @@ function WorkWithUs() {
           projectLinks: projectLinks || undefined,
           hoursPerWeek,
           Why_good_fit: whyGoodFit,
-          status: "pending"
-        }
-      );
+          status: "pending",
+        },
+      });
       setSuccess(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
