@@ -6,9 +6,15 @@ const viteEnv =
     : undefined;
 
 function readEnv(name: string, fallback = ""): string {
-  return (
-    viteEnv?.[name] || (typeof process !== "undefined" ? process.env[name] : undefined) || fallback
-  );
+  try {
+    if (viteEnv?.[name]) return viteEnv[name];
+    // @ts-expect-error process is not defined in all environments
+    if (typeof process !== "undefined" && process.env && process.env[name])
+      return process.env[name] as string;
+  } catch (e) {
+    // Ignore errors for process
+  }
+  return fallback;
 }
 
 export const APPWRITE_ENDPOINT = readEnv(

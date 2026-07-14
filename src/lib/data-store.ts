@@ -364,12 +364,29 @@ async function getDocument(collectionId: string, documentId: string) {
 
 async function upsertDocument(collectionId: string, documentId: string, data: Record<string, any>) {
   try {
-    return await appwrite.databases.upsertDocument({
-      databaseId: APPWRITE_DATABASE_ID,
-      collectionId,
-      documentId,
-      data,
-    });
+    try {
+      await appwrite.databases.getDocument({
+        databaseId: APPWRITE_DATABASE_ID,
+        collectionId,
+        documentId,
+      });
+      return await appwrite.databases.updateDocument({
+        databaseId: APPWRITE_DATABASE_ID,
+        collectionId,
+        documentId,
+        data,
+      });
+    } catch (e: any) {
+      if (e.code === 404) {
+        return await appwrite.databases.createDocument({
+          databaseId: APPWRITE_DATABASE_ID,
+          collectionId,
+          documentId,
+          data,
+        });
+      }
+      throw e;
+    }
   } catch {
     return null;
   }

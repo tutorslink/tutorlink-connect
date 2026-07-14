@@ -6,6 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Filter, Star } from "lucide-react";
 
 export const Route = createFileRoute("/_public/find-tutor")({
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      level: (search.level as string) || "",
+      query: (search.query as string) || "",
+    };
+  },
   component: FindTutor,
 });
 

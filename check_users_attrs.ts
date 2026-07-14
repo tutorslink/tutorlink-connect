@@ -9,6 +9,6 @@ const databases = new Databases(client);
 
 async function check() {
   const attrs = await databases.listAttributes(process.env.VITE_APPWRITE_DATABASE_ID!, "users");
-  console.log(attrs.attributes.map(a => a.key));
+  console.log(attrs.attributes.map((a) => a.key));
 }
 check().catch(console.error);
