@@ -21,14 +21,20 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function Dashboard() {
   const [roles, setRoles] = useState<Role[]>([]);
-  const [profile, setProfile] = useState<{ display_name: string | null; email: string | null } | null>(null);
+  const [profile, setProfile] = useState<{
+    display_name: string | null;
+    email: string | null;
+  } | null>(null);
 
   useEffect(() => {
     (async () => {
       const { data: userData } = await appwrite.auth.getUser();
       const uid = userData.user?.id;
       if (!uid) return;
-      const [roles, record] = await Promise.all([DataStore.getUserRoles(uid), DataStore.getUserRecord(uid)]);
+      const [roles, record] = await Promise.all([
+        DataStore.getUserRoles(uid),
+        DataStore.getUserRecord(uid),
+      ]);
       setRoles((roles ?? []).map((x) => x as Role));
       setProfile({
         display_name: record?.displayName || userData.user?.name || null,
@@ -44,8 +50,10 @@ function Dashboard() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Welcome, {profile?.display_name || 'Staff'}</h1>
-          <p className="text-muted-foreground text-sm">Staff/Admin View - Not fully implemented in this preview.</p>
+          <h1 className="text-2xl font-bold">Welcome, {profile?.display_name || "Staff"}</h1>
+          <p className="text-muted-foreground text-sm">
+            Staff/Admin View - Not fully implemented in this preview.
+          </p>
         </div>
       </div>
     );
@@ -55,7 +63,10 @@ function Dashboard() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Welcome back{profile?.display_name ? `, ${profile.display_name}` : ""}. Here's your learning overview.</p>
+        <p className="text-muted-foreground mt-1">
+          Welcome back{profile?.display_name ? `, ${profile.display_name}` : ""}. Here's your
+          learning overview.
+        </p>
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -111,16 +122,31 @@ function Dashboard() {
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-xl">Upcoming Lessons</CardTitle>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/dashboard">View Schedule <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <Link to="/dashboard">
+                  View Schedule <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-4 pt-4">
                 {[
-                  { tutor: "Sarah Jenkins", subject: "Mathematics", date: "Today", time: "4:00 PM - 5:00 PM" },
-                  { tutor: "Michael Chen", subject: "Computer Science", date: "Tomorrow", time: "3:30 PM - 4:30 PM" },
+                  {
+                    tutor: "Sarah Jenkins",
+                    subject: "Mathematics",
+                    date: "Today",
+                    time: "4:00 PM - 5:00 PM",
+                  },
+                  {
+                    tutor: "Michael Chen",
+                    subject: "Computer Science",
+                    date: "Tomorrow",
+                    time: "3:30 PM - 4:30 PM",
+                  },
                 ].map((lesson, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 border rounded-lg hover:border-primary transition-colors">
+                  <div
+                    key={i}
+                    className="flex items-center justify-between p-4 border rounded-lg hover:border-primary transition-colors"
+                  >
                     <div className="flex flex-col">
                       <span className="font-semibold">{lesson.subject}</span>
                       <span className="text-sm text-muted-foreground">with {lesson.tutor}</span>
@@ -147,14 +173,18 @@ function Dashboard() {
                   <div className="mt-1 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                   <div>
                     <p className="text-sm font-medium">New Tutor Assigned</p>
-                    <p className="text-xs text-muted-foreground mt-1">Michael Chen has been assigned for Computer Science.</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Michael Chen has been assigned for Computer Science.
+                    </p>
                   </div>
                 </div>
                 <div className="flex gap-4">
                   <div className="mt-1 w-2 h-2 rounded-full bg-muted flex-shrink-0" />
                   <div>
                     <p className="text-sm font-medium">Lesson Rescheduled</p>
-                    <p className="text-xs text-muted-foreground mt-1">Mathematics lesson moved to 4:00 PM today.</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Mathematics lesson moved to 4:00 PM today.
+                    </p>
                   </div>
                 </div>
               </div>

@@ -41,27 +41,27 @@ export const Route = createFileRoute("/_authenticated")({
 
 const studentNav: NavItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "My Tutors", href: "/dashboard/my-tutors", icon: Users },
-  { name: "Schedule", href: "/dashboard/schedule", icon: Calendar },
-  { name: "Lesson History", href: "/dashboard/lessons", icon: Clock },
-  { name: "Reviews", href: "/dashboard/reviews", icon: Star },
-  { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
-  { name: "Profile", href: "/dashboard/profile", icon: User },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { name: "My Tutors", href: "/my-tutors", icon: Users },
+  { name: "Schedule", href: "/schedule", icon: Calendar },
+  { name: "Lesson History", href: "/lessons", icon: Clock },
+  { name: "Reviews", href: "/reviews", icon: Star },
+  { name: "Notifications", href: "/notifications", icon: Bell },
+  { name: "Profile", href: "/profile", icon: User },
+  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 const tutorNav: NavItem[] = [
-  { name: "Dashboard", href: "/tutor", icon: LayoutDashboard },
-  { name: "My Students", href: "/tutor/students", icon: Users },
-  { name: "Schedule", href: "/tutor/schedule", icon: Calendar },
-  { name: "Availability", href: "/tutor/availability", icon: Clock },
-  { name: "Advertisement", href: "/tutor/advertisement", icon: Megaphone },
-  { name: "Public Profile", href: "/tutor/profile", icon: IdCard },
-  { name: "Reviews", href: "/tutor/reviews", icon: Star },
-  { name: "Earnings", href: "/tutor/earnings", icon: DollarSign },
-  { name: "Notifications", href: "/tutor/notifications", icon: Bell },
-  { name: "Profile", href: "/tutor/account", icon: User },
-  { name: "Settings", href: "/tutor/settings", icon: Settings },
+  { name: "Dashboard", href: "/tutor-dashboard", icon: LayoutDashboard },
+  { name: "My Students", href: "/tutor-students", icon: Users },
+  { name: "Schedule", href: "/tutor-schedule", icon: Calendar },
+  { name: "Availability", href: "/tutor-availability", icon: Clock },
+  { name: "Advertisement", href: "/tutor-advertisement", icon: Megaphone },
+  { name: "Public Profile", href: "/tutor-profile", icon: IdCard },
+  { name: "Reviews", href: "/tutor-reviews", icon: Star },
+  { name: "Earnings", href: "/tutor-earnings", icon: DollarSign },
+  { name: "Notifications", href: "/tutor-notifications", icon: Bell },
+  { name: "Profile", href: "/tutor-account", icon: User },
+  { name: "Settings", href: "/tutor-settings", icon: Settings },
 ];
 
 const recruitmentNav: NavItem[] = [
@@ -154,12 +154,7 @@ function AuthLayout() {
   }
 
   return (
-    <PortalLayout
-      email={email}
-      roleLabel={roleLabel}
-      navItems={navItems}
-      onSignOut={signOut}
-    >
+    <PortalLayout email={email} roleLabel={roleLabel} navItems={navItems} onSignOut={signOut}>
       <Outlet />
     </PortalLayout>
   );

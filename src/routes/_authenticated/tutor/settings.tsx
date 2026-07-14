@@ -74,7 +74,9 @@ function TutorSettings() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Email Notifications</p>
-                <p className="text-xs text-muted-foreground">Receive lesson updates and alerts via email</p>
+                <p className="text-xs text-muted-foreground">
+                  Receive lesson updates and alerts via email
+                </p>
               </div>
               <Switch
                 checked={prefs.email_notifications}
@@ -114,7 +116,9 @@ function TutorSettings() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Marketing Communications</p>
-                <p className="text-xs text-muted-foreground">Tips, newsletters, and promotional content</p>
+                <p className="text-xs text-muted-foreground">
+                  Tips, newsletters, and promotional content
+                </p>
               </div>
               <Switch
                 checked={prefs.marketing}
@@ -135,11 +139,15 @@ function TutorSettings() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Current Password</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Current Password
+              </label>
               <Input type="password" placeholder="••••••••" />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">New Password</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                New Password
+              </label>
               <Input type="password" placeholder="••••••••" />
             </div>
             <Button variant="outline" size="sm" onClick={() => toast.success("Password updated")}>

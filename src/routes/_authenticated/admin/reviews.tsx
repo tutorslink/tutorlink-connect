@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/admin/reviews")({
 });
 
 function AdminReviews() {
-  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
 
@@ -72,7 +72,10 @@ function AdminReviews() {
                     </p>
                     <div className="flex items-center gap-1 text-amber-500 mt-1">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`h-3.5 w-3.5 ${i < r.rating ? "fill-amber-500" : "text-muted-foreground"}`} />
+                        <Star
+                          key={i}
+                          className={`h-3.5 w-3.5 ${i < r.rating ? "fill-amber-500" : "text-muted-foreground"}`}
+                        />
                       ))}
                       <span className="text-xs text-muted-foreground ml-1">
                         {new Date(r.created_at).toLocaleDateString()}
@@ -85,7 +88,9 @@ function AdminReviews() {
 
                 {r.tutor_response && (
                   <div className="mt-3 p-3 bg-muted/30 rounded-lg border-l-2 border-blue-500">
-                    <p className="text-xs font-semibold text-muted-foreground mb-1">Tutor Response:</p>
+                    <p className="text-xs font-semibold text-muted-foreground mb-1">
+                      Tutor Response:
+                    </p>
                     <p className="text-sm text-muted-foreground">{r.tutor_response}</p>
                   </div>
                 )}
@@ -93,21 +98,39 @@ function AdminReviews() {
                 <div className="flex gap-2 mt-3 pt-3 border-t">
                   {r.status === "pending" && (
                     <>
-                      <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 gap-1.5" onClick={() => handleModerate(r.id, "approved")}>
+                      <Button
+                        size="sm"
+                        className="bg-emerald-600 hover:bg-emerald-700 gap-1.5"
+                        onClick={() => handleModerate(r.id, "approved")}
+                      >
                         <Check className="h-4 w-4" /> Approve
                       </Button>
-                      <Button variant="outline" size="sm" className="text-red-600 gap-1.5" onClick={() => handleModerate(r.id, "rejected")}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-red-600 gap-1.5"
+                        onClick={() => handleModerate(r.id, "rejected")}
+                      >
                         <X className="h-4 w-4" /> Reject
                       </Button>
                     </>
                   )}
                   {r.status === "approved" && (
-                    <Button variant="outline" size="sm" className="text-red-600 gap-1.5" onClick={() => handleModerate(r.id, "rejected")}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 gap-1.5"
+                      onClick={() => handleModerate(r.id, "rejected")}
+                    >
                       <X className="h-4 w-4" /> Unpublish
                     </Button>
                   )}
                   {r.status === "rejected" && (
-                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 gap-1.5" onClick={() => handleModerate(r.id, "approved")}>
+                    <Button
+                      size="sm"
+                      className="bg-emerald-600 hover:bg-emerald-700 gap-1.5"
+                      onClick={() => handleModerate(r.id, "approved")}
+                    >
                       <Check className="h-4 w-4" /> Restore
                     </Button>
                   )}

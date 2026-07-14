@@ -71,17 +71,14 @@ function lastMonths(count: number): string[] {
   return labels;
 }
 
-async function safeList(collectionId: string, queries: string[] = []): Promise<any[]> {
-  try {
-    const result = await appwrite.databases.listDocuments({
-      databaseId: APPWRITE_DATABASE_ID,
-      collectionId,
-      queries,
-    });
-    return result.documents as any[];
-  } catch {
-    return [];
-  }
+function safeList(
+  collectionId: string,
+  queries: string[] = [],
+): Promise<Record<string, unknown>[]> {
+  return appwrite.databases
+    .listDocuments(APPWRITE_DATABASE_ID, collectionId, queries)
+    .then((result) => result.documents as Record<string, unknown>[])
+    .catch(() => []);
 }
 
 const isPendingStatus = (status: unknown): boolean => {
@@ -111,46 +108,76 @@ export interface AdminDashboardMetrics {
 }
 
 export async function getAdminDashboardMetrics(range?: DateRange): Promise<AdminDashboardMetrics> {
-  const [students, tutors, tutorApps, recruitmentApps, lessons, reviews, ads, aiConfig] = await Promise.all([
-    DataStore.getAllStudents(),
-    DataStore.getAllTutors(),
-    DataStore.getTutorApplicationsFromDB(),
-    DataStore.getRecruitmentApplicationsFromDB(),
-    DataStore.getAllLessons(),
-    DataStore.getAllReviews(),
-    DataStore.getAdvertisements(),
-    DataStore.getPlatformSetting("ai_config"),
-  ]);
+  const [students, tutors, tutorApps, recruitmentApps, lessons, reviews, ads, aiConfig] =
+    await Promise.all([
+      DataStore.getAllStudents(),
+      DataStore.getAllTutors(),
+      DataStore.getTutorApplicationsFromDB(),
+      DataStore.getRecruitmentApplicationsFromDB(),
+      DataStore.getAllLessons(),
+      DataStore.getAllReviews(),
+      DataStore.getAdvertisements(),
+      DataStore.getPlatformSetting("ai_config"),
+    ]);
 
-  const lessonsInRange = lessons.filter((l: any) => inRange(l.starts_at, range));
+  const lessonsInRange = lessons.filter((l: Record<string, unknown>) =>
+    inRange(l.starts_at as string, range),
+  );
 
-  const activeTutors = tutors.filter((t: any) => t.is_active !== false).length;
-  const ratedTutors = tutors.filter((t: any) => typeof t.rating_avg === "number" && t.rating_avg > 0);
+  const activeTutors = tutors.filter((t: Record<string, unknown>) => t.is_active !== false).length;
+  const ratedTutors = tutors.filter(
+    (t: Record<string, unknown>) => typeof t.rating_avg === "number" && t.rating_avg > 0,
+  );
   const averageTutorRating = ratedTutors.length
-    ? Number((ratedTutors.reduce((sum: number, t: any) => sum + t.rating_avg, 0) / ratedTutors.length).toFixed(2))
+    ? Number(
+        (
+          ratedTutors.reduce(
+            (sum: number, t: Record<string, unknown>) => sum + (t.rating_avg as number),
+            0,
+          ) / ratedTutors.length
+        ).toFixed(2),
+      )
     : 0;
 
   const now = new Date();
   const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-  const thisMonthCount = lessons.filter((l: any) => new Date(l.starts_at) >= thisMonthStart).length;
+  const thisMonthCount = lessons.filter(
+    (l: Record<string, unknown>) => new Date(l.starts_at as string) >= thisMonthStart,
+  ).length;
   const lastMonthCount = lessons.filter(
-    (l: any) => new Date(l.starts_at) >= lastMonthStart && new Date(l.starts_at) < thisMonthStart,
+    (l: Record<string, unknown>) =>
+      new Date(l.starts_at as string) >= lastMonthStart &&
+      new Date(l.starts_at as string) < thisMonthStart,
   ).length;
   const monthOverMonthLessonGrowthPct =
-    lastMonthCount > 0 ? Number((((thisMonthCount - lastMonthCount) / lastMonthCount) * 100).toFixed(1)) : null;
+    lastMonthCount > 0
+      ? Number((((thisMonthCount - lastMonthCount) / lastMonthCount) * 100).toFixed(1))
+      : null;
 
   return {
     totalStudents: students.length,
     totalTutors: tutors.length,
     activeTutors,
-    pendingTutorApplications: tutorApps.filter((a: any) => isPendingStatus(a.status)).length,
-    pendingRecruitmentApplications: recruitmentApps.filter((a: any) => isPendingStatus(a.status)).length,
-    scheduledLessons: lessonsInRange.filter((l: any) => l.status === "scheduled").length,
-    completedLessons: lessonsInRange.filter((l: any) => l.status === "completed").length,
-    cancelledLessons: lessonsInRange.filter((l: any) => l.status === "cancelled").length,
+    pendingTutorApplications: tutorApps.filter((a: Record<string, unknown>) =>
+      isPendingStatus(a.status),
+    ).length,
+    pendingRecruitmentApplications: recruitmentApps.filter((a: Record<string, unknown>) =>
+      isPendingStatus(a.status),
+    ).length,
+    scheduledLessons: lessonsInRange.filter(
+      (l: Record<string, unknown>) => l.status === "scheduled",
+    ).length,
+    completedLessons: lessonsInRange.filter(
+      (l: Record<string, unknown>) => l.status === "completed",
+    ).length,
+    cancelledLessons: lessonsInRange.filter(
+      (l: Record<string, unknown>) => l.status === "cancelled",
+    ).length,
     averageTutorRating,
-    activeAdvertisements: ads.filter((a: any) => (a.isActive ?? a.is_active) === true).length,
+    activeAdvertisements: ads.filter(
+      (a: Record<string, unknown>) => (a.isActive ?? a.is_active) === true,
+    ).length,
     totalReviews: reviews.length,
     aiAssistantEnabled: aiConfig?.enabled !== false,
     monthOverMonthLessonGrowthPct,
@@ -196,7 +223,7 @@ export async function getLessonTrend(months = 7): Promise<MonthPoint[]> {
 
   const lessons = await DataStore.getAllLessons();
   for (const lesson of lessons) {
-    const label = monthLabel((lesson as any).starts_at);
+    const label = monthLabel((lesson as Record<string, unknown>).starts_at as string);
     if (label in bucket) bucket[label] += 1;
   }
 
@@ -217,13 +244,17 @@ export async function getTopSubjects(limit = 6): Promise<SubjectBreakdown[]> {
   const lessons = await DataStore.getAllLessons();
   const counts = new Map<string, number>();
   for (const l of lessons) {
-    const subject = ((l as any).subject || "").trim();
+    const subject = (((l as Record<string, unknown>).subject as string) || "").trim();
     if (!subject) continue;
     counts.set(subject, (counts.get(subject) || 0) + 1);
   }
   const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit);
   const max = sorted[0]?.[1] || 1;
-  return sorted.map(([subject, count]) => ({ subject, count, pct: Math.round((count / max) * 100) }));
+  return sorted.map(([subject, count]) => ({
+    subject,
+    count,
+    pct: Math.round((count / max) * 100),
+  }));
 }
 
 // ---------------------------------------------------------------------------
@@ -243,18 +274,20 @@ export interface RecruitmentMetrics {
 
 export async function getRecruitmentMetrics(): Promise<RecruitmentMetrics> {
   const apps = await DataStore.getRecruitmentApplicationsFromDB();
-  const status = (a: any) => String(a.status || "pending").toLowerCase();
+  const status = (a: Record<string, unknown>) => String(a.status || "pending").toLowerCase();
 
-  const pending = apps.filter((a) => status(a) === "pending").length;
-  const underReview = apps.filter((a) => status(a) === "under_review").length;
-  const approved = apps.filter((a) => status(a) === "approved").length;
-  const rejected = apps.filter((a) => status(a) === "rejected").length;
+  const pending = apps.filter((a) => status(a as Record<string, unknown>) === "pending").length;
+  const underReview = apps.filter(
+    (a) => status(a as Record<string, unknown>) === "under_review",
+  ).length;
+  const approved = apps.filter((a) => status(a as Record<string, unknown>) === "approved").length;
+  const rejected = apps.filter((a) => status(a as Record<string, unknown>) === "rejected").length;
   const decided = approved + rejected;
 
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 30);
-  const recentlySubmitted = apps.filter((a: any) => {
-    const created = a.created_at || a.createdAt || a.$createdAt;
+  const recentlySubmitted = apps.filter((a: Record<string, unknown>) => {
+    const created = (a.created_at || a.createdAt || a.$createdAt) as string;
     return created && new Date(created) >= cutoff;
   }).length;
 

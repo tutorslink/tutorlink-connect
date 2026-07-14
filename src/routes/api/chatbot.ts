@@ -85,10 +85,15 @@ export const Route = createFileRoute("/api/chatbot")({
 
           const aiEnabled = aiConfig?.enabled !== false;
           if (!aiEnabled) {
-            return new Response(JSON.stringify({ text: "The AI Assistant is currently disabled. Please contact us at support@tutorslink.me." }), {
-              status: 200,
-              headers: { "content-type": "application/json" },
-            });
+            return new Response(
+              JSON.stringify({
+                text: "The AI Assistant is currently disabled. Please contact us at support@tutorslink.me.",
+              }),
+              {
+                status: 200,
+                headers: { "content-type": "application/json" },
+              },
+            );
           }
 
           const welcomeMessage = aiConfig?.welcome_message || "Hi! I am the Tutors Link Assistant.";
@@ -106,8 +111,12 @@ Your primary goals:
    - Work With Us (Recruitment): "/work-with-us"
    - About Us: "/about"
    - Contact Page: "/contact"
-   - Dashboard: "/dashboard"${leadCapture ? `
-4. Actively encourage visitors to become qualified leads — suggest suitable tutors, encourage contact, guide toward enquiry forms, and encourage tutor/recruitment applications. Lead generation should remain conversational rather than overly promotional.` : ""}
+   - Dashboard: "/dashboard"${
+     leadCapture
+       ? `
+4. Actively encourage visitors to become qualified leads — suggest suitable tutors, encourage contact, guide toward enquiry forms, and encourage tutor/recruitment applications. Lead generation should remain conversational rather than overly promotional.`
+       : ""
+   }
 
 5. If you cannot confidently answer, invite them to visit our Contact page or email us at support@tutorslink.me.
 
@@ -188,10 +197,10 @@ Conduct the conversation naturally, professionally, and keep responses relativel
 
           if (!response.ok) {
             const err = await response.json().catch(() => undefined);
-            return new Response(
-              JSON.stringify({ error: err?.error?.message ?? "OpenAI error" }),
-              { status: 500, headers: { "content-type": "application/json" } },
-            );
+            return new Response(JSON.stringify({ error: err?.error?.message ?? "OpenAI error" }), {
+              status: 500,
+              headers: { "content-type": "application/json" },
+            });
           }
 
           const data = await response.json();
@@ -204,7 +213,10 @@ Conduct the conversation naturally, professionally, and keep responses relativel
               text: reply,
               reply,
             }),
-            { status: 200, headers: { "content-type": "application/json", "cache-control": "no-store" } },
+            {
+              status: 200,
+              headers: { "content-type": "application/json", "cache-control": "no-store" },
+            },
           );
         } catch (error: unknown) {
           console.error("Chatbot API Error:", error);

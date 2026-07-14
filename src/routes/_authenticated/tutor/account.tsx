@@ -37,7 +37,11 @@ function TutorAccount() {
         description="Manage your personal account information."
         action={
           <Button onClick={handleSave} disabled={saving}>
-            {saving ? <span className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+            {saving ? (
+              <span className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+            ) : (
+              <Save className="h-4 w-4 mr-2" />
+            )}
             Save Changes
           </Button>
         }
@@ -52,23 +56,50 @@ function TutorAccount() {
         <CardContent className="space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Full Name</label>
-              <Input value={profile.fullName} onChange={(e) => setProfile({ ...profile, fullName: e.target.value })} className="rounded-xl" />
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Full Name
+              </label>
+              <Input
+                value={profile.fullName}
+                onChange={(e) => setProfile({ ...profile, fullName: e.target.value })}
+                className="rounded-xl"
+              />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Email</label>
-              <Input type="email" value={profile.email} onChange={(e) => setProfile({ ...profile, email: e.target.value })} className="rounded-xl" />
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Email
+              </label>
+              <Input
+                type="email"
+                value={profile.email}
+                onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                className="rounded-xl"
+              />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Phone</label>
-              <Input value={profile.phone} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} className="rounded-xl" />
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Phone
+              </label>
+              <Input
+                value={profile.phone}
+                onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                className="rounded-xl"
+              />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Country</label>
-              <Input value={profile.country} onChange={(e) => setProfile({ ...profile, country: e.target.value })} className="rounded-xl" />
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Country
+              </label>
+              <Input
+                value={profile.country}
+                onChange={(e) => setProfile({ ...profile, country: e.target.value })}
+                className="rounded-xl"
+              />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Timezone</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Timezone
+              </label>
               <select
                 value={profile.timezone}
                 onChange={(e) => setProfile({ ...profile, timezone: e.target.value })}
@@ -82,12 +113,19 @@ function TutorAccount() {
               </select>
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Preferred Language</label>
-              <Input value={profile.language} onChange={(e) => setProfile({ ...profile, language: e.target.value })} className="rounded-xl" />
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Preferred Language
+              </label>
+              <Input
+                value={profile.language}
+                onChange={(e) => setProfile({ ...profile, language: e.target.value })}
+                className="rounded-xl"
+              />
             </div>
           </div>
           <p className="text-xs text-muted-foreground pt-2 border-t">
-            Changes affecting authentication or identity verification may require additional confirmation.
+            Changes affecting authentication or identity verification may require additional
+            confirmation.
           </p>
         </CardContent>
       </Card>

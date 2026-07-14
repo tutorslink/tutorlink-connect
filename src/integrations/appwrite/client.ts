@@ -1,12 +1,26 @@
 import { Account, Client, Databases, ID, OAuthProvider, Storage } from "appwrite";
 
-const viteEnv = typeof import.meta !== "undefined" ? (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env : undefined;
+const viteEnv =
+  typeof import.meta !== "undefined"
+    ? (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env
+    : undefined;
 
 function readEnv(name: string, fallback = ""): string {
-  return viteEnv?.[name] || (typeof process !== "undefined" ? process.env[name] : undefined) || fallback;
+  try {
+    if (viteEnv?.[name]) return viteEnv[name];
+    // @ts-expect-error process is not defined in all environments
+    if (typeof process !== "undefined" && process.env && process.env[name])
+      return process.env[name] as string;
+  } catch (e) {
+    // Ignore errors for process
+  }
+  return fallback;
 }
 
-export const APPWRITE_ENDPOINT = readEnv("VITE_APPWRITE_ENDPOINT", "https://fra.cloud.appwrite.io/v1");
+export const APPWRITE_ENDPOINT = readEnv(
+  "VITE_APPWRITE_ENDPOINT",
+  "https://fra.cloud.appwrite.io/v1",
+);
 export const APPWRITE_PROJECT_ID = readEnv("VITE_APPWRITE_PROJECT_ID", "tutorslink");
 export const APPWRITE_DATABASE_ID = readEnv("VITE_APPWRITE_DATABASE_ID", "TutorsLinkDatabase");
 
@@ -14,7 +28,9 @@ const AUTH_EVENT = "tutorslink-auth-change";
 
 function createClientInstance() {
   if (!APPWRITE_ENDPOINT || !APPWRITE_PROJECT_ID) {
-    throw new Error("Missing Appwrite environment variables. Set VITE_APPWRITE_ENDPOINT and VITE_APPWRITE_PROJECT_ID.");
+    throw new Error(
+      "Missing Appwrite environment variables. Set VITE_APPWRITE_ENDPOINT and VITE_APPWRITE_PROJECT_ID.",
+    );
   }
 
   const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
@@ -33,16 +49,16 @@ function getClient() {
   return cachedClient;
 }
 
-function emitAuthChange(session: any) {
+function emitAuthChange(session: { user: Record<string, unknown> } | null) {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new CustomEvent(AUTH_EVENT, { detail: session }));
 }
 
-function normalizeUser(user: any) {
+function normalizeUser(user: Record<string, unknown> | null) {
   if (!user) return null;
   return {
     ...user,
-    id: user.id || user.$id,
+    id: (user.id as string) || (user.$id as string),
   };
 }
 
@@ -83,7 +99,10 @@ export const appwrite = {
         emitAuthChange(user ? { user } : null);
         return { data: { session: user ? { user } : null }, error: null };
       } catch (error) {
-        return { data: { session: null }, error: error instanceof Error ? error : new Error(String(error)) };
+        return {
+          data: { session: null },
+          error: error instanceof Error ? error : new Error(String(error)),
+        };
       }
     },
     async signUp({
@@ -93,17 +112,24 @@ export const appwrite = {
     }: {
       email: string;
       password: string;
-      options?: { emailRedirectTo?: string; data?: Record<string, any> };
+      options?: { emailRedirectTo?: string; data?: Record<string, unknown> };
     }) {
       try {
-        const name = options?.data?.display_name || options?.data?.name || email.split("@")[0] || "Tutors Link User";
+        const name =
+          options?.data?.display_name ||
+          options?.data?.name ||
+          email.split("@")[0] ||
+          "Tutors Link User";
         await getClient().account.create(ID.unique(), email, password, name);
         await getClient().account.createEmailPasswordSession(email, password);
         const user = await getCurrentUser();
         emitAuthChange(user ? { user } : null);
         return { data: { session: user ? { user } : null }, error: null };
       } catch (error) {
-        return { data: { session: null }, error: error instanceof Error ? error : new Error(String(error)) };
+        return {
+          data: { session: null },
+          error: error instanceof Error ? error : new Error(String(error)),
+        };
       }
     },
     async signOut() {
@@ -115,17 +141,26 @@ export const appwrite = {
         return { error: error instanceof Error ? error : new Error(String(error)) };
       }
     },
-    async signInWithOAuth(provider: "google" | "apple" | "microsoft", opts?: { redirect_uri?: string; extraParams?: Record<string, string> }) {
+    async signInWithOAuth(
+      provider: "google" | "apple" | "microsoft",
+      opts?: { redirect_uri?: string; extraParams?: Record<string, string> },
+    ) {
       try {
-        const success = opts?.redirect_uri || (typeof window !== "undefined" ? window.location.origin : undefined);
-        const failure = opts?.redirect_uri || (typeof window !== "undefined" ? window.location.origin : undefined);
+        const success =
+          opts?.redirect_uri ||
+          (typeof window !== "undefined" ? window.location.origin : undefined);
+        const failure =
+          opts?.redirect_uri ||
+          (typeof window !== "undefined" ? window.location.origin : undefined);
         await getClient().account.createOAuth2Session(provider as OAuthProvider, success, failure);
         return { error: null };
       } catch (error) {
         return { error: error instanceof Error ? error : new Error(String(error)) };
       }
     },
-    onAuthStateChange(callback: (_event: string, session: any) => void) {
+    onAuthStateChange(
+      callback: (_event: string, session: { user: Record<string, unknown> } | null) => void,
+    ) {
       const listener = (event: Event) => {
         const session = (event as CustomEvent).detail ?? null;
         callback("change", session);

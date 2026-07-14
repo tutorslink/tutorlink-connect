@@ -8,7 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import { DataStore } from "@/lib/data-store";
 import { appwrite } from "@/integrations/appwrite/client";
@@ -82,12 +88,20 @@ function TutorAdvertisement() {
 
   return (
     <div>
-      <PageHeader title="Advertisement" description="Manage your tutoring advertisement that appears in search results." action={
-        <div className="flex items-center gap-2">
-          <StatusBadge status={status} />
-          {isPublished && <Badge variant="default" className="bg-emerald-600">Published</Badge>}
-        </div>
-      } />
+      <PageHeader
+        title="Advertisement"
+        description="Manage your tutoring advertisement that appears in search results."
+        action={
+          <div className="flex items-center gap-2">
+            <StatusBadge status={status} />
+            {isPublished && (
+              <Badge variant="default" className="bg-emerald-600">
+                Published
+              </Badge>
+            )}
+          </div>
+        }
+      />
 
       <Card className="mb-6">
         <CardHeader>
@@ -116,8 +130,13 @@ function TutorAdvertisement() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Teaching Format</Label>
-              <Select value={ad.teaching_format} onValueChange={(v) => setAd({ ...ad, teaching_format: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+              <Select
+                value={ad.teaching_format}
+                onValueChange={(v) => setAd({ ...ad, teaching_format: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="online">Online</SelectItem>
                   <SelectItem value="in_person">In-Person</SelectItem>

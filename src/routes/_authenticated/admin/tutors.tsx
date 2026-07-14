@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/admin/tutors")({
 });
 
 function AdminTutors() {
-  const [tutors, setTutors] = useState<any[]>([]);
+  const [tutors, setTutors] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,7 +42,11 @@ function AdminTutors() {
       </div>
 
       {tutors.length === 0 ? (
-        <EmptyState icon={GraduationCap} title="No Tutors" description="No tutors have been approved yet." />
+        <EmptyState
+          icon={GraduationCap}
+          title="No Tutors"
+          description="No tutors have been approved yet."
+        />
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tutors.map((t) => (
@@ -51,7 +55,11 @@ function AdminTutors() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="h-12 w-12 rounded-xl bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold">
-                      {(t.name || "T").split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
+                      {(t.name || "T")
+                        .split(" ")
+                        .map((n: string) => n[0])
+                        .join("")
+                        .slice(0, 2)}
                     </div>
                     <div>
                       <p className="font-semibold text-sm flex items-center gap-1.5">
@@ -65,15 +73,20 @@ function AdminTutors() {
                 <div className="flex items-center gap-3 text-xs">
                   {t.rating_avg > 0 && (
                     <span className="flex items-center gap-1 text-amber-500 font-medium">
-                      <Star className="h-3.5 w-3.5 fill-amber-500" /> {t.rating_avg} ({t.rating_count})
+                      <Star className="h-3.5 w-3.5 fill-amber-500" /> {t.rating_avg} (
+                      {t.rating_count})
                     </span>
                   )}
                   {t.hourly_rate && <span className="font-medium">${t.hourly_rate}/hr</span>}
                   {t.years_experience != null && <span>{t.years_experience} yrs exp</span>}
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t">
-                  <Badge variant={t.is_active ? "default" : "secondary"}>{t.is_active ? "Active" : "Inactive"}</Badge>
-                  <Button variant="outline" size="sm">Manage</Button>
+                  <Badge variant={t.is_active ? "default" : "secondary"}>
+                    {t.is_active ? "Active" : "Inactive"}
+                  </Badge>
+                  <Button variant="outline" size="sm">
+                    Manage
+                  </Button>
                 </div>
               </CardContent>
             </Card>

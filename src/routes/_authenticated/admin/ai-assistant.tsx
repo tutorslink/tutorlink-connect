@@ -48,26 +48,53 @@ function AdminAIAssistant() {
 
   return (
     <div>
-      <PageHeader title="AI Assistant" description="Configure and monitor the AI chatbot assistant." action={
-        <Button size="sm" className="gap-2" onClick={handleSave} disabled={saving}>
-          <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Configuration"}
-        </Button>
-      } />
+      <PageHeader
+        title="AI Assistant"
+        description="Configure and monitor the AI chatbot assistant."
+        action={
+          <Button size="sm" className="gap-2" onClick={handleSave} disabled={saving}>
+            <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Configuration"}
+          </Button>
+        }
+      />
 
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
-        <StatCard icon={MessageCircle} label="Conversations (30d)" value={342} color="text-blue-600 bg-blue-50 dark:bg-blue-950/30" />
-        <StatCard icon={Sparkles} label="Avg Confidence" value="92%" color="text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30" />
-        <StatCard icon={Bot} label="Status" value={config.enabled ? "Active" : "Disabled"} color={config.enabled ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30" : "text-red-600 bg-red-50 dark:bg-red-950/30"} />
+        <StatCard
+          icon={MessageCircle}
+          label="Conversations (30d)"
+          value={342}
+          color="text-blue-600 bg-blue-50 dark:bg-blue-950/30"
+        />
+        <StatCard
+          icon={Sparkles}
+          label="Avg Confidence"
+          value="92%"
+          color="text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30"
+        />
+        <StatCard
+          icon={Bot}
+          label="Status"
+          value={config.enabled ? "Active" : "Disabled"}
+          color={
+            config.enabled
+              ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30"
+              : "text-red-600 bg-red-50 dark:bg-red-950/30"
+          }
+        />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
         <Card>
-          <CardHeader><CardTitle className="text-base">Configuration</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Configuration</CardTitle>
+          </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Enable AI Assistant</p>
-                <p className="text-xs text-muted-foreground">Show the chatbot widget on public pages</p>
+                <p className="text-xs text-muted-foreground">
+                  Show the chatbot widget on public pages
+                </p>
               </div>
               <Switch
                 checked={config.enabled}
@@ -77,7 +104,9 @@ function AdminAIAssistant() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Tutor Recommendations</p>
-                <p className="text-xs text-muted-foreground">Allow AI to recommend tutors from database</p>
+                <p className="text-xs text-muted-foreground">
+                  Allow AI to recommend tutors from database
+                </p>
               </div>
               <Switch
                 checked={config.tutor_recommendations}
@@ -87,7 +116,9 @@ function AdminAIAssistant() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">Lead Capture</p>
-                <p className="text-xs text-muted-foreground">Encourage visitors to contact or apply</p>
+                <p className="text-xs text-muted-foreground">
+                  Encourage visitors to contact or apply
+                </p>
               </div>
               <Switch
                 checked={config.lead_capture}
@@ -105,7 +136,9 @@ function AdminAIAssistant() {
               />
             </div>
             <div className="space-y-2 pt-2 border-t">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Welcome Message</label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Welcome Message
+              </label>
               <Textarea
                 value={config.welcome_message}
                 onChange={(e) => setConfig({ ...config, welcome_message: e.target.value })}
@@ -116,20 +149,46 @@ function AdminAIAssistant() {
         </Card>
 
         <Card>
-          <CardHeader><CardTitle className="text-base">Recent Conversations</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Recent Conversations</CardTitle>
+          </CardHeader>
           <CardContent className="space-y-3">
             {[
-              { user: "Visitor", msg: "Looking for a math tutor for A-Level", time: "2 min ago", status: "resolved" },
-              { user: "Visitor", msg: "How do I apply as a tutor?", time: "15 min ago", status: "resolved" },
-              { user: "Visitor", msg: "What subjects are available?", time: "1 hour ago", status: "resolved" },
-              { user: "Visitor", msg: "Need help with SAT preparation", time: "2 hours ago", status: "escalated" },
+              {
+                user: "Visitor",
+                msg: "Looking for a math tutor for A-Level",
+                time: "2 min ago",
+                status: "resolved",
+              },
+              {
+                user: "Visitor",
+                msg: "How do I apply as a tutor?",
+                time: "15 min ago",
+                status: "resolved",
+              },
+              {
+                user: "Visitor",
+                msg: "What subjects are available?",
+                time: "1 hour ago",
+                status: "resolved",
+              },
+              {
+                user: "Visitor",
+                msg: "Need help with SAT preparation",
+                time: "2 hours ago",
+                status: "escalated",
+              },
             ].map((c, i) => (
               <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
                 <div>
                   <p className="text-sm font-medium">{c.msg}</p>
-                  <p className="text-xs text-muted-foreground">{c.user} · {c.time}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {c.user} · {c.time}
+                  </p>
                 </div>
-                <Badge variant={c.status === "resolved" ? "default" : "destructive"}>{c.status}</Badge>
+                <Badge variant={c.status === "resolved" ? "default" : "destructive"}>
+                  {c.status}
+                </Badge>
               </div>
             ))}
           </CardContent>

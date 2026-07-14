@@ -16,18 +16,18 @@ Every release should be checked against the surfaces listed in
 `docs/DEPLOYMENT.md` §6 (Post-Deploy Verification) plus the scenarios below,
 scoped to whichever areas the release actually touched:
 
-| Surface | Owner | Notes |
-| --- | --- | --- |
-| Public website (`/_public/*`) | Website Manager | SEO meta, responsive layout |
-| Auth (`/auth`) | Website Manager | Email/password + Google OAuth |
-| Student portal (`/dashboard/*`) | Website Manager | RBAC-gated |
-| Tutor portal (`/tutor/*`) | Website Manager | RBAC-gated |
-| Recruitment portal (`/recruitment/*`) | Recruitment Team | RBAC-gated |
-| Admin dashboard (`/admin/*`) | Owner | RBAC-gated, incl. Analytics (§20) |
-| AI Assistant (`/api/chatbot`) | Website Manager | Requires `GEMINI_API_KEY` |
-| Scheduling & conflict detection | Website Manager | See `admin/scheduling.tsx` |
-| Discord integration | Website Manager | Feature-flagged (`src/lib/config.ts`) |
-| Notifications | Website Manager | Per-role notification pages |
+| Surface                               | Owner            | Notes                                 |
+| ------------------------------------- | ---------------- | ------------------------------------- |
+| Public website (`/_public/*`)         | Website Manager  | SEO meta, responsive layout           |
+| Auth (`/auth`)                        | Website Manager  | Email/password + Google OAuth         |
+| Student portal (`/dashboard/*`)       | Website Manager  | RBAC-gated                            |
+| Tutor portal (`/tutor/*`)             | Website Manager  | RBAC-gated                            |
+| Recruitment portal (`/recruitment/*`) | Recruitment Team | RBAC-gated                            |
+| Admin dashboard (`/admin/*`)          | Owner            | RBAC-gated, incl. Analytics (§20)     |
+| AI Assistant (`/api/chatbot`)         | Website Manager  | Requires `GEMINI_API_KEY`             |
+| Scheduling & conflict detection       | Website Manager  | See `admin/scheduling.tsx`            |
+| Discord integration                   | Website Manager  | Feature-flagged (`src/lib/config.ts`) |
+| Notifications                         | Website Manager  | Per-role notification pages           |
 
 ## Functional Testing (§24.4)
 

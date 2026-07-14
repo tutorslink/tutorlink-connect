@@ -1,11 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { TrendingUp, Users, GraduationCap, Star, BookOpen, DollarSign, Download, RefreshCw, ShieldAlert } from "lucide-react";
+import {
+  TrendingUp,
+  Users,
+  GraduationCap,
+  Star,
+  BookOpen,
+  DollarSign,
+  Download,
+  RefreshCw,
+  ShieldAlert,
+} from "lucide-react";
 import { PageHeader, StatCard, EmptyState } from "@/components/portal-shared";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line } from "recharts";
 import { appwrite } from "@/integrations/appwrite/client";
 import { DataStore } from "@/lib/data-store";
@@ -41,7 +62,9 @@ function AdminAnalytics() {
   const [rangeLabel, setRangeLabel] = useState(RANGE_OPTIONS[0].label);
   const [loading, setLoading] = useState(true);
   const [metrics, setMetrics] = useState<AdminDashboardMetrics | null>(null);
-  const [enrollment, setEnrollment] = useState<{ month: string; students: number; tutors: number }[]>([]);
+  const [enrollment, setEnrollment] = useState<
+    { month: string; students: number; tutors: number }[]
+  >([]);
   const [lessonTrend, setLessonTrend] = useState<{ month: string; value: number }[]>([]);
   const [subjects, setSubjects] = useState<{ subject: string; count: number; pct: number }[]>([]);
 
@@ -134,14 +157,24 @@ function AdminAnalytics() {
         action={
           <div className="flex flex-wrap items-center gap-2">
             <Select value={rangeLabel} onValueChange={setRangeLabel}>
-              <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-[160px]">
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 {RANGE_OPTIONS.map((o) => (
-                  <SelectItem key={o.label} value={o.label}>{o.label}</SelectItem>
+                  <SelectItem key={o.label} value={o.label}>
+                    {o.label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm" className="gap-1.5" onClick={loadData} disabled={loading}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5"
+              onClick={loadData}
+              disabled={loading}
+            >
               <RefreshCw className="h-4 w-4" /> Refresh
             </Button>
             <Button size="sm" className="gap-1.5" onClick={handleExport} disabled={!metrics}>
@@ -158,19 +191,61 @@ function AdminAnalytics() {
       ) : (
         <>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <StatCard icon={Users} label="Total Students" value={metrics.totalStudents} color="text-blue-600 bg-blue-50 dark:bg-blue-950/30" />
-            <StatCard icon={GraduationCap} label="Active Tutors" value={metrics.activeTutors} color="text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30" />
-            <StatCard icon={BookOpen} label="Completed Lessons" value={metrics.completedLessons} color="text-amber-600 bg-amber-50 dark:bg-amber-950/30" />
-            <StatCard icon={Star} label="Avg Tutor Rating" value={metrics.averageTutorRating || "—"} color="text-purple-600 bg-purple-50 dark:bg-purple-950/30" />
-            <StatCard icon={TrendingUp} label="Scheduled Lessons" value={metrics.scheduledLessons} color="text-cyan-600 bg-cyan-50 dark:bg-cyan-950/30" />
-            <StatCard icon={DollarSign} label="Active Ads" value={metrics.activeAdvertisements} color="text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30" />
-            <StatCard icon={Users} label="Pending Tutor Apps" value={metrics.pendingTutorApplications} color="text-rose-600 bg-rose-50 dark:bg-rose-950/30" />
-            <StatCard icon={Star} label="Total Reviews" value={metrics.totalReviews} color="text-indigo-600 bg-indigo-50 dark:bg-indigo-950/30" />
+            <StatCard
+              icon={Users}
+              label="Total Students"
+              value={metrics.totalStudents}
+              color="text-blue-600 bg-blue-50 dark:bg-blue-950/30"
+            />
+            <StatCard
+              icon={GraduationCap}
+              label="Active Tutors"
+              value={metrics.activeTutors}
+              color="text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30"
+            />
+            <StatCard
+              icon={BookOpen}
+              label="Completed Lessons"
+              value={metrics.completedLessons}
+              color="text-amber-600 bg-amber-50 dark:bg-amber-950/30"
+            />
+            <StatCard
+              icon={Star}
+              label="Avg Tutor Rating"
+              value={metrics.averageTutorRating || "—"}
+              color="text-purple-600 bg-purple-50 dark:bg-purple-950/30"
+            />
+            <StatCard
+              icon={TrendingUp}
+              label="Scheduled Lessons"
+              value={metrics.scheduledLessons}
+              color="text-cyan-600 bg-cyan-50 dark:bg-cyan-950/30"
+            />
+            <StatCard
+              icon={DollarSign}
+              label="Active Ads"
+              value={metrics.activeAdvertisements}
+              color="text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30"
+            />
+            <StatCard
+              icon={Users}
+              label="Pending Tutor Apps"
+              value={metrics.pendingTutorApplications}
+              color="text-rose-600 bg-rose-50 dark:bg-rose-950/30"
+            />
+            <StatCard
+              icon={Star}
+              label="Total Reviews"
+              value={metrics.totalReviews}
+              color="text-indigo-600 bg-indigo-50 dark:bg-indigo-950/30"
+            />
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6 mb-6">
             <Card>
-              <CardHeader><CardTitle className="text-base">Enrollment Growth</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle className="text-base">Enrollment Growth</CardTitle>
+              </CardHeader>
               <CardContent>
                 {enrollment.some((e) => e.students || e.tutors) ? (
                   <ChartContainer config={chartConfig} className="h-[260px] w-full">
@@ -184,13 +259,17 @@ function AdminAnalytics() {
                     </BarChart>
                   </ChartContainer>
                 ) : (
-                  <p className="text-sm text-muted-foreground py-16 text-center">Not enough historical data yet.</p>
+                  <p className="text-sm text-muted-foreground py-16 text-center">
+                    Not enough historical data yet.
+                  </p>
                 )}
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader><CardTitle className="text-base">Lessons Delivered</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle className="text-base">Lessons Delivered</CardTitle>
+              </CardHeader>
               <CardContent>
                 {lessonTrend.some((l) => l.value) ? (
                   <ChartContainer config={chartConfig} className="h-[260px] w-full">
@@ -199,30 +278,46 @@ function AdminAnalytics() {
                       <XAxis dataKey="month" tickLine={false} axisLine={false} fontSize={12} />
                       <YAxis tickLine={false} axisLine={false} fontSize={12} />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Line dataKey="value" stroke="var(--color-value)" strokeWidth={2} dot={false} />
+                      <Line
+                        dataKey="value"
+                        stroke="var(--color-value)"
+                        strokeWidth={2}
+                        dot={false}
+                      />
                     </LineChart>
                   </ChartContainer>
                 ) : (
-                  <p className="text-sm text-muted-foreground py-16 text-center">No lessons recorded yet.</p>
+                  <p className="text-sm text-muted-foreground py-16 text-center">
+                    No lessons recorded yet.
+                  </p>
                 )}
               </CardContent>
             </Card>
           </div>
 
           <Card>
-            <CardHeader><CardTitle className="text-base">Top Subjects by Lesson Volume</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-base">Top Subjects by Lesson Volume</CardTitle>
+            </CardHeader>
             <CardContent>
               {subjects.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-8 text-center">No subject data yet.</p>
+                <p className="text-sm text-muted-foreground py-8 text-center">
+                  No subject data yet.
+                </p>
               ) : (
                 <div className="space-y-3">
                   {subjects.map((s) => (
                     <div key={s.subject} className="flex items-center gap-4">
                       <span className="text-sm font-medium w-40 truncate">{s.subject}</span>
                       <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-blue-600 rounded-full" style={{ width: `${s.pct}%` }} />
+                        <div
+                          className="h-full bg-blue-600 rounded-full"
+                          style={{ width: `${s.pct}%` }}
+                        />
                       </div>
-                      <span className="text-sm text-muted-foreground w-12 text-right">{s.count}</span>
+                      <span className="text-sm text-muted-foreground w-12 text-right">
+                        {s.count}
+                      </span>
                     </div>
                   ))}
                 </div>

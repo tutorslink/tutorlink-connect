@@ -1,21 +1,44 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Menu, X, GraduationCap, LayoutDashboard, LogOut } from "lucide-react";
+import { Menu, X, GraduationCap, LayoutDashboard, LogOut, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { appwrite } from "@/integrations/appwrite/client";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [session, setSession] = useState<any | null>(null);
+  const [session, setSession] = useState<Record<string, unknown> | null>(null);
+  const [isDark, setIsDark] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check initial theme
+    const isDarkMode =
+      document.documentElement.classList.contains("dark") ||
+      (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    setIsDark(isDarkMode);
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
     appwrite.auth.getSession().then(({ data }) => setSession(data.session));
     const { data: authSub } = appwrite.auth.onAuthStateChange((_e, sesh) => {
       setSession(sesh);
     });
     return () => authSub.subscription.unsubscribe();
   }, []);
+
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+    if (!isDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   const handleSignOut = async () => {
     await appwrite.auth.signOut();
@@ -63,6 +86,14 @@ export function Navbar() {
 
         {/* Auth CTA Buttons */}
         <div className="hidden md:flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="rounded-xl text-muted-foreground hover:text-foreground"
+          >
+            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
           {session ? (
             <div className="flex items-center gap-2">
               <Button
@@ -109,6 +140,14 @@ export function Navbar() {
 
         {/* Mobile Hamburger Toggle */}
         <div className="md:hidden flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="h-9 w-9 text-muted-foreground hover:text-foreground rounded-xl"
+          >
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
           {session && (
             <Button
               asChild

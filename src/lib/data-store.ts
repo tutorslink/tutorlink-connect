@@ -67,7 +67,8 @@ const defaultTutors: Tutor[] = [
   {
     id: "tutor_1",
     name: "Dr. Alexander Sterling",
-    avatar_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+    avatar_url:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
     headline: "Oxford Graduate & Experienced Mathematics Professor",
     about:
       "I hold a PhD in Mathematics from Oxford University and have spent over 12 years helping students master advanced calculus, algebra, and physics. My teaching style focuses on understanding core principles rather than memorization, making complex topics accessible and engaging.",
@@ -85,7 +86,8 @@ const defaultTutors: Tutor[] = [
   {
     id: "tutor_2",
     name: "Sophia Martinez",
-    avatar_url: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
+    avatar_url:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
     headline: "Bilingual Literature Scholar & English Essay Specialist",
     about:
       "Specializing in SAT English, AP Literature, and academic writing. I work closely with students to polish their essay writing skills, vocabulary, and literary analysis. I am passionate about literature and helping students express themselves clearly.",
@@ -103,7 +105,8 @@ const defaultTutors: Tutor[] = [
   {
     id: "tutor_3",
     name: "Marcus Chen",
-    avatar_url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+    avatar_url:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
     headline: "Software Engineer & Computer Science Tutor",
     about:
       "Ex-Google Engineer teaching Python, Java, web development, and data structures. I believe in hands-on, project-based learning. Whether you are prepping for AP Computer Science, university exams, or coding interviews, I've got you covered.",
@@ -121,7 +124,8 @@ const defaultTutors: Tutor[] = [
   {
     id: "tutor_4",
     name: "Elena Rostova",
-    avatar_url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+    avatar_url:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
     headline: "Biochemistry Ph.D. & Pre-Med Mentor",
     about:
       "Teaching Biology and Chemistry for medical school aspirants and high school students. I use illustrative diagrams, concept maps, and practical medical scenarios to help make biology and biochemistry understandable and fun.",
@@ -143,7 +147,8 @@ const defaultTestimonials: Testimonial[] = [
     id: "test_1",
     name: "Sarah Jenkins",
     rating: 5,
-    comment: "Dr. Sterling completely turned around my son's attitude towards calculus. He went from failing to getting an A in his IB exams!",
+    comment:
+      "Dr. Sterling completely turned around my son's attitude towards calculus. He went from failing to getting an A in his IB exams!",
     role: "Parent of IB Student",
     is_featured: true,
   },
@@ -151,7 +156,8 @@ const defaultTestimonials: Testimonial[] = [
     id: "test_2",
     name: "Liam O'Connor",
     rating: 5,
-    comment: "The Computer Science tutoring from Marcus was incredible. His practical industry insights helped me secure a software engineering internship.",
+    comment:
+      "The Computer Science tutoring from Marcus was incredible. His practical industry insights helped me secure a software engineering internship.",
     role: "University Sophomore",
     is_featured: true,
   },
@@ -159,7 +165,8 @@ const defaultTestimonials: Testimonial[] = [
     id: "test_3",
     name: "Amira Patel",
     rating: 5,
-    comment: "Tutors Link connected me with Sophia, who helped me raise my SAT Verbal score by 140 points in just six weeks. I'm so grateful!",
+    comment:
+      "Tutors Link connected me with Sophia, who helped me raise my SAT Verbal score by 140 points in just six weeks. I'm so grateful!",
     role: "SAT Aspirant",
     is_featured: true,
   },
@@ -185,19 +192,23 @@ const defaultCMS: CMSContent = {
   about: {
     mission:
       "To democratize elite, bespoke education and bridge the gap between world-class educators and ambitious students globally.",
-    vision: "To become the global standard for premium, high-trust academic mentorship and personal tutoring.",
+    vision:
+      "To become the global standard for premium, high-trust academic mentorship and personal tutoring.",
     values: [
       {
         title: "Academic Rigor",
-        description: "We hold our tutors and curriculum to the highest global educational standards.",
+        description:
+          "We hold our tutors and curriculum to the highest global educational standards.",
       },
       {
         title: "Personalized Care",
-        description: "No two students learn the same way. We structure custom pathways for every mind.",
+        description:
+          "No two students learn the same way. We structure custom pathways for every mind.",
       },
       {
         title: "Uncompromising Integrity",
-        description: "Clear, transparent communication, vetted safety, and professional excellence.",
+        description:
+          "Clear, transparent communication, vetted safety, and professional excellence.",
       },
     ],
   },
@@ -223,8 +234,27 @@ const defaultCMS: CMSContent = {
   ],
 };
 
-const defaultSubjects = ["Mathematics", "Physics", "Chemistry", "Biology", "Computer Science", "English Literature", "Economics", "History"];
-const defaultLevels = ["Primary", "Secondary", "GCSE", "IGCSE", "A-Level", "IB", "SAT", "University", "Professional"];
+const defaultSubjects = [
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Computer Science",
+  "English Literature",
+  "Economics",
+  "History",
+];
+const defaultLevels = [
+  "Primary",
+  "Secondary",
+  "GCSE",
+  "IGCSE",
+  "A-Level",
+  "IB",
+  "SAT",
+  "University",
+  "Professional",
+];
 
 const KEYS = {
   TUTORS: "tl_tutors",
@@ -293,12 +323,14 @@ function safeNumber(value: unknown, fallback = 0): number {
 }
 
 function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part[0]?.toUpperCase() || "")
-    .join("")
-    .slice(0, 2) || "TL";
+  return (
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((part) => part[0]?.toUpperCase() || "")
+      .join("")
+      .slice(0, 2) || "TL"
+  );
 }
 
 function avatarFor(name: string): string {
@@ -332,12 +364,29 @@ async function getDocument(collectionId: string, documentId: string) {
 
 async function upsertDocument(collectionId: string, documentId: string, data: Record<string, any>) {
   try {
-    return await appwrite.databases.upsertDocument({
-      databaseId: APPWRITE_DATABASE_ID,
-      collectionId,
-      documentId,
-      data,
-    });
+    try {
+      await appwrite.databases.getDocument({
+        databaseId: APPWRITE_DATABASE_ID,
+        collectionId,
+        documentId,
+      });
+      return await appwrite.databases.updateDocument({
+        databaseId: APPWRITE_DATABASE_ID,
+        collectionId,
+        documentId,
+        data,
+      });
+    } catch (e: any) {
+      if (e.code === 404) {
+        return await appwrite.databases.createDocument({
+          databaseId: APPWRITE_DATABASE_ID,
+          collectionId,
+          documentId,
+          data,
+        });
+      }
+      throw e;
+    }
   } catch {
     return null;
   }
@@ -353,7 +402,11 @@ async function deleteDocument(collectionId: string, documentId: string) {
   } catch {}
 }
 
-async function createDocument(collectionId: string, data: Record<string, any>, documentId = ID.unique()) {
+async function createDocument(
+  collectionId: string,
+  data: Record<string, any>,
+  documentId = ID.unique(),
+) {
   try {
     return await appwrite.databases.createDocument({
       databaseId: APPWRITE_DATABASE_ID,
@@ -367,7 +420,10 @@ async function createDocument(collectionId: string, data: Record<string, any>, d
 }
 
 function mapTutorDoc(doc: any): Tutor {
-  const name = safeString(doc.displayName || doc.name || doc.fullName || doc.authUserId, "Certified Tutor");
+  const name = safeString(
+    doc.displayName || doc.name || doc.fullName || doc.authUserId,
+    "Certified Tutor",
+  );
   const rate = safeNumber(doc.hourlyRate ?? doc.hourly_rate, 40);
   const rating = safeNumber(doc.rating ?? doc.rating_avg, 5);
   const reviews = safeNumber(doc.reviewCount ?? doc.rating_count, 0);
@@ -383,7 +439,11 @@ function mapTutorDoc(doc: any): Tutor {
     rating_avg: rating,
     rating_count: reviews,
     years_experience: years,
-    languages: Array.isArray(doc.languages) ? doc.languages : Array.isArray(doc.education) ? doc.education : ["English"],
+    languages: Array.isArray(doc.languages)
+      ? doc.languages
+      : Array.isArray(doc.education)
+        ? doc.education
+        : ["English"],
     subjects: Array.isArray(doc.subjects) ? doc.subjects : [],
     levels: Array.isArray(doc.levels) ? doc.levels : defaultLevels,
     is_featured: safeBool(doc.featured ?? doc.is_featured),
@@ -478,7 +538,12 @@ function parseJson(value: unknown) {
 }
 
 export const DataStore = {
-  saveUserRecord: async (user: { id: string; email?: string; displayName?: string; role?: string }) => {
+  saveUserRecord: async (user: {
+    id: string;
+    email?: string;
+    displayName?: string;
+    role?: string;
+  }) => {
     await upsertDocument(COLLECTIONS.USERS, user.id, {
       authUserId: user.id,
       email: safeString(user.email, `${user.id}@tutorslink.local`),
@@ -561,7 +626,8 @@ export const DataStore = {
   getLevels: async (): Promise<string[]> => defaultLevels,
 
   // --- TESTIMONIALS ---
-  getTestimonials: async (): Promise<Testimonial[]> => getLocal<Testimonial[]>(KEYS.TESTIMONIALS, defaultTestimonials),
+  getTestimonials: async (): Promise<Testimonial[]> =>
+    getLocal<Testimonial[]>(KEYS.TESTIMONIALS, defaultTestimonials),
 
   saveTestimonial: async (test: Testimonial): Promise<void> => {
     const testimonials = await DataStore.getTestimonials();
@@ -573,7 +639,10 @@ export const DataStore = {
 
   deleteTestimonial: async (id: string): Promise<void> => {
     const testimonials = await DataStore.getTestimonials();
-    setLocal(KEYS.TESTIMONIALS, testimonials.filter((t) => t.id !== id));
+    setLocal(
+      KEYS.TESTIMONIALS,
+      testimonials.filter((t) => t.id !== id),
+    );
   },
 
   // --- CMS ---
@@ -602,7 +671,9 @@ export const DataStore = {
         about: {
           mission: safeString(doc.aboutMission, stored.about.mission),
           vision: safeString(doc.aboutVision, stored.about.vision),
-          values: Array.isArray(parseJson(doc.aboutValues)) ? (parseJson(doc.aboutValues) as any) : stored.about.values,
+          values: Array.isArray(parseJson(doc.aboutValues))
+            ? (parseJson(doc.aboutValues) as any)
+            : stored.about.values,
         },
         faqs: Array.isArray(parseJson(doc.faqs)) ? (parseJson(doc.faqs) as any) : stored.faqs,
       };
@@ -667,47 +738,64 @@ export const DataStore = {
     list.push(newApp);
     setLocal(KEYS.APPLICATIONS, list);
 
-    await createDocument(COLLECTIONS.TUTOR_APPLICATIONS, {
-      email: app.email,
-      dateOfBirth: new Date().toISOString().slice(0, 10),
-      phoneNumber: app.phone,
-      discordUsername: app.email.split("@")[0],
-      highestQualificationLink: null,
-      highestQualificationFileId: null,
-      highestQualificationFileName: app.cv_name || null,
-      highestQualificationFileUrl: null,
-      countryOfResidence: "Unknown",
-      languagesSpoken: app.languages || ["English"],
-      subjectName: app.subjects[0] || "General",
-      subjectCode: app.subjects[0] || null,
-      examBoard: null,
-      teachingLevel: app.levels[0] || "General",
-      examResultSummary: app.cover_letter || app.bio || "",
-      resultDocumentLink: null,
-      resultDocumentFileId: null,
-      resultDocumentFileName: null,
-      resultDocumentFileUrl: null,
-      teachingExperience: app.cover_letter || app.bio || "",
-      teachingFormat: "online",
-      oneOnOneRateUsd: safeNumber(app.expected_rate, 0),
-      groupRateUsd: safeNumber(app.expected_rate, 0),
-      maxGroupStudents: 1,
-      weeklyClassesPerStudent: 1,
-      applicantUserId: app.userId || null,
-      status: "pending",
-      internalNotes: null,
-      reviewedAt: null,
-      reviewedBy: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }, id);
+    await createDocument(
+      COLLECTIONS.TUTOR_APPLICATIONS,
+      {
+        email: app.email,
+        dateOfBirth: new Date().toISOString().slice(0, 10),
+        phoneNumber: app.phone,
+        discordUsername: app.email.split("@")[0],
+        highestQualificationLink: null,
+        highestQualificationFileId: null,
+        highestQualificationFileName: app.cv_name || null,
+        highestQualificationFileUrl: null,
+        countryOfResidence: "Unknown",
+        languagesSpoken: app.languages || ["English"],
+        subjectName: app.subjects[0] || "General",
+        subjectCode: app.subjects[0] || null,
+        examBoard: null,
+        teachingLevel: app.levels[0] || "General",
+        examResultSummary: app.cover_letter || app.bio || "",
+        resultDocumentLink: null,
+        resultDocumentFileId: null,
+        resultDocumentFileName: null,
+        resultDocumentFileUrl: null,
+        teachingExperience: app.cover_letter || app.bio || "",
+        teachingFormat: "online",
+        oneOnOneRateUsd: safeNumber(app.expected_rate, 0),
+        groupRateUsd: safeNumber(app.expected_rate, 0),
+        maxGroupStudents: 1,
+        weeklyClassesPerStudent: 1,
+        applicantUserId: app.userId || null,
+        status: "pending",
+        internalNotes: null,
+        reviewedAt: null,
+        reviewedBy: null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      id,
+    );
 
     return newApp;
   },
 
-  submitContactInquiry: async (inquiry: { name: string; email: string; phone: string; subject?: string; level?: string; tutor_id?: string; message: string }) => {
+  submitContactInquiry: async (inquiry: {
+    name: string;
+    email: string;
+    phone: string;
+    subject?: string;
+    level?: string;
+    tutor_id?: string;
+    message: string;
+  }) => {
     const id = "inquiry_" + Math.random().toString(36).slice(2, 11);
-    const newInquiry = { id, ...inquiry, status: "new" as const, created_at: new Date().toISOString() };
+    const newInquiry = {
+      id,
+      ...inquiry,
+      status: "new" as const,
+      created_at: new Date().toISOString(),
+    };
     const list = getLocal<any[]>("tl_contact_inquiries", []);
     list.push(newInquiry);
     setLocal("tl_contact_inquiries", list);
@@ -721,7 +809,10 @@ export const DataStore = {
       list[idx].status = status;
       setLocal(KEYS.APPLICATIONS, list);
     }
-    await upsertDocument(COLLECTIONS.TUTOR_APPLICATIONS, id, { status, reviewedAt: new Date().toISOString() });
+    await upsertDocument(COLLECTIONS.TUTOR_APPLICATIONS, id, {
+      status,
+      reviewedAt: new Date().toISOString(),
+    });
   },
 
   updateRecruitmentStatus: async (id: string, status: string) => {
@@ -731,18 +822,27 @@ export const DataStore = {
       list[idx].status = status;
       setLocal(KEYS.RECRUITMENT, list);
     }
-    await upsertDocument(COLLECTIONS.RECRUITMENT_APPLICATIONS, id, { status, reviewedAt: new Date().toISOString() });
+    await upsertDocument(COLLECTIONS.RECRUITMENT_APPLICATIONS, id, {
+      status,
+      reviewedAt: new Date().toISOString(),
+    });
   },
 
   getTutorApplications: async (): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.TUTOR_APPLICATIONS, [Query.orderDesc("$createdAt")]);
+      const docs = await listDocuments(COLLECTIONS.TUTOR_APPLICATIONS, [
+        Query.orderDesc("$createdAt"),
+      ]);
       if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>(KEYS.APPLICATIONS, []);
   },
 
-  updateTutorApplicationStatus: async (id: string, status: "pending" | "under_review" | "approved" | "rejected", notes?: string) => {
+  updateTutorApplicationStatus: async (
+    id: string,
+    status: "pending" | "under_review" | "approved" | "rejected",
+    notes?: string,
+  ) => {
     const list = getLocal<any[]>(KEYS.APPLICATIONS, []);
     const idx = list.findIndex((x) => x.id === id);
     if (idx !== -1) {
@@ -807,36 +907,46 @@ export const DataStore = {
     list.push(newApp);
     setLocal(KEYS.RECRUITMENT, list);
 
-    await createDocument(COLLECTIONS.RECRUITMENT_APPLICATIONS, {
-      Full_name: app.fullName,
-      Discord_username: app.email.split("@")[0],
-      Instagram_handle: app.email.split("@")[0],
-      Email_address: app.email,
-      Country_of_residence: "Unknown",
-      Languages_fluent_in: ["English"],
-      Current_education_level: "Unknown",
-      Role_you_want_to_apply_for: app.roleAppliedFor,
-      Reason_to_apply: app.coverLetter,
-      Experience: app.coverLetter,
-      Why_good_fit: app.coverLetter,
-      status: "pending",
-      applicantUserId: app.userId || null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }, id);
+    await createDocument(
+      COLLECTIONS.RECRUITMENT_APPLICATIONS,
+      {
+        Full_name: app.fullName,
+        Discord_username: app.email.split("@")[0],
+        Instagram_handle: app.email.split("@")[0],
+        Email_address: app.email,
+        Country_of_residence: "Unknown",
+        Languages_fluent_in: ["English"],
+        Current_education_level: "Unknown",
+        Role_you_want_to_apply_for: app.roleAppliedFor,
+        Reason_to_apply: app.coverLetter,
+        Experience: app.coverLetter,
+        Why_good_fit: app.coverLetter,
+        status: "pending",
+        applicantUserId: app.userId || null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      id,
+    );
 
     return newApp;
   },
 
   getRecruitmentApplications: async (): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.RECRUITMENT_APPLICATIONS, [Query.orderDesc("$createdAt")]);
+      const docs = await listDocuments(COLLECTIONS.RECRUITMENT_APPLICATIONS, [
+        Query.orderDesc("$createdAt"),
+      ]);
       if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>(KEYS.RECRUITMENT, []);
   },
 
-  updateRecruitmentApplicationStatus: async (id: string, status: "pending" | "under_review" | "approved" | "rejected", notes?: string) => {
+  updateRecruitmentApplicationStatus: async (
+    id: string,
+    status: "pending" | "under_review" | "approved" | "rejected",
+    notes?: string,
+  ) => {
     const list = getLocal<any[]>(KEYS.RECRUITMENT, []);
     const idx = list.findIndex((x) => x.id === id);
     if (idx !== -1) {
@@ -906,7 +1016,10 @@ export const DataStore = {
   getStudentAssignments: async (studentId: string): Promise<any[]> => {
     const tutors = await DataStore.getTutors();
     try {
-      const docs = await listDocuments(COLLECTIONS.ASSIGNMENTS, [Query.equal("studentId", studentId), Query.equal("isActive", true)]);
+      const docs = await listDocuments(COLLECTIONS.ASSIGNMENTS, [
+        Query.equal("studentId", studentId),
+        Query.equal("isActive", true),
+      ]);
       if (docs.length > 0) {
         return docs.map((a) => {
           const tutor = tutors.find((t) => t.id === (a.tutorId || a.tutor_id));
@@ -926,8 +1039,20 @@ export const DataStore = {
     } catch {}
 
     const localAss = getLocal<any[]>(KEYS.ASSIGNMENTS, [
-      { id: "ass_1", student_id: studentId, tutor_id: "tutor_1", remaining_classes: 8, is_active: true },
-      { id: "ass_2", student_id: studentId, tutor_id: "tutor_2", remaining_classes: 4, is_active: true },
+      {
+        id: "ass_1",
+        student_id: studentId,
+        tutor_id: "tutor_1",
+        remaining_classes: 8,
+        is_active: true,
+      },
+      {
+        id: "ass_2",
+        student_id: studentId,
+        tutor_id: "tutor_2",
+        remaining_classes: 4,
+        is_active: true,
+      },
     ]);
 
     return localAss
@@ -936,15 +1061,14 @@ export const DataStore = {
         const tutor = tutors.find((t) => t.id === a.tutor_id);
         return {
           ...a,
-          tutor:
-            tutor || {
-              name: "Unassigned Tutor",
-              headline: "Professional Tutor",
-              avatar_url: avatarFor("Unassigned Tutor"),
-              hourly_rate: 40,
-              rating_avg: 5.0,
-              rating_count: 0,
-            },
+          tutor: tutor || {
+            name: "Unassigned Tutor",
+            headline: "Professional Tutor",
+            avatar_url: avatarFor("Unassigned Tutor"),
+            hourly_rate: 40,
+            rating_avg: 5.0,
+            rating_count: 0,
+          },
         };
       });
   },
@@ -974,7 +1098,9 @@ export const DataStore = {
       },
     ]);
 
-    const filtered = isTutor ? localLessons.filter((l) => l.tutor_id === userId) : localLessons.filter((l) => l.student_id === userId);
+    const filtered = isTutor
+      ? localLessons.filter((l) => l.tutor_id === userId)
+      : localLessons.filter((l) => l.student_id === userId);
     return filtered.map((l) => {
       const tutor = tutors.find((t) => t.id === l.tutor_id);
       return {
@@ -985,28 +1111,49 @@ export const DataStore = {
     });
   },
 
-  scheduleLesson: async (lesson: { student_id: string; tutor_id: string; starts_at: string; ends_at: string; notes?: string; subject: string }) => {
+  scheduleLesson: async (lesson: {
+    student_id: string;
+    tutor_id: string;
+    starts_at: string;
+    ends_at: string;
+    notes?: string;
+    subject: string;
+  }) => {
     const list = getLocal<any[]>(KEYS.LESSONS, []);
-    const newLess = { id: "less_" + Math.random().toString(36).slice(2, 11), ...lesson, status: "scheduled" };
+    const newLess = {
+      id: "less_" + Math.random().toString(36).slice(2, 11),
+      ...lesson,
+      status: "scheduled",
+    };
     list.push(newLess);
     setLocal(KEYS.LESSONS, list);
-    await createDocument(COLLECTIONS.LESSONS, {
-      studentId: lesson.student_id,
-      tutorId: lesson.tutor_id,
-      startsAt: lesson.starts_at,
-      endsAt: lesson.ends_at,
-      subject: lesson.subject,
-      academicLevel: null,
-      notes: lesson.notes || "",
-      createdBy: null,
-      status: "scheduled",
-      isDeleted: false,
-    }, newLess.id);
+    await createDocument(
+      COLLECTIONS.LESSONS,
+      {
+        studentId: lesson.student_id,
+        tutorId: lesson.tutor_id,
+        startsAt: lesson.starts_at,
+        endsAt: lesson.ends_at,
+        subject: lesson.subject,
+        academicLevel: null,
+        notes: lesson.notes || "",
+        createdBy: null,
+        status: "scheduled",
+        isDeleted: false,
+      },
+      newLess.id,
+    );
     return newLess;
   },
 
   // --- REVIEWS ---
-  submitReview: async (review: { student_id: string; student_name: string; tutor_id: string; rating: number; comment: string }) => {
+  submitReview: async (review: {
+    student_id: string;
+    student_name: string;
+    tutor_id: string;
+    rating: number;
+    comment: string;
+  }) => {
     const list = getLocal<Review[]>(KEYS.REVIEWS, []);
     const newRev: Review = {
       id: "rev_" + Math.random().toString(36).slice(2, 11),
@@ -1020,21 +1167,25 @@ export const DataStore = {
     list.push(newRev);
     setLocal(KEYS.REVIEWS, list);
 
-    await createDocument(COLLECTIONS.REVIEWS, {
-      authorName: review.student_name,
-      authorInitials: initials(review.student_name),
-      title: null,
-      body: review.comment,
-      rating: review.rating,
-      isPublic: false,
-      status: "pending",
-      helpfulCount: 0,
-      response: null,
-      responseAt: null,
-      tutor: review.tutor_id,
-      studentId: review.student_id,
-      createdAt: new Date().toISOString(),
-    }, newRev.id);
+    await createDocument(
+      COLLECTIONS.REVIEWS,
+      {
+        authorName: review.student_name,
+        authorInitials: initials(review.student_name),
+        title: null,
+        body: review.comment,
+        rating: review.rating,
+        isPublic: false,
+        status: "pending",
+        helpfulCount: 0,
+        response: null,
+        responseAt: null,
+        tutor: review.tutor_id,
+        studentId: review.student_id,
+        createdAt: new Date().toISOString(),
+      },
+      newRev.id,
+    );
 
     return newRev;
   },
@@ -1075,15 +1226,28 @@ export const DataStore = {
   // --- AUDIT LOGS ---
   logAction: async (action: string, actorId: string | null, details: any) => {
     const list = getLocal<any[]>("tl_audit_logs", []);
-    const entry = { id: "audit_" + Math.random().toString(36).slice(2, 11), action, actor_id: actorId, metadata: details, created_at: new Date().toISOString() };
+    const entry = {
+      id: "audit_" + Math.random().toString(36).slice(2, 11),
+      action,
+      actor_id: actorId,
+      metadata: details,
+      created_at: new Date().toISOString(),
+    };
     list.push(entry);
     setLocal("tl_audit_logs", list);
-    await createDocument(COLLECTIONS.AUDIT_LOGS, { action, actorId, metadata: details, createdAt: new Date().toISOString() }, entry.id);
+    await createDocument(
+      COLLECTIONS.AUDIT_LOGS,
+      { action, actorId, metadata: details, createdAt: new Date().toISOString() },
+      entry.id,
+    );
   },
 
   getAuditLogs: async (): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.AUDIT_LOGS, [Query.orderDesc("$createdAt"), Query.limit(100)]);
+      const docs = await listDocuments(COLLECTIONS.AUDIT_LOGS, [
+        Query.orderDesc("$createdAt"),
+        Query.limit(100),
+      ]);
       if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>("tl_audit_logs", []);
@@ -1092,7 +1256,10 @@ export const DataStore = {
   // --- SUBJECT CATEGORIES ---
   getSubjectCategories: async (): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.SUBJECT_CATEGORIES, [Query.equal("active", true), Query.orderAsc("displayOrder")]);
+      const docs = await listDocuments(COLLECTIONS.SUBJECT_CATEGORIES, [
+        Query.equal("active", true),
+        Query.orderAsc("displayOrder"),
+      ]);
       if (docs.length > 0) return docs;
     } catch {}
     return [];
@@ -1101,7 +1268,10 @@ export const DataStore = {
   // --- PAGES ---
   getPages: async (): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.PAGES, [Query.equal("isDeleted", false), Query.orderDesc("updatedAt")]);
+      const docs = await listDocuments(COLLECTIONS.PAGES, [
+        Query.equal("isDeleted", false),
+        Query.orderDesc("updatedAt"),
+      ]);
       if (docs.length > 0) return docs.map(mapPageDoc);
     } catch {}
     return getLocal<any[]>("tl_pages", []);
@@ -1109,13 +1279,26 @@ export const DataStore = {
 
   getPage: async (slug: string): Promise<any | null> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.PAGES, [Query.equal("slug", slug), Query.equal("status", "published"), Query.equal("isDeleted", false), Query.limit(1)]);
+      const docs = await listDocuments(COLLECTIONS.PAGES, [
+        Query.equal("slug", slug),
+        Query.equal("status", "published"),
+        Query.equal("isDeleted", false),
+        Query.limit(1),
+      ]);
       if (docs[0]) return mapPageDoc(docs[0]);
     } catch {}
     return null;
   },
 
-  savePage: async (page: { id?: string; title: string; slug: string; content?: string; seo_title?: string; seo_description?: string; status?: string }) => {
+  savePage: async (page: {
+    id?: string;
+    title: string;
+    slug: string;
+    content?: string;
+    seo_title?: string;
+    seo_description?: string;
+    status?: string;
+  }) => {
     const docId = page.id || page.slug;
     const payload = {
       title: page.title,
@@ -1141,7 +1324,13 @@ export const DataStore = {
     return null;
   },
 
-  saveHomepageContent: async (content: { hero_headline?: string; hero_subheadline?: string; cta_primary?: string; cta_secondary?: string; stats?: any }) => {
+  saveHomepageContent: async (content: {
+    hero_headline?: string;
+    hero_subheadline?: string;
+    cta_primary?: string;
+    cta_secondary?: string;
+    stats?: any;
+  }) => {
     await upsertDocument(COLLECTIONS.HOMEPAGE, "homepage", {
       heroHeadline: content.hero_headline,
       heroSubheadline: content.hero_subheadline,
@@ -1180,7 +1369,14 @@ export const DataStore = {
     }
   },
 
-  saveNotificationPreferences: async (prefs: { user_id: string; email_notifications?: boolean; push_notifications?: boolean; lesson_reminders?: boolean; announcements?: boolean; marketing?: boolean }): Promise<void> => {
+  saveNotificationPreferences: async (prefs: {
+    user_id: string;
+    email_notifications?: boolean;
+    push_notifications?: boolean;
+    lesson_reminders?: boolean;
+    announcements?: boolean;
+    marketing?: boolean;
+  }): Promise<void> => {
     await upsertDocument(COLLECTIONS.NOTIFICATION_PREFERENCES, prefs.user_id, {
       userId: prefs.user_id,
       emailNotifications: prefs.email_notifications ?? true,
@@ -1195,7 +1391,12 @@ export const DataStore = {
   // --- NOTIFICATIONS ---
   getNotifications: async (userId: string): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.NOTIFICATIONS, [Query.equal("userId", userId), Query.equal("isDeleted", false), Query.orderDesc("createdAt"), Query.limit(50)]);
+      const docs = await listDocuments(COLLECTIONS.NOTIFICATIONS, [
+        Query.equal("userId", userId),
+        Query.equal("isDeleted", false),
+        Query.orderDesc("createdAt"),
+        Query.limit(50),
+      ]);
       if (docs.length > 0) return docs.map(mapNotificationDoc);
     } catch {}
     return getLocal<any[]>(KEYS.NOTIFICATIONS, []);
@@ -1203,14 +1404,24 @@ export const DataStore = {
 
   getUnreadNotificationCount: async (userId: string): Promise<number> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.NOTIFICATIONS, [Query.equal("userId", userId), Query.equal("isRead", false), Query.equal("isDeleted", false)]);
+      const docs = await listDocuments(COLLECTIONS.NOTIFICATIONS, [
+        Query.equal("userId", userId),
+        Query.equal("isRead", false),
+        Query.equal("isDeleted", false),
+      ]);
       return docs.length;
     } catch {
       return 0;
     }
   },
 
-  createNotification: async (notif: { user_id: string; type?: string; title: string; body?: string; link?: string }): Promise<void> => {
+  createNotification: async (notif: {
+    user_id: string;
+    type?: string;
+    title: string;
+    body?: string;
+    link?: string;
+  }): Promise<void> => {
     await createDocument(COLLECTIONS.NOTIFICATIONS, {
       userId: notif.user_id,
       type: notif.type || "info",
@@ -1229,7 +1440,10 @@ export const DataStore = {
 
   markAllNotificationsRead: async (userId: string): Promise<void> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.NOTIFICATIONS, [Query.equal("userId", userId), Query.equal("isRead", false)]);
+      const docs = await listDocuments(COLLECTIONS.NOTIFICATIONS, [
+        Query.equal("userId", userId),
+        Query.equal("isRead", false),
+      ]);
       for (const doc of docs) {
         await upsertDocument(COLLECTIONS.NOTIFICATIONS, doc.$id || doc.id, { isRead: true });
       }
@@ -1239,7 +1453,11 @@ export const DataStore = {
   // --- LESSONS ---
   getLessonsForUser: async (userId: string, isTutor = false): Promise<any[]> => {
     try {
-      const queries = [Query.equal("isDeleted", false), Query.orderAsc("startsAt"), Query.limit(200)];
+      const queries = [
+        Query.equal("isDeleted", false),
+        Query.orderAsc("startsAt"),
+        Query.limit(200),
+      ];
       queries.push(Query.equal(isTutor ? "tutorId" : "studentId", userId));
       const docs = await listDocuments(COLLECTIONS.LESSONS, queries);
       if (docs.length > 0) return docs.map(mapLessonDoc);
@@ -1250,7 +1468,11 @@ export const DataStore = {
   getAllLessons: async (): Promise<any[]> => {
     try {
       const [docs, students, tutors] = await Promise.all([
-        listDocuments(COLLECTIONS.LESSONS, [Query.equal("isDeleted", false), Query.orderDesc("startsAt"), Query.limit(100)]),
+        listDocuments(COLLECTIONS.LESSONS, [
+          Query.equal("isDeleted", false),
+          Query.orderDesc("startsAt"),
+          Query.limit(100),
+        ]),
         DataStore.getAllStudents(),
         DataStore.getAllTutors(),
       ]);
@@ -1261,7 +1483,9 @@ export const DataStore = {
           const tutor = tutors.find((t) => t.id === lesson.tutor_id);
           return {
             ...lesson,
-            student: student ? { display_name: student.name || student.display_name } : lesson.student,
+            student: student
+              ? { display_name: student.name || student.display_name }
+              : lesson.student,
             tutor: tutor ? { display_name: tutor.name || tutor.display_name } : lesson.tutor,
           };
         });
@@ -1270,7 +1494,16 @@ export const DataStore = {
     return [];
   },
 
-  createLesson: async (lesson: { tutor_id: string; student_id: string; starts_at: string; ends_at: string; subject?: string; academic_level?: string; notes?: string; created_by?: string }): Promise<any | null> => {
+  createLesson: async (lesson: {
+    tutor_id: string;
+    student_id: string;
+    starts_at: string;
+    ends_at: string;
+    subject?: string;
+    academic_level?: string;
+    notes?: string;
+    created_by?: string;
+  }): Promise<any | null> => {
     const data = {
       tutorId: lesson.tutor_id,
       studentId: lesson.student_id,
@@ -1285,8 +1518,18 @@ export const DataStore = {
     };
     const doc = await createDocument(COLLECTIONS.LESSONS, data);
     if (doc) {
-      await DataStore.createNotification({ user_id: lesson.student_id, type: "info", title: "Lesson Scheduled", body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}` });
-      await DataStore.createNotification({ user_id: lesson.tutor_id, type: "info", title: "Lesson Scheduled", body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}` });
+      await DataStore.createNotification({
+        user_id: lesson.student_id,
+        type: "info",
+        title: "Lesson Scheduled",
+        body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}`,
+      });
+      await DataStore.createNotification({
+        user_id: lesson.tutor_id,
+        type: "info",
+        title: "Lesson Scheduled",
+        body: `New lesson scheduled for ${new Date(lesson.starts_at).toLocaleString()}`,
+      });
       return mapLessonDoc(doc);
     }
     return null;
@@ -1303,21 +1546,33 @@ export const DataStore = {
   // --- REVIEWS ---
   getReviewsForTutor: async (tutorId: string): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.REVIEWS, [Query.equal("tutor", tutorId), Query.equal("isDeleted", false), Query.orderDesc("createdAt")]);
-      if (docs.length > 0) return docs.map((doc) => ({ ...mapReviewDoc(doc), student: doc.student }));
+      const docs = await listDocuments(COLLECTIONS.REVIEWS, [
+        Query.equal("tutor", tutorId),
+        Query.equal("isDeleted", false),
+        Query.orderDesc("createdAt"),
+      ]);
+      if (docs.length > 0)
+        return docs.map((doc) => ({ ...mapReviewDoc(doc), student: doc.student }));
     } catch {}
     return getLocal<Review[]>(KEYS.REVIEWS, []);
   },
 
   getAllReviews: async (): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.REVIEWS, [Query.equal("isDeleted", false), Query.orderDesc("createdAt"), Query.limit(100)]);
+      const docs = await listDocuments(COLLECTIONS.REVIEWS, [
+        Query.equal("isDeleted", false),
+        Query.orderDesc("createdAt"),
+        Query.limit(100),
+      ]);
       if (docs.length > 0) return docs.map(mapReviewDoc);
     } catch {}
     return getLocal<Review[]>(KEYS.REVIEWS, []);
   },
 
-  moderateReview: async (id: string, status: "pending" | "approved" | "rejected"): Promise<void> => {
+  moderateReview: async (
+    id: string,
+    status: "pending" | "approved" | "rejected",
+  ): Promise<void> => {
     const list = getLocal<Review[]>(KEYS.REVIEWS, []);
     const idx = list.findIndex((r) => r.id === id);
     if (idx !== -1) {
@@ -1328,7 +1583,10 @@ export const DataStore = {
   },
 
   addTutorResponse: async (reviewId: string, response: string): Promise<void> => {
-    await upsertDocument(COLLECTIONS.REVIEWS, reviewId, { response, responseAt: new Date().toISOString() });
+    await upsertDocument(COLLECTIONS.REVIEWS, reviewId, {
+      response,
+      responseAt: new Date().toISOString(),
+    });
   },
 
   // --- DISCORD LINKS ---
@@ -1340,7 +1598,11 @@ export const DataStore = {
     }
   },
 
-  linkDiscordAccount: async (userId: string, discordId: string, discordUsername: string): Promise<void> => {
+  linkDiscordAccount: async (
+    userId: string,
+    discordId: string,
+    discordUsername: string,
+  ): Promise<void> => {
     await upsertDocument(COLLECTIONS.DISCORD_LINKS, userId, {
       userId,
       discordId,
@@ -1358,7 +1620,10 @@ export const DataStore = {
   getStudentAssignmentsFromDB: async (studentId: string): Promise<any[]> => {
     try {
       const tutors = await DataStore.getTutors();
-      const docs = await listDocuments(COLLECTIONS.ASSIGNMENTS, [Query.equal("studentId", studentId), Query.equal("isActive", true)]);
+      const docs = await listDocuments(COLLECTIONS.ASSIGNMENTS, [
+        Query.equal("studentId", studentId),
+        Query.equal("isActive", true),
+      ]);
       if (docs.length > 0) {
         return docs.map((a) => {
           const tutor = tutors.find((t) => t.id === (a.tutorId || a.tutor_id));
@@ -1381,9 +1646,17 @@ export const DataStore = {
 
   getAllStudents: async (): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.USERS, [Query.equal("role", "student"), Query.equal("active", true)]);
+      const docs = await listDocuments(COLLECTIONS.USERS, [
+        Query.equal("role", "student"),
+        Query.equal("active", true),
+      ]);
       if (docs.length > 0) {
-        return docs.map((doc) => ({ id: doc.$id || doc.id, name: doc.displayName, email: doc.email, avatar_url: avatarFor(doc.displayName || doc.email || "Student") }));
+        return docs.map((doc) => ({
+          id: doc.$id || doc.id,
+          name: doc.displayName,
+          email: doc.email,
+          avatar_url: avatarFor(doc.displayName || doc.email || "Student"),
+        }));
       }
     } catch {}
     return [];
@@ -1417,7 +1690,10 @@ export const DataStore = {
 
   getTutorApplicationsFromDB: async (): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.TUTOR_APPLICATIONS, [Query.orderDesc("$createdAt"), Query.limit(200)]);
+      const docs = await listDocuments(COLLECTIONS.TUTOR_APPLICATIONS, [
+        Query.orderDesc("$createdAt"),
+        Query.limit(200),
+      ]);
       if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>(KEYS.APPLICATIONS, []);
@@ -1425,7 +1701,10 @@ export const DataStore = {
 
   getRecruitmentApplicationsFromDB: async (): Promise<any[]> => {
     try {
-      const docs = await listDocuments(COLLECTIONS.RECRUITMENT_APPLICATIONS, [Query.orderDesc("$createdAt"), Query.limit(200)]);
+      const docs = await listDocuments(COLLECTIONS.RECRUITMENT_APPLICATIONS, [
+        Query.orderDesc("$createdAt"),
+        Query.limit(200),
+      ]);
       if (docs.length > 0) return docs;
     } catch {}
     return getLocal<any[]>(KEYS.RECRUITMENT, []);
@@ -1434,15 +1713,24 @@ export const DataStore = {
   // --- AVAILABILITY ---
   getTutorAvailability: async (tutorId: string): Promise<any[]> => {
     try {
-      return await listDocuments(COLLECTIONS.SCHEDULES, [Query.equal("tutorId", tutorId), Query.equal("isActive", true), Query.orderAsc("dayOfWeek")]);
+      return await listDocuments(COLLECTIONS.SCHEDULES, [
+        Query.equal("tutorId", tutorId),
+        Query.equal("isActive", true),
+        Query.orderAsc("dayOfWeek"),
+      ]);
     } catch {
       return [];
     }
   },
 
-  saveTutorAvailability: async (tutorId: string, schedules: { day_of_week: number; start_time: string; end_time: string; timezone: string }[]): Promise<void> => {
+  saveTutorAvailability: async (
+    tutorId: string,
+    schedules: { day_of_week: number; start_time: string; end_time: string; timezone: string }[],
+  ): Promise<void> => {
     try {
-      const existing = await listDocuments(COLLECTIONS.SCHEDULES, [Query.equal("tutorId", tutorId)]);
+      const existing = await listDocuments(COLLECTIONS.SCHEDULES, [
+        Query.equal("tutorId", tutorId),
+      ]);
       for (const doc of existing) {
         await deleteDocument(COLLECTIONS.SCHEDULES, doc.$id || doc.id);
       }
@@ -1464,7 +1752,10 @@ export const DataStore = {
   // --- ADVERTISEMENTS ---
   getAdvertisements: async (): Promise<any[]> => {
     try {
-      return await listDocuments(COLLECTIONS.TUTOR_ADS, [Query.equal("isDeleted", false), Query.orderDesc("$createdAt")]);
+      return await listDocuments(COLLECTIONS.TUTOR_ADS, [
+        Query.equal("isDeleted", false),
+        Query.orderDesc("$createdAt"),
+      ]);
     } catch {
       return [];
     }
@@ -1472,13 +1763,27 @@ export const DataStore = {
 
   getTutorAdvertisements: async (tutorId: string): Promise<any[]> => {
     try {
-      return await listDocuments(COLLECTIONS.TUTOR_ADS, [Query.equal("tutorId", tutorId), Query.equal("isDeleted", false), Query.orderDesc("$createdAt")]);
+      return await listDocuments(COLLECTIONS.TUTOR_ADS, [
+        Query.equal("tutorId", tutorId),
+        Query.equal("isDeleted", false),
+        Query.orderDesc("$createdAt"),
+      ]);
     } catch {
       return [];
     }
   },
 
-  saveAdvertisement: async (ad: { tutor_id: string; title: string; description?: string; price?: number; monthly_price?: number; teaching_format?: string; is_active?: boolean; is_featured?: boolean; advertisement_status?: string }): Promise<void> => {
+  saveAdvertisement: async (ad: {
+    tutor_id: string;
+    title: string;
+    description?: string;
+    price?: number;
+    monthly_price?: number;
+    teaching_format?: string;
+    is_active?: boolean;
+    is_featured?: boolean;
+    advertisement_status?: string;
+  }): Promise<void> => {
     const data = {
       title: ad.title,
       body: ad.description || "",

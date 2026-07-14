@@ -5,8 +5,20 @@ import { PageHeader, StatusBadge, EmptyState } from "@/components/portal-shared"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -35,8 +47,8 @@ function AdminScheduling() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
-  const [students, setStudents] = useState<any[]>([]);
-  const [tutors, setTutors] = useState<any[]>([]);
+  const [students, setStudents] = useState<Record<string, unknown>[]>([]);
+  const [tutors, setTutors] = useState<Record<string, unknown>[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
   const [levels, setLevels] = useState<string[]>([]);
   const [conflict, setConflict] = useState<string | null>(null);
@@ -73,7 +85,12 @@ function AdminScheduling() {
     setLoading(false);
   };
 
-  const checkConflicts = (tutorId: string, startsAt: string, endsAt: string, excludeId?: string) => {
+  const checkConflicts = (
+    tutorId: string,
+    startsAt: string,
+    endsAt: string,
+    excludeId?: string,
+  ) => {
     const start = new Date(startsAt).getTime();
     const end = new Date(endsAt).getTime();
     return lessons.filter((l) => {
@@ -121,7 +138,16 @@ function AdminScheduling() {
     if (result) {
       toast.success("Lesson created and notifications sent");
       setShowCreate(false);
-      setForm({ student_id: "", tutor_id: "", date: "", start_time: "", end_time: "", subject: "", academic_level: "", notes: "" });
+      setForm({
+        student_id: "",
+        tutor_id: "",
+        date: "",
+        start_time: "",
+        end_time: "",
+        subject: "",
+        academic_level: "",
+        notes: "",
+      });
       setConflict(null);
       loadData();
     } else {
@@ -153,11 +179,15 @@ function AdminScheduling() {
 
   return (
     <div>
-      <PageHeader title="Scheduling" description="View, create, and manage all scheduled lessons across the platform." action={
-        <Button className="gap-2" onClick={() => setShowCreate(true)}>
-          <Plus className="h-4 w-4" /> Schedule Lesson
-        </Button>
-      } />
+      <PageHeader
+        title="Scheduling"
+        description="View, create, and manage all scheduled lessons across the platform."
+        action={
+          <Button className="gap-2" onClick={() => setShowCreate(true)}>
+            <Plus className="h-4 w-4" /> Schedule Lesson
+          </Button>
+        }
+      />
 
       {loading ? (
         <div className="flex justify-center py-12">
@@ -168,14 +198,21 @@ function AdminScheduling() {
           icon={Calendar}
           title="No Lessons"
           description="No lessons have been scheduled yet."
-          action={<Button className="gap-2" onClick={() => setShowCreate(true)}><Plus className="h-4 w-4" /> Schedule Lesson</Button>}
+          action={
+            <Button className="gap-2" onClick={() => setShowCreate(true)}>
+              <Plus className="h-4 w-4" /> Schedule Lesson
+            </Button>
+          }
         />
       ) : (
         <Card>
           <CardContent className="p-0">
             <div className="divide-y">
               {lessons.map((l) => (
-                <div key={l.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-muted/30 transition-colors gap-3">
+                <div
+                  key={l.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-muted/30 transition-colors gap-3"
+                >
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center shrink-0">
                       <Calendar className="h-5 w-5 text-blue-600" />
@@ -183,7 +220,8 @@ function AdminScheduling() {
                     <div>
                       <p className="font-semibold text-sm">{l.subject || "Untitled Lesson"}</p>
                       <p className="text-xs text-muted-foreground">
-                        {l.student?.display_name || "Student"} with {l.tutor?.display_name || "Tutor"}
+                        {l.student?.display_name || "Student"} with{" "}
+                        {l.tutor?.display_name || "Tutor"}
                       </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
                         <Clock className="h-3 w-3" /> {formatDateTime(l.starts_at)}
@@ -194,10 +232,19 @@ function AdminScheduling() {
                     <StatusBadge status={l.status} />
                     {l.status === "scheduled" && (
                       <>
-                        <Button variant="outline" size="sm" onClick={() => handleStatusChange(l.id, "completed")}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleStatusChange(l.id, "completed")}
+                        >
                           <CheckCircle className="h-3.5 w-3.5 mr-1" /> Complete
                         </Button>
-                        <Button variant="outline" size="sm" className="text-red-600" onClick={() => handleCancel(l.id)}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-red-600"
+                          onClick={() => handleCancel(l.id)}
+                        >
                           Cancel
                         </Button>
                       </>
@@ -210,7 +257,13 @@ function AdminScheduling() {
         </Card>
       )}
 
-      <Dialog open={showCreate} onOpenChange={(open) => { setShowCreate(open); if (!open) setConflict(null); }}>
+      <Dialog
+        open={showCreate}
+        onOpenChange={(open) => {
+          setShowCreate(open);
+          if (!open) setConflict(null);
+        }}
+      >
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>Schedule New Lesson</DialogTitle>
@@ -218,22 +271,36 @@ function AdminScheduling() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Student</Label>
-              <Select value={form.student_id} onValueChange={(v) => setForm({ ...form, student_id: v })}>
-                <SelectTrigger><SelectValue placeholder="Select student" /></SelectTrigger>
+              <Select
+                value={form.student_id}
+                onValueChange={(v) => setForm({ ...form, student_id: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select student" />
+                </SelectTrigger>
                 <SelectContent>
                   {students.map((s) => (
-                    <SelectItem key={s.id} value={s.id}>{s.name || s.email}</SelectItem>
+                    <SelectItem key={s.id as string} value={s.id as string}>
+                      {(s.name || s.email) as string}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
               <Label>Tutor</Label>
-              <Select value={form.tutor_id} onValueChange={(v) => setForm({ ...form, tutor_id: v })}>
-                <SelectTrigger><SelectValue placeholder="Select tutor" /></SelectTrigger>
+              <Select
+                value={form.tutor_id}
+                onValueChange={(v) => setForm({ ...form, tutor_id: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select tutor" />
+                </SelectTrigger>
                 <SelectContent>
                   {tutors.map((t) => (
-                    <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
+                    <SelectItem key={t.id as string} value={t.id as string}>
+                      {t.name as string}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -241,35 +308,61 @@ function AdminScheduling() {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label>Date</Label>
-                <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
+                <Input
+                  type="date"
+                  value={form.date}
+                  onChange={(e) => setForm({ ...form, date: e.target.value })}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Subject</Label>
-                <Select value={form.subject} onValueChange={(v) => setForm({ ...form, subject: v })}>
-                  <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+                <Select
+                  value={form.subject}
+                  onValueChange={(v) => setForm({ ...form, subject: v })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Optional" />
+                  </SelectTrigger>
                   <SelectContent>
                     {subjects.map((s) => (
-                      <SelectItem key={s} value={s}>{s}</SelectItem>
+                      <SelectItem key={s} value={s}>
+                        {s}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
                 <Label>Start Time</Label>
-                <Input type="time" value={form.start_time} onChange={(e) => setForm({ ...form, start_time: e.target.value })} />
+                <Input
+                  type="time"
+                  value={form.start_time}
+                  onChange={(e) => setForm({ ...form, start_time: e.target.value })}
+                />
               </div>
               <div className="space-y-2">
                 <Label>End Time</Label>
-                <Input type="time" value={form.end_time} onChange={(e) => setForm({ ...form, end_time: e.target.value })} />
+                <Input
+                  type="time"
+                  value={form.end_time}
+                  onChange={(e) => setForm({ ...form, end_time: e.target.value })}
+                />
               </div>
             </div>
             <div className="space-y-2">
               <Label>Academic Level</Label>
-              <Select value={form.academic_level} onValueChange={(v) => setForm({ ...form, academic_level: v })}>
-                <SelectTrigger><SelectValue placeholder="Optional" /></SelectTrigger>
+              <Select
+                value={form.academic_level}
+                onValueChange={(v) => setForm({ ...form, academic_level: v })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Optional" />
+                </SelectTrigger>
                 <SelectContent>
                   {levels.map((l) => (
-                    <SelectItem key={l} value={l}>{l}</SelectItem>
+                    <SelectItem key={l} value={l}>
+                      {l}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -291,7 +384,9 @@ function AdminScheduling() {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setShowCreate(false)}>
+              Cancel
+            </Button>
             <Button onClick={handleCreateTime}>Create Lesson</Button>
           </DialogFooter>
         </DialogContent>

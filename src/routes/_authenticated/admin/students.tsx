@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/admin/students")({
 });
 
 function AdminStudents() {
-  const [students, setStudents] = useState<any[]>([]);
+  const [students, setStudents] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,23 +41,37 @@ function AdminStudents() {
       </div>
 
       {students.length === 0 ? (
-        <EmptyState icon={Users} title="No Students" description="No students have registered yet." />
+        <EmptyState
+          icon={Users}
+          title="No Students"
+          description="No students have registered yet."
+        />
       ) : (
         <Card>
           <CardContent className="p-0">
             <div className="divide-y">
               {students.map((s) => (
-                <div key={s.id} className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors">
+                <div
+                  key={s.id}
+                  className="flex items-center justify-between p-4 hover:bg-muted/30 transition-colors"
+                >
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-950/30 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold text-sm">
-                      {(s.name || s.email || "S").split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                      {(s.name || s.email || "S")
+                        .split(" ")
+                        .map((n: string) => n[0])
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase()}
                     </div>
                     <div>
                       <p className="font-semibold text-sm">{s.name || "Unknown"}</p>
                       <p className="text-xs text-muted-foreground">{s.email}</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm">View</Button>
+                  <Button variant="outline" size="sm">
+                    View
+                  </Button>
                 </div>
               ))}
             </div>
