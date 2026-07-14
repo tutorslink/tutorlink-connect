@@ -10,6 +10,29 @@ export default defineConfig({
     tailwindcss(),
     tanstackStart({
       server: { entry: "server" },
+      routers: {
+        client: {
+          vite: {
+            build: {
+              outDir: ".dist/client",
+            },
+          },
+        },
+        server: {
+          vite: {
+            build: {
+              outDir: ".dist/server",
+            },
+          },
+        },
+        ssr: {
+          vite: {
+            build: {
+              outDir: ".dist/server",
+            },
+          },
+        },
+      },
     }),
     react(),
   ],
