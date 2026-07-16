@@ -20,6 +20,13 @@ import { Route as PublicFindATutorRouteImport } from './routes/_public.find-a-tu
 import { Route as PublicContactRouteImport } from './routes/_public.contact'
 import { Route as PublicApplyRouteImport } from './routes/_public.apply'
 import { Route as PublicAboutRouteImport } from './routes/_public.about'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated.settings'
+import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated.schedule'
+import { Route as AuthenticatedReviewsRouteImport } from './routes/_authenticated.reviews'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated.notifications'
+import { Route as AuthenticatedMyTutorsRouteImport } from './routes/_authenticated.my-tutors'
+import { Route as AuthenticatedLessonsRouteImport } from './routes/_authenticated.lessons'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedCmsRouteImport } from './routes/_authenticated.cms'
 import { Route as AuthenticatedTutorIndexRouteImport } from './routes/_authenticated/tutor/index'
@@ -109,6 +116,42 @@ const PublicAboutRoute = PublicAboutRouteImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => PublicRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedReviewsRoute = AuthenticatedReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMyTutorsRoute = AuthenticatedMyTutorsRouteImport.update({
+  id: '/my-tutors',
+  path: '/my-tutors',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedLessonsRoute = AuthenticatedLessonsRouteImport.update({
+  id: '/lessons',
+  path: '/lessons',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -325,6 +368,13 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/cms': typeof AuthenticatedCmsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/lessons': typeof AuthenticatedLessonsRoute
+  '/my-tutors': typeof AuthenticatedMyTutorsRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/reviews': typeof AuthenticatedReviewsRoute
+  '/schedule': typeof AuthenticatedScheduleRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/about': typeof PublicAboutRoute
   '/apply': typeof PublicApplyRoute
   '/contact': typeof PublicContactRoute
@@ -372,6 +422,13 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cms': typeof AuthenticatedCmsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/lessons': typeof AuthenticatedLessonsRoute
+  '/my-tutors': typeof AuthenticatedMyTutorsRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/reviews': typeof AuthenticatedReviewsRoute
+  '/schedule': typeof AuthenticatedScheduleRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/about': typeof PublicAboutRoute
   '/apply': typeof PublicApplyRoute
   '/contact': typeof PublicContactRoute
@@ -421,6 +478,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/cms': typeof AuthenticatedCmsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/lessons': typeof AuthenticatedLessonsRoute
+  '/_authenticated/my-tutors': typeof AuthenticatedMyTutorsRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/reviews': typeof AuthenticatedReviewsRoute
+  '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_public/about': typeof PublicAboutRoute
   '/_public/apply': typeof PublicApplyRoute
   '/_public/contact': typeof PublicContactRoute
@@ -471,6 +535,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cms'
     | '/dashboard'
+    | '/lessons'
+    | '/my-tutors'
+    | '/notifications'
+    | '/profile'
+    | '/reviews'
+    | '/schedule'
+    | '/settings'
     | '/about'
     | '/apply'
     | '/contact'
@@ -518,6 +589,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cms'
     | '/dashboard'
+    | '/lessons'
+    | '/my-tutors'
+    | '/notifications'
+    | '/profile'
+    | '/reviews'
+    | '/schedule'
+    | '/settings'
     | '/about'
     | '/apply'
     | '/contact'
@@ -566,6 +644,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/cms'
     | '/_authenticated/dashboard'
+    | '/_authenticated/lessons'
+    | '/_authenticated/my-tutors'
+    | '/_authenticated/notifications'
+    | '/_authenticated/profile'
+    | '/_authenticated/reviews'
+    | '/_authenticated/schedule'
+    | '/_authenticated/settings'
     | '/_public/about'
     | '/_public/apply'
     | '/_public/contact'
@@ -696,6 +781,55 @@ declare module '@tanstack/react-router' {
       fullPath: '/about'
       preLoaderRoute: typeof PublicAboutRouteImport
       parentRoute: typeof PublicRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/schedule': {
+      id: '/_authenticated/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof AuthenticatedScheduleRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/reviews': {
+      id: '/_authenticated/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof AuthenticatedReviewsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/my-tutors': {
+      id: '/_authenticated/my-tutors'
+      path: '/my-tutors'
+      fullPath: '/my-tutors'
+      preLoaderRoute: typeof AuthenticatedMyTutorsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/lessons': {
+      id: '/_authenticated/lessons'
+      path: '/lessons'
+      fullPath: '/lessons'
+      preLoaderRoute: typeof AuthenticatedLessonsRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -955,6 +1089,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedCmsRoute: typeof AuthenticatedCmsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedLessonsRoute: typeof AuthenticatedLessonsRoute
+  AuthenticatedMyTutorsRoute: typeof AuthenticatedMyTutorsRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedReviewsRoute: typeof AuthenticatedReviewsRoute
+  AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedAdminAdvertisementsRoute: typeof AuthenticatedAdminAdvertisementsRoute
   AuthenticatedAdminAiAssistantRoute: typeof AuthenticatedAdminAiAssistantRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
@@ -992,6 +1133,13 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCmsRoute: AuthenticatedCmsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedLessonsRoute: AuthenticatedLessonsRoute,
+  AuthenticatedMyTutorsRoute: AuthenticatedMyTutorsRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedReviewsRoute: AuthenticatedReviewsRoute,
+  AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedAdminAdvertisementsRoute: AuthenticatedAdminAdvertisementsRoute,
   AuthenticatedAdminAiAssistantRoute: AuthenticatedAdminAiAssistantRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,

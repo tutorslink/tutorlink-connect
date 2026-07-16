@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/admin/ai-assistant")({
 function AdminAIAssistant() {
   const [config, setConfig] = useState({
     enabled: true,
-    welcome_message: "Hi! I am the Tutors Link Assistant.",
+    welcome_message: "Hi! I am the Tutors Link AI Assistant, ask me questions but dont bully me...",
     lead_capture: true,
     tutor_recommendations: true,
     auto_escalate: false,
