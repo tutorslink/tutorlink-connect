@@ -235,7 +235,7 @@ const defaultCMS: CMSContent = {
 };
 
 const defaultSubjects = [
-[ "Middle School Maths",
+  "Middle School Maths",
   "IGCSE/GCSE Accounting",
   "IGCSE/GCSE Physics",
   "IGCSE/GCSE Maths",
@@ -288,7 +288,7 @@ const defaultSubjects = [
   "University Chemistry",
   "University Biology",
   "Arabic",
-  "Quran"]
+  "Quran",
 ];
 const defaultLevels = [
   "Primary",

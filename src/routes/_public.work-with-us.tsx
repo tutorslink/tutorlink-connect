@@ -71,6 +71,8 @@ function WorkWithUs() {
           hoursPerWeek,
           Why_good_fit: whyGoodFit,
           status: "pending",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         },
       });
       setSuccess(true);

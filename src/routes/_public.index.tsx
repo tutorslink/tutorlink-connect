@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { DataStore } from "@/lib/data-store";
 import { motion } from "motion/react";
 
 export const Route = createFileRoute("/_public/")({
@@ -21,7 +23,41 @@ export const Route = createFileRoute("/_public/")({
   component: Index,
 });
 
+const FALLBACK_LEVELS = [
+  "Primary",
+  "Secondary",
+  "IGCSE",
+  "GCSE",
+  "A-Level",
+  "SAT",
+  "University",
+  "Professional",
+];
+
 function Index() {
+  const [levels, setLevels] = useState<string[]>([]);
+  const [levelsLoading, setLevelsLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const docs = await DataStore.getSubjectCategories();
+        if (docs.length > 0) {
+          const names = docs
+            .map((doc: any) => doc.name || doc.title || doc.label || "")
+            .filter(Boolean) as string[];
+          setLevels(names.length > 0 ? names : FALLBACK_LEVELS);
+        } else {
+          setLevels(FALLBACK_LEVELS);
+        }
+      } catch {
+        setLevels(FALLBACK_LEVELS);
+      } finally {
+        setLevelsLoading(false);
+      }
+    })();
+  }, []);
+
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
@@ -56,7 +92,7 @@ function Index() {
           </motion.p>
           <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
             <Button size="lg" asChild className="text-lg px-8 shadow-lg shadow-blue-500/20 rounded-xl transition-transform hover:scale-105">
-              <Link to="/find-tutor">Find a Tutor</Link>
+              <Link to="/find-a-tutor">Find a Tutor</Link>
             </Button>
             <Button size="lg" variant="outline" asChild className="text-lg px-8 rounded-xl transition-transform hover:scale-105">
               <Link to="/apply">Apply as a Tutor</Link>
@@ -111,22 +147,22 @@ function Index() {
           variants={staggerContainer}
           className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
         >
-          {[
-            "Primary",
-            "Secondary",
-            "IGCSE",
-            "GCSE",
-            "A-Level",
-            "SAT",
-            "University",
-            "Professional",
-          ].map((level) => (
-            <motion.div key={level} variants={fadeInUp} whileHover={{ y: -5 }}>
-              <Card className="hover:border-blue-500/50 hover:shadow-lg transition-all cursor-pointer h-full border-border/50 bg-background/50 backdrop-blur-sm rounded-2xl">
-                <CardContent className="p-8 text-center font-semibold text-lg">{level}</CardContent>
-              </Card>
-            </motion.div>
-          ))}
+          {levelsLoading
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-24 rounded-2xl bg-muted animate-pulse"
+                />
+              ))
+            : levels.map((level) => (
+                <motion.div key={level} variants={fadeInUp} whileHover={{ y: -5 }}>
+                  <Link to="/find-a-tutor" search={{ level }}>
+                    <Card className="hover:border-blue-500/50 hover:shadow-lg transition-all cursor-pointer h-full border-border/50 bg-background/50 backdrop-blur-sm rounded-2xl">
+                      <CardContent className="p-8 text-center font-semibold text-lg">{level}</CardContent>
+                    </Card>
+                  </Link>
+                </motion.div>
+              ))}
         </motion.div>
       </section>
 
@@ -188,7 +224,7 @@ function Index() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
             <Button size="lg" variant="secondary" asChild className="text-lg px-10 rounded-xl font-semibold shadow-xl hover:scale-105 transition-transform text-blue-600">
-              <Link to="/find-tutor">Find a Tutor</Link>
+              <Link to="/find-a-tutor">Find a Tutor</Link>
             </Button>
             <Button
               size="lg"

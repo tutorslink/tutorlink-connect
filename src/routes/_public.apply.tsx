@@ -96,7 +96,9 @@ function Apply() {
         videoLink: videoLink || undefined,
         bio: bio || undefined,
         agreedToTerms,
-        status: "pending"
+        status: "pending",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       await appwrite.databases.createDocument({
