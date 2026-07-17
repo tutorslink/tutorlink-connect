@@ -7,8 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ID } from "node-appwrite";
-import { appwrite } from "@/integrations/appwrite/client";
+import { ID, appwrite } from "@/integrations/appwrite/client";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "motion/react";
@@ -97,15 +96,17 @@ function Apply() {
         videoLink: videoLink || undefined,
         bio: bio || undefined,
         agreedToTerms,
-        status: "pending"
+        status: "pending",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
-      await appwrite.databases.createDocument(
-        "Database",
-        "tutor_applications",
-        ID.unique(),
-        payload
-      );
+      await appwrite.databases.createDocument({
+        databaseId: "Database",
+        collectionId: "tutor_applications",
+        documentId: ID.unique(),
+        data: payload,
+      });
       
       setSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -16,15 +16,17 @@ const SUGGESTED_PROMPTS = [
   "How do I apply as a tutor?",
   "What subjects are available?",
   "Can you recommend a tutor?",
+  "Is Tutors Link Legit?",
 ];
 
 const CONTEXT_PROMPTS: Record<string, string[]> = {
   "/find-a-tutor": ["Find a math tutor", "Show me English tutors", "Who teaches computer science?"],
-  "/apply": ["How do I apply?", "What documents do I need?", "What's the approval process?"],
+  "/apply": ["How do I apply?", "What documents do I need?", "What's the approval process?" , "is applying easy?"],
   "/work-with-us": [
     "What positions are open?",
     "How do I join the team?",
     "Tell me about recruitment",
+    "What are the benefits of working with Tutors Link?",
   ],
   "/about": ["What is Tutors Link?", "Tell me about your mission", "How are tutors vetted?"],
   "/contact": ["How do I contact support?", "What are your response times?"],
@@ -39,7 +41,7 @@ export function AIChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I'm the Tutors Link Assistant. How can I help you find the right tutor today?",
+      content: "Hi! I'm the Tutors Link Assistant. Im a little smart, but go easy on me.. How can I help you find the right tutor today?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -99,7 +101,7 @@ export function AIChatbot() {
           {
             role: "assistant",
             content:
-              "I'm having trouble connecting right now. Please try again or visit our Contact page at /contact.",
+              "Ouch! I'm having trouble connecting right now :( Please try again or contact support if the issue persists.",
           },
         ]);
       } finally {
@@ -226,7 +228,7 @@ export function AIChatbot() {
               className="flex w-full gap-2"
             >
               <Input
-                placeholder="Ask me anything..."
+                placeholder="Ask me anything... Just dont bully me..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 className="flex-1"
