@@ -1,3 +1,4 @@
+// src/routes/__root.tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -8,6 +9,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { AppwriteProvider } from "@appwrite.io/react";
 
 import appCss from "../styles.css?url";
 
@@ -117,8 +119,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AppwriteProvider
+        endpoint={import.meta.env.VITE_APPWRITE_ENDPOINT}
+        project={import.meta.env.VITE_APPWRITE_PROJECT_ID}
+      >
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </AppwriteProvider>
     </QueryClientProvider>
   );
 }
