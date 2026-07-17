@@ -119,7 +119,7 @@ export const appwrite = {
           options?.data?.display_name ||
           options?.data?.name ||
           email.split("@")[0] ||
-          "Tutors Link User";
+          "Alvey User";
         await getClient().account.create(ID.unique(), email, password, name);
         await getClient().account.createEmailPasswordSession(email, password);
         const user = await getCurrentUser();

@@ -47,7 +47,7 @@ function Logo() {
           strokeLinecap="round"
         />
       </svg>
-      <span className="font-bold text-xl text-primary">Tutors Link</span>
+      <span className="font-bold text-xl text-primary">Alvey</span>
     </div>
   );
 }
@@ -74,7 +74,7 @@ function PublicLayout() {
       <header className="border-b sticky top-0 bg-background/95 backdrop-blur z-50">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="font-bold text-xl text-primary">
-            Tutors Link
+            Alvey
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             <Link to="/" className="hover:text-primary transition-colors">
@@ -140,7 +140,7 @@ function PublicLayout() {
       <footer className="border-t py-12 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-8">
           <div>
-            <div className="font-bold text-xl text-primary mb-4">Tutors Link</div>
+            <div className="font-bold text-xl text-primary mb-4">Alvey</div>
             <p className="text-sm text-muted-foreground">
               Connecting students with qualified tutors for personalized learning experiences.
             </p>
@@ -192,7 +192,7 @@ function PublicLayout() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 mt-12 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} Tutors Link. All rights reserved.
+          &copy; {new Date().getFullYear()} Alvey. All rights reserved.
         </div>
       </footer>
       <AIChatbot />

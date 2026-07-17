@@ -1,4 +1,4 @@
-# Testing & Quality Assurance — Tutors Link
+# Testing & Quality Assurance — Alvey
 
 Implements SRS §24.
 

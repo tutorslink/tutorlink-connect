@@ -112,7 +112,7 @@ function AdminSettings() {
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Platform Name
               </label>
-              <Input defaultValue="Tutors Link" />
+              <Input defaultValue="Alvey" />
             </div>
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">

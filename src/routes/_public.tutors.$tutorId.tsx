@@ -20,7 +20,7 @@ import { DataStore, Tutor, Review } from "@/lib/data-store";
 export const Route = createFileRoute("/_public/tutors/$tutorId")({
   head: ({ params }) => ({
     meta: [
-      { title: `Tutor Profile · Tutors Link` },
+      { title: `Tutor Profile · Alvey` },
       {
         name: "description",
         content:

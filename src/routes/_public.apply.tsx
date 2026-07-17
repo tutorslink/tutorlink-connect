@@ -124,7 +124,7 @@ function Apply() {
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
           <h1 className="text-4xl font-bold mb-6 text-emerald-600 dark:text-emerald-500">Application Submitted!</h1>
           <p className="text-xl text-muted-foreground mb-8">
-            Thank you for your interest in joining Tutors Link. We will review your application and get back to you soon.
+            Thank you for your interest in joining Alvey. We will review your application and get back to you soon.
           </p>
         </motion.div>
       </div>
@@ -136,7 +136,7 @@ function Apply() {
       <div className="text-center mb-12">
         <h1 className="text-4xl font-extrabold mb-4 tracking-tight">Tutor Application Form</h1>
         <p className="text-lg text-muted-foreground">
-          Thank you for your interest in joining Tutors Link as a tutor! This form will collect your teaching details as part of the application process. We look forward to learning more about you and your skills.
+          Thank you for your interest in joining Alvey as a tutor! This form will collect your teaching details as part of the application process. We look forward to learning more about you and your skills.
         </p>
       </div>
 
@@ -265,7 +265,7 @@ function Apply() {
         {/* Section 3: Classes & Commission Policies */}
         <div className="bg-card border rounded-2xl p-8 shadow-sm space-y-6">
           <h2 className="text-2xl font-semibold border-b pb-4">3. Classes & Commission Policies</h2>
-          <p className="text-sm text-muted-foreground mb-4">Details of the classes and Tutors Link's commission policies.</p>
+          <p className="text-sm text-muted-foreground mb-4">Details of the classes and Alvey's commission policies.</p>
           
           <div className="space-y-6">
             <div>
@@ -332,9 +332,9 @@ function Apply() {
             </div>
 
             <div className="p-6 bg-muted/30 rounded-xl space-y-4 border">
-              <h3 className="font-semibold text-lg">Tutors Link Commission Terms</h3>
+              <h3 className="font-semibold text-lg">Alvey Commission Terms</h3>
               <p className="text-sm text-muted-foreground">
-                Tutors Link will keep 40% fees from students you receive through our platform during the first month only. This money is used for maintaining and improving Tutors Link, including platform management, community support and growth, and advertising tutors like you!
+                Alvey will keep 40% fees from students you receive through our platform during the first month only. This money is used for maintaining and improving Alvey, including platform management, community support and growth, and advertising tutors like you!
               </p>
               <p className="text-sm text-muted-foreground">
                 Disagreeing with this policy may lead to your application being rejected. From the second month onward, tutors keep 100% of their earnings.

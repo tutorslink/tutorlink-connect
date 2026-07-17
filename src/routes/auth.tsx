@@ -20,8 +20,8 @@ function getAccount() {
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in · Tutors Link" },
-      { name: "description", content: "Sign in or create an account on Tutors Link." },
+      { title: "Sign in · Alvey" },
+      { name: "description", content: "Sign in or create an account on Alvey." },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),
@@ -111,7 +111,7 @@ function AuthPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
-            ← Tutors Link
+            ← Alvey
           </Link>
           <CardTitle className="text-2xl mt-2">Welcome</CardTitle>
           <CardDescription>Sign in or create your account</CardDescription>

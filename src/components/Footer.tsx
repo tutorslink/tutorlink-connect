@@ -50,7 +50,7 @@ export function Footer() {
                 <GraduationCap className="h-5 w-5 text-white" />
               </div>
               <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                Tutors Link
+                Alvey
               </span>
             </Link>
             <p className="text-sm leading-relaxed max-w-sm text-slate-400">
@@ -134,7 +134,7 @@ export function Footer() {
             </a>
           </div>
           <div className="text-center sm:text-right">
-            &copy; {currentYear} Tutors Link. All rights reserved. Registered under global
+            &copy; {currentYear} Alvey. All rights reserved. Registered under global
             educational brand parameters.
           </div>
         </div>

@@ -1,4 +1,4 @@
-# Non-Functional Requirements — Tutors Link
+# Non-Functional Requirements — Alvey
 
 Implements SRS §26. This document maps each quality attribute to concrete
 technical practices enforced in the codebase.

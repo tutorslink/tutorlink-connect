@@ -12,7 +12,7 @@ type Role = "student" | "tutor" | "recruitment" | "website_manager" | "owner";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Student Dashboard · Tutors Link" },
+      { title: "Student Dashboard · Alvey" },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),

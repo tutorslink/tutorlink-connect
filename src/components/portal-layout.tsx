@@ -37,7 +37,7 @@ export function PortalLayout({
             <GraduationCap className="h-4 w-4 text-white" />
           </div>
           <Link to="/" className="font-bold text-lg text-primary">
-            Tutors Link
+            Alvey
           </Link>
         </div>
         <div className="px-3 py-2 border-b">
@@ -112,7 +112,7 @@ export function PortalLayout({
         {/* Mobile Header */}
         <header className="md:hidden h-16 border-b flex items-center justify-between px-4 bg-card shrink-0">
           <Link to="/" className="font-bold text-lg text-primary">
-            Tutors Link
+            Alvey
           </Link>
           <Button
             variant="ghost"

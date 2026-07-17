@@ -166,7 +166,7 @@ const defaultTestimonials: Testimonial[] = [
     name: "Amira Patel",
     rating: 5,
     comment:
-      "Tutors Link connected me with Sophia, who helped me raise my SAT Verbal score by 140 points in just six weeks. I'm so grateful!",
+      "Alvey connected me with Sophia, who helped me raise my SAT Verbal score by 140 points in just six weeks. I'm so grateful!",
     role: "SAT Aspirant",
     is_featured: true,
   },
@@ -215,7 +215,7 @@ const defaultCMS: CMSContent = {
   faqs: [
     {
       category: "General",
-      question: "How does Tutors Link match students with tutors?",
+      question: "How does Alvey match students with tutors?",
       answer:
         "We analyze the student's subject requirements, academic level, timezone, and budget, then recommend 3 certified tutors who best fit their criteria. Our team also reviews each connection for optimal alignment.",
     },
@@ -227,7 +227,7 @@ const defaultCMS: CMSContent = {
     },
     {
       category: "Tutors",
-      question: "Are Tutors Link tutors fully vetted?",
+      question: "Are Alvey tutors fully vetted?",
       answer:
         "Absolutely. Every tutor undergoes a strict verification process, including identity verification, academic credential audits, a live teaching interview, and a background check.",
     },
@@ -479,7 +479,7 @@ function mapTutorDoc(doc: any): Tutor {
     id: doc.$id || doc.id || doc.authUserId || name,
     name,
     avatar_url: safeString(doc.avatarUrl || doc.avatar_url, avatarFor(name)),
-    headline: safeString(doc.headline, "Tutors Link Educator"),
+    headline: safeString(doc.headline, "Alvey Educator"),
     about: safeString(doc.fullBio || doc.shortBio || doc.about, ""),
     hourly_rate: rate,
     rating_avg: rating,
@@ -593,7 +593,7 @@ export const DataStore = {
     await upsertDocument(COLLECTIONS.USERS, user.id, {
       authUserId: user.id,
       email: safeString(user.email, `${user.id}@tutorslink.local`),
-      displayName: safeString(user.displayName, user.email?.split("@")[0] || "Tutors Link User"),
+      displayName: safeString(user.displayName, user.email?.split("@")[0] || "Alvey User"),
       role: safeString(user.role, "student"),
       discordId: null,
       active: true,

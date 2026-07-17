@@ -1,4 +1,4 @@
-# Environment Configuration — Tutors Link
+# Environment Configuration — Alvey
 
 Implements SRS §23.4.
 

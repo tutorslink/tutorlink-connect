@@ -62,7 +62,7 @@ export function Navbar() {
             <GraduationCap className="h-5 w-5 text-white" />
           </div>
           <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Tutors Link
+            Alvey
           </span>
         </Link>
 

@@ -91,7 +91,7 @@ function WorkWithUs() {
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
           <h1 className="text-4xl font-bold mb-6 text-emerald-600 dark:text-emerald-500">Application Submitted!</h1>
           <p className="text-xl text-muted-foreground mb-8">
-            Thank you for applying to be a volunteer at Tutors Link. We will review your application and contact you soon.
+            Thank you for applying to be a volunteer at Alvey. We will review your application and contact you soon.
           </p>
         </motion.div>
       </div>
@@ -103,7 +103,7 @@ function WorkWithUs() {
       <div className="text-center mb-12">
         <h1 className="text-4xl font-extrabold mb-4 tracking-tight">Student Volunteer Application</h1>
         <p className="text-lg text-muted-foreground">
-          Welcome to Tutors Link! We are seeking passionate student volunteers to join our team and help us connect students with tutors. Selected volunteers will gain valuable experience and receive a certificate of completion.
+          Welcome to Alvey! We are seeking passionate student volunteers to join our team and help us connect students with tutors. Selected volunteers will gain valuable experience and receive a certificate of completion.
         </p>
       </div>
 

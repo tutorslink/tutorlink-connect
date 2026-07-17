@@ -8,7 +8,7 @@
  */
 
 export const APP_VERSION = "1.0.0";
-export const APP_NAME = "Tutors Link";
+export const APP_NAME = "Alvey";
 
 /** Feature flags — flip to gate incomplete or non-essential features. */
 export const features = {

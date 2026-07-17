@@ -1,4 +1,4 @@
-# Disaster Recovery — Tutors Link
+# Disaster Recovery — Alvey
 
 Implements SRS §23.12.
 

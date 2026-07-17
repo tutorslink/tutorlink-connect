@@ -88,7 +88,7 @@ function TutorEarnings() {
           )}
           <p className="text-xs text-muted-foreground mt-4 pt-3 border-t">
             All financial values are informational records only. Payment processing is handled
-            internally by Tutors Link.
+            internally by Alvey.
           </p>
         </CardContent>
       </Card>

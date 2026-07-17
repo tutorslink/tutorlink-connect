@@ -8,12 +8,12 @@ import { motion } from "motion/react";
 export const Route = createFileRoute("/_public/")({
   head: () => ({
     meta: [
-      { title: "Tutors Link · Find the right tutor" },
+      { title: "Alvey · Find the right tutor" },
       {
         name: "description",
         content: "A modern tutoring platform connecting students with qualified tutors.",
       },
-      { property: "og:title", content: "Tutors Link" },
+      { property: "og:title", content: "Alvey" },
       {
         property: "og:description",
         content: "A modern tutoring platform connecting students with qualified tutors.",
@@ -84,7 +84,7 @@ function Index() {
           className="max-w-4xl mx-auto space-y-6 relative z-10"
         >
           <motion.h1 variants={fadeInUp} className="text-5xl md:text-6xl font-extrabold tracking-tight text-foreground">
-            Master your potential with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Tutors Link</span>
+            Master your potential with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Alvey</span>
           </motion.h1>
           <motion.p variants={fadeInUp} className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Connecting ambitious students with world-class tutors. Start your personalized learning
@@ -176,7 +176,7 @@ function Index() {
             variants={fadeInUp}
             className="text-4xl font-bold mb-20 tracking-tight"
           >
-            How Tutors Link Works
+            How Alvey Works
           </motion.h2>
           <motion.div 
             initial="hidden"

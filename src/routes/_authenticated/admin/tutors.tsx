@@ -296,7 +296,7 @@ function CreateTutorModal({
           <div className="p-4 bg-muted/30 rounded-xl border space-y-3">
             <p className="text-sm font-semibold">Commission Terms</p>
             <p className="text-xs text-muted-foreground">
-              Tutors Link keeps 40% from the first month. From the second month onward, tutors keep 100% of their earnings.
+              Alvey keeps 40% from the first month. From the second month onward, tutors keep 100% of their earnings.
             </p>
             <div className="flex items-center gap-2">
               <Checkbox id="admin-terms" checked={agreedToTerms} onCheckedChange={(v) => setAgreedToTerms(v === true)} />

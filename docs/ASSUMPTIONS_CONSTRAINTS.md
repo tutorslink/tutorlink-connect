@@ -1,4 +1,4 @@
-# Assumptions & Constraints — Tutors Link
+# Assumptions & Constraints — Alvey
 
 Documents the assumptions, constraints, and known open items that shaped
 implementation decisions. Corresponds to SRS §27.

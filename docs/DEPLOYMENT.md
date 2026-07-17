@@ -1,4 +1,4 @@
-# Deployment Guide — Tutors Link
+# Deployment Guide — Alvey
 
 Implements SRS §23 (Deployment & Maintenance).
 

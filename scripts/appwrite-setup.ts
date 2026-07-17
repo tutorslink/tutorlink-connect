@@ -97,7 +97,7 @@ async function ignoreExists<T>(label: string, promise: Promise<T>) {
 }
 
 async function ensureDatabase() {
-  await ignoreExists("database create", databases.create(databaseId, "Tutors Link", true));
+  await ignoreExists("database create", databases.create(databaseId, "Alvey", true));
 }
 
 async function ensureCollection(def: CollectionDef) {

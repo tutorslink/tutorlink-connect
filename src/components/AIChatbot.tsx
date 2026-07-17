@@ -12,11 +12,11 @@ interface Message {
 
 const SUGGESTED_PROMPTS = [
   "Help me find a mathematics tutor",
-  "How does Tutors Link work?",
+  "How does Alvey work?",
   "How do I apply as a tutor?",
   "What subjects are available?",
   "Can you recommend a tutor?",
-  "Is Tutors Link Legit?",
+  "Is Alvey Legit?",
 ];
 
 const CONTEXT_PROMPTS: Record<string, string[]> = {
@@ -26,9 +26,9 @@ const CONTEXT_PROMPTS: Record<string, string[]> = {
     "What positions are open?",
     "How do I join the team?",
     "Tell me about recruitment",
-    "What are the benefits of working with Tutors Link?",
+    "What are the benefits of working with Alvey?",
   ],
-  "/about": ["What is Tutors Link?", "Tell me about your mission", "How are tutors vetted?"],
+  "/about": ["What is Alvey?", "Tell me about your mission", "How are tutors vetted?"],
   "/contact": ["How do I contact support?", "What are your response times?"],
 };
 
@@ -41,7 +41,7 @@ export function AIChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I'm the Tutors Link Assistant. Im a little smart, but go easy on me.. How can I help you find the right tutor today?",
+      content: "Hi! I'm the Alvey Assistant. Im a little smart, but go easy on me.. How can I help you find the right tutor today?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -159,7 +159,7 @@ export function AIChatbot() {
           >
             <CardTitle className="text-base flex items-center gap-2">
               <Bot className="h-5 w-5" />
-              Tutors Link AI
+              Alvey AI
             </CardTitle>
             <Button
               variant="ghost"
