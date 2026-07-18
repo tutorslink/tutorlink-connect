@@ -74,6 +74,12 @@ type CollectionDef = {
 };
 
 const publicRead = [Permission.read(Role.any())];
+const publicManagedCrud = [
+  Permission.read(Role.any()),
+  Permission.create(Role.users()),
+  Permission.update(Role.users()),
+  Permission.delete(Role.users()),
+];
 const authCrud = [
   Permission.read(Role.users()),
   Permission.create(Role.users()),
@@ -269,7 +275,7 @@ const collections: CollectionDef[] = [
   {
     id: "tutor_profiles",
     name: "Tutor Profiles",
-    permissions: publicRead,
+    permissions: publicManagedCrud,
     attributes: [
       { kind: "string", key: "slug", size: 96, required: true },
       { kind: "string", key: "displayName", size: 160, required: true },
@@ -300,7 +306,7 @@ const collections: CollectionDef[] = [
   {
     id: "ads",
     name: "Tutor Advertisements",
-    permissions: publicRead,
+    permissions: publicManagedCrud,
     attributes: [
       { kind: "string", key: "title", size: 256, required: true },
       { kind: "text", key: "body", required: true },
@@ -404,7 +410,7 @@ const collections: CollectionDef[] = [
   {
     id: "subjects",
     name: "Subjects",
-    permissions: publicRead,
+    permissions: publicManagedCrud,
     attributes: [
       { kind: "string", key: "name", size: 160, required: true },
       { kind: "string", key: "slug", size: 160, required: true },
@@ -496,7 +502,7 @@ const collections: CollectionDef[] = [
   {
     id: "pages",
     name: "Pages",
-    permissions: publicRead,
+    permissions: publicManagedCrud,
     attributes: [
       { kind: "string", key: "slug", size: 96, required: true },
       { kind: "string", key: "title", size: 160, required: true },
@@ -519,7 +525,7 @@ const collections: CollectionDef[] = [
   {
     id: "homepage_content",
     name: "Homepage Content",
-    permissions: publicRead,
+    permissions: publicManagedCrud,
     attributes: [
       { kind: "text", key: "heroHeadline", required: false },
       { kind: "text", key: "heroSubheadline", required: false },

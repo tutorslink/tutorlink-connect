@@ -9,12 +9,60 @@ import {
   X,
   ChevronDown,
   Award,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 import { DataStore, Tutor } from "@/lib/data-store";
+
+const languageOptions = [
+  "Afrikaans",
+  "Amharic",
+  "Arabic",
+  "Bengali",
+  "Chinese (Cantonese)",
+  "Chinese (Mandarin)",
+  "Dutch",
+  "English",
+  "Filipino",
+  "French",
+  "German",
+  "Greek",
+  "Gujarati",
+  "Hindi",
+  "Indonesian",
+  "Italian",
+  "Japanese",
+  "Korean",
+  "Malay",
+  "Malayalam",
+  "Mandarin",
+  "Marathi",
+  "Persian",
+  "Portuguese",
+  "Punjabi",
+  "Russian",
+  "Spanish",
+  "Swahili",
+  "Tamil",
+  "Telugu",
+  "Thai",
+  "Turkish",
+  "Urdu",
+  "Vietnamese",
+].sort((a, b) => a.localeCompare(b));
 
 export const Route = createFileRoute("/_public/find-a-tutor")({
   head: () => ({
@@ -47,6 +95,7 @@ function FindATutorPage() {
   const [selectedSubject, setSelectedSubject] = useState(searchParams.subject || "All");
   const [selectedLevel, setSelectedLevel] = useState(searchParams.level || "All");
   const [selectedLanguage, setSelectedLanguage] = useState("All");
+  const [languageOpen, setLanguageOpen] = useState(false);
   const [maxPrice, setMaxPrice] = useState<number>(100);
   const [onlyVerified, setOnlyVerified] = useState(false);
   const [sortBy, setSortBy] = useState("featured");
@@ -92,7 +141,10 @@ function FindATutorPage() {
     }
 
     if (selectedLanguage !== "All") {
-      result = result.filter((t) => t.languages.includes(selectedLanguage));
+      const selected = selectedLanguage.toLowerCase();
+      result = result.filter((t) =>
+        t.languages.some((language) => language.toLowerCase() === selected),
+      );
     }
 
     result = result.filter((t) => t.hourly_rate <= maxPrice);
@@ -213,18 +265,63 @@ function FindATutorPage() {
               <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Tutor Language
               </label>
-              <select
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
-                className="w-full bg-background border border-border rounded-xl p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-              >
-                <option value="All">All Languages</option>
-                <option value="English">English</option>
-                <option value="Spanish">Spanish</option>
-                <option value="French">French</option>
-                <option value="Mandarin">Mandarin</option>
-                <option value="Russian">Russian</option>
-              </select>
+              <Popover open={languageOpen} onOpenChange={setLanguageOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={languageOpen}
+                    className="w-full justify-between rounded-xl font-normal"
+                  >
+                    {selectedLanguage === "All" ? "All Languages" : selectedLanguage}
+                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+                  <Command>
+                    <CommandInput placeholder="Search languages..." />
+                    <CommandList>
+                      <CommandEmpty>No language found.</CommandEmpty>
+                      <CommandGroup>
+                        <CommandItem
+                          value="All Languages"
+                          onSelect={() => {
+                            setSelectedLanguage("All");
+                            setLanguageOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedLanguage === "All" ? "opacity-100" : "opacity-0",
+                            )}
+                          />
+                          All Languages
+                        </CommandItem>
+                        {languageOptions.map((language) => (
+                          <CommandItem
+                            key={language}
+                            value={language}
+                            onSelect={() => {
+                              setSelectedLanguage(language);
+                              setLanguageOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                selectedLanguage === language ? "opacity-100" : "opacity-0",
+                              )}
+                            />
+                            {language}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
 
             {/* Pricing Slider */}

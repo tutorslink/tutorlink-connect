@@ -106,6 +106,18 @@ function AuthPage() {
     );
   };
 
+  const handleLinkedIn = () => {
+    const account = getAccount();
+    const origin = window.location.origin;
+    account.createOAuth2Session(OAuthProvider.Linkedin, `${origin}/auth`, `${origin}/auth`);
+  };
+
+  const handleDiscord = () => {
+    const account = getAccount();
+    const origin = window.location.origin;
+    account.createOAuth2Session(OAuthProvider.Discord, `${origin}/auth`, `${origin}/auth`);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
       <Card className="w-full max-w-md">
@@ -224,16 +236,19 @@ function AuthPage() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={async () => {
-                setLoading(true);
-                const res = await appwrite.auth.signInWithOAuth("discord", {
-                  redirect_uri: window.location.origin,
-                });
-                if (res.error) {
-                  setLoading(false);
-                  toast.error(res.error.message ?? "Discord sign-in failed");
-                }
-              }}
+              onClick={handleLinkedIn}
+              disabled={loading}
+            >
+              <span className="mr-2 flex h-5 w-5 items-center justify-center rounded bg-[#0A66C2] text-xs font-bold text-white">
+                in
+              </span>
+              Continue with LinkedIn
+            </Button>
+
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={handleDiscord}
               disabled={loading}
             >
               <svg className="w-5 h-5 mr-2 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24">

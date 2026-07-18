@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, no-empty */
-import { ID, Query } from "appwrite";
+import { ID, Permission, Query, Role } from "appwrite";
 import { appwrite, APPWRITE_DATABASE_ID, getCurrentUser } from "@/integrations/appwrite/client";
 
 export interface Tutor {
@@ -410,42 +410,41 @@ async function getDocument(collectionId: string, documentId: string) {
 
 async function upsertDocument(collectionId: string, documentId: string, data: Record<string, any>) {
   try {
-    try {
-      await appwrite.databases.getDocument({
-        databaseId: APPWRITE_DATABASE_ID,
-        collectionId,
-        documentId,
-      });
-      return await appwrite.databases.updateDocument({
-        databaseId: APPWRITE_DATABASE_ID,
-        collectionId,
-        documentId,
-        data,
-      });
-    } catch (e: any) {
-      if (e.code === 404) {
-        return await appwrite.databases.createDocument({
-          databaseId: APPWRITE_DATABASE_ID,
-          collectionId,
-          documentId,
-          data,
-        });
-      }
-      throw e;
-    }
-  } catch {
-    return null;
-  }
-}
-
-async function deleteDocument(collectionId: string, documentId: string) {
-  try {
-    await appwrite.databases.deleteDocument({
+    await appwrite.databases.getDocument({
       databaseId: APPWRITE_DATABASE_ID,
       collectionId,
       documentId,
     });
-  } catch {}
+    return await appwrite.databases.updateDocument({
+      databaseId: APPWRITE_DATABASE_ID,
+      collectionId,
+      documentId,
+      data,
+    });
+  } catch (e: any) {
+    if (e.code === 404) {
+      return await appwrite.databases.createDocument({
+        databaseId: APPWRITE_DATABASE_ID,
+        collectionId,
+        documentId,
+        data,
+        permissions: [
+          Permission.read(Role.users()),
+          Permission.update(Role.users()),
+          Permission.delete(Role.users()),
+        ],
+      });
+    }
+    throw e;
+  }
+}
+
+async function deleteDocument(collectionId: string, documentId: string) {
+  await appwrite.databases.deleteDocument({
+    databaseId: APPWRITE_DATABASE_ID,
+    collectionId,
+    documentId,
+  });
 }
 
 async function createDocument(
@@ -453,16 +452,17 @@ async function createDocument(
   data: Record<string, any>,
   documentId = ID.unique(),
 ) {
-  try {
-    return await appwrite.databases.createDocument({
-      databaseId: APPWRITE_DATABASE_ID,
-      collectionId,
-      documentId,
-      data,
-    });
-  } catch {
-    return null;
-  }
+  return await appwrite.databases.createDocument({
+    databaseId: APPWRITE_DATABASE_ID,
+    collectionId,
+    documentId,
+    data,
+    permissions: [
+      Permission.read(Role.users()),
+      Permission.update(Role.users()),
+      Permission.delete(Role.users()),
+    ],
+  });
 }
 
 function mapTutorDoc(doc: any): Tutor {
@@ -660,6 +660,34 @@ export const DataStore = {
     setLocal(KEYS.TUTORS, tutors);
   },
 
+  updateTutorProfile: async (tutor: Partial<Tutor> & { id: string }): Promise<void> => {
+    const existing = (await DataStore.getAllTutors()).find((t) => t.id === tutor.id);
+    const merged: Tutor = {
+      id: tutor.id,
+      name: tutor.name ?? existing?.name ?? "Certified Tutor",
+      avatar_url: tutor.avatar_url ?? existing?.avatar_url ?? avatarFor(tutor.name || "Tutor"),
+      headline: tutor.headline ?? existing?.headline ?? "Alvey Educator",
+      about: tutor.about ?? existing?.about ?? "",
+      hourly_rate: tutor.hourly_rate ?? existing?.hourly_rate ?? 40,
+      rating_avg: tutor.rating_avg ?? existing?.rating_avg ?? 5,
+      rating_count: tutor.rating_count ?? existing?.rating_count ?? 0,
+      years_experience: tutor.years_experience ?? existing?.years_experience ?? 0,
+      languages: tutor.languages ?? existing?.languages ?? ["English"],
+      subjects: tutor.subjects ?? existing?.subjects ?? [],
+      levels: tutor.levels ?? existing?.levels ?? defaultLevels,
+      is_featured: tutor.is_featured ?? existing?.is_featured ?? false,
+      is_verified: tutor.is_verified ?? existing?.is_verified ?? false,
+      availability: tutor.availability ?? existing?.availability ?? "Flexible schedule (contact us)",
+    };
+    await DataStore.saveTutor(merged);
+  },
+
+  archiveTutor: async (id: string): Promise<void> => {
+    await upsertDocument(COLLECTIONS.TUTOR_PROFILES, id, { active: false });
+    const tutors = getLocal<Tutor[]>(KEYS.TUTORS, defaultTutors).filter((t) => t.id !== id);
+    setLocal(KEYS.TUTORS, tutors);
+  },
+
   // --- SUBJECTS & LEVELS ---
   getSubjects: async (): Promise<string[]> => {
     try {
@@ -742,6 +770,7 @@ export const DataStore = {
       faqs: JSON.stringify(cms.faqs),
       isPublished: true,
       updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
     });
   },
 
@@ -1385,6 +1414,7 @@ export const DataStore = {
       stats: JSON.stringify(content.stats || {}),
       isPublished: true,
       updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
     });
   },
 
@@ -1398,11 +1428,13 @@ export const DataStore = {
   },
 
   savePlatformSetting: async (key: string, value: any): Promise<void> => {
+    const now = new Date().toISOString();
     await upsertDocument(COLLECTIONS.PLATFORM_SETTINGS, key, {
       key,
       value: JSON.stringify(value),
       updatedBy: (await getCurrentUser())?.$id || null,
-      updatedAt: new Date().toISOString(),
+      updatedAt: now,
+      createdAt: now,
     });
   },
 
@@ -1431,6 +1463,7 @@ export const DataStore = {
       announcements: prefs.announcements ?? true,
       marketing: prefs.marketing ?? false,
       updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
     });
   },
 
@@ -1708,6 +1741,27 @@ export const DataStore = {
     return [];
   },
 
+  saveStudent: async (student: {
+    id: string;
+    name: string;
+    email: string;
+    role?: string;
+    active?: boolean;
+  }): Promise<void> => {
+    await upsertDocument(COLLECTIONS.USERS, student.id, {
+      authUserId: student.id,
+      email: student.email,
+      displayName: student.name,
+      role: student.role || "student",
+      discordId: null,
+      active: student.active ?? true,
+    });
+  },
+
+  archiveStudent: async (id: string): Promise<void> => {
+    await upsertDocument(COLLECTIONS.USERS, id, { active: false });
+  },
+
   getAllTutors: async (): Promise<any[]> => {
     try {
       const docs = await listDocuments(COLLECTIONS.TUTOR_PROFILES, [Query.equal("active", true)]);
@@ -1789,6 +1843,7 @@ export const DataStore = {
             endTime: schedule.end_time,
             timezone: schedule.timezone,
             isActive: true,
+            createdAt: new Date().toISOString(),
           });
         }
       }
@@ -1798,10 +1853,19 @@ export const DataStore = {
   // --- ADVERTISEMENTS ---
   getAdvertisements: async (): Promise<any[]> => {
     try {
-      return await listDocuments(COLLECTIONS.TUTOR_ADS, [
+      const docs = await listDocuments(COLLECTIONS.TUTOR_ADS, [
         Query.equal("isDeleted", false),
         Query.orderDesc("$createdAt"),
       ]);
+      return docs.map((ad) => ({
+        ...ad,
+        id: ad.$id || ad.id,
+        description: ad.description || ad.body || "",
+        advertisement_status: ad.status || ad.advertisement_status || "pending",
+        is_active: String(ad.status || "").toLowerCase() === "active",
+        teaching_format: ad.teachingFormat || ad.teaching_format || "",
+        monthly_price: ad.monthlyPrice ?? ad.monthly_price ?? null,
+      }));
     } catch {
       return [];
     }
@@ -1820,6 +1884,7 @@ export const DataStore = {
   },
 
   saveAdvertisement: async (ad: {
+    id?: string;
     tutor_id: string;
     title: string;
     description?: string;
@@ -1830,27 +1895,34 @@ export const DataStore = {
     is_featured?: boolean;
     advertisement_status?: string;
   }): Promise<void> => {
+    const now = new Date().toISOString();
     const data = {
       title: ad.title,
       body: ad.description || "",
       description: ad.description || "",
-      status: ad.advertisement_status || "pending",
+      status: ad.advertisement_status || (ad.is_active ? "active" : "pending"),
       Source: "app",
       messageId: null,
       createdBy: ad.tutor_id,
       subject: "General",
       level: "General",
-      createdAt: new Date().toISOString(),
-      tutor: ad.tutor_id,
+      createdAt: now,
       tutorId: ad.tutor_id,
-      teaching_format: ad.teaching_format || "online",
-      monthly_price: ad.monthly_price ?? ad.price ?? null,
+      teachingFormat: ad.teaching_format || "online",
+      monthlyPrice: ad.monthly_price ?? ad.price ?? null,
       price: ad.price ?? null,
       isFeatured: ad.is_featured ?? false,
-      isActive: ad.is_active ?? true,
       isDeleted: false,
     };
-    await upsertDocument(COLLECTIONS.TUTOR_ADS, ad.tutor_id, data);
+    await upsertDocument(COLLECTIONS.TUTOR_ADS, ad.id || ad.tutor_id || ID.unique(), data);
+  },
+
+  updateAdvertisementStatus: async (id: string, active: boolean): Promise<void> => {
+    await upsertDocument(COLLECTIONS.TUTOR_ADS, id, { status: active ? "active" : "paused" });
+  },
+
+  archiveAdvertisement: async (id: string): Promise<void> => {
+    await upsertDocument(COLLECTIONS.TUTOR_ADS, id, { isDeleted: true, status: "archived" });
   },
 };
 

@@ -148,7 +148,7 @@ export const appwrite = {
       }
     },
     async signInWithOAuth(
-      provider: "google" | "apple" | "microsoft",
+      provider: "google" | "apple" | "microsoft" | "discord" | "linkedin",
       opts?: { redirect_uri?: string; extraParams?: Record<string, string> },
     ) {
       try {
