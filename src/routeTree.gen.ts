@@ -15,7 +15,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as ApiChatbotRouteImport } from './routes/api/chatbot'
 import { Route as PublicWorkWithUsRouteImport } from './routes/_public.work-with-us'
-import { Route as PublicFindTutorRouteImport } from './routes/_public.find-tutor'
+import { Route as PublicFindTutorRouteImport } from './routes/_public.find-a-tutor'
 import { Route as PublicFindATutorRouteImport } from './routes/_public.find-a-tutor'
 import { Route as PublicContactRouteImport } from './routes/_public.contact'
 import { Route as PublicApplyRouteImport } from './routes/_public.apply'
@@ -93,8 +93,8 @@ const PublicWorkWithUsRoute = PublicWorkWithUsRouteImport.update({
   getParentRoute: () => PublicRoute,
 } as any)
 const PublicFindTutorRoute = PublicFindTutorRouteImport.update({
-  id: '/find-tutor',
-  path: '/find-tutor',
+  id: '/find-a-tutor',
+  path: '/find-a-tutor',
   getParentRoute: () => PublicRoute,
 } as any)
 const PublicFindATutorRoute = PublicFindATutorRouteImport.update({
@@ -379,7 +379,7 @@ export interface FileRoutesByFullPath {
   '/apply': typeof PublicApplyRoute
   '/contact': typeof PublicContactRoute
   '/find-a-tutor': typeof PublicFindATutorRoute
-  '/find-tutor': typeof PublicFindTutorRoute
+  '/find-a-tutor': typeof PublicFindTutorRoute
   '/work-with-us': typeof PublicWorkWithUsRoute
   '/api/chatbot': typeof ApiChatbotRoute
   '/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
@@ -433,7 +433,7 @@ export interface FileRoutesByTo {
   '/apply': typeof PublicApplyRoute
   '/contact': typeof PublicContactRoute
   '/find-a-tutor': typeof PublicFindATutorRoute
-  '/find-tutor': typeof PublicFindTutorRoute
+  '/find-a-tutor': typeof PublicFindTutorRoute
   '/work-with-us': typeof PublicWorkWithUsRoute
   '/api/chatbot': typeof ApiChatbotRoute
   '/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
@@ -489,7 +489,7 @@ export interface FileRoutesById {
   '/_public/apply': typeof PublicApplyRoute
   '/_public/contact': typeof PublicContactRoute
   '/_public/find-a-tutor': typeof PublicFindATutorRoute
-  '/_public/find-tutor': typeof PublicFindTutorRoute
+  '/_public/find-a-tutor': typeof PublicFindTutorRoute
   '/_public/work-with-us': typeof PublicWorkWithUsRoute
   '/api/chatbot': typeof ApiChatbotRoute
   '/_public/': typeof PublicIndexRoute
@@ -546,7 +546,7 @@ export interface FileRouteTypes {
     | '/apply'
     | '/contact'
     | '/find-a-tutor'
-    | '/find-tutor'
+    | '/find-a-tutor'
     | '/work-with-us'
     | '/api/chatbot'
     | '/admin/advertisements'
@@ -600,7 +600,7 @@ export interface FileRouteTypes {
     | '/apply'
     | '/contact'
     | '/find-a-tutor'
-    | '/find-tutor'
+    | '/find-a-tutor'
     | '/work-with-us'
     | '/api/chatbot'
     | '/admin/advertisements'
@@ -655,7 +655,7 @@ export interface FileRouteTypes {
     | '/_public/apply'
     | '/_public/contact'
     | '/_public/find-a-tutor'
-    | '/_public/find-tutor'
+    | '/_public/find-a-tutor'
     | '/_public/work-with-us'
     | '/api/chatbot'
     | '/_public/'
@@ -747,10 +747,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicWorkWithUsRouteImport
       parentRoute: typeof PublicRoute
     }
-    '/_public/find-tutor': {
-      id: '/_public/find-tutor'
-      path: '/find-tutor'
-      fullPath: '/find-tutor'
+    '/_public/find-a-tutor': {
+      id: '/_public/find-a-tutor'
+      path: '/find-a-tutor'
+      fullPath: '/find-a-tutor'
       preLoaderRoute: typeof PublicFindTutorRouteImport
       parentRoute: typeof PublicRoute
     }

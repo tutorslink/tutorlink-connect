@@ -8,10 +8,16 @@ const viteEnv =
 function readEnv(name: string, fallback = ""): string {
   try {
     if (viteEnv?.[name]) return viteEnv[name];
-    // @ts-expect-error process is not defined in all environments
-    if (typeof process !== "undefined" && process.env && process.env[name])
-      return process.env[name] as string;
-  } catch (e) {
+
+    const processEnv =
+      typeof globalThis !== "undefined"
+        ? (globalThis as typeof globalThis & {
+            process?: { env?: Record<string, string | undefined> };
+          }).process?.env
+        : undefined;
+
+    if (processEnv?.[name]) return processEnv[name] as string;
+  } catch {
     // Ignore errors for process
   }
   return fallback;

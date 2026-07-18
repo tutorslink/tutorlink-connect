@@ -80,7 +80,7 @@ function PublicLayout() {
             <Link to="/" className="hover:text-primary transition-colors">
               Home
             </Link>
-            <Link to="/find-tutor" className="hover:text-primary transition-colors">
+            <Link to="/find-a-tutor" className="hover:text-primary transition-colors">
               Find a Tutor
             </Link>
             <Link to="/apply" className="hover:text-primary transition-colors">
@@ -151,7 +151,7 @@ function PublicLayout() {
               <Link to="/" className="hover:text-foreground">
                 Home
               </Link>
-              <Link to="/find-tutor" className="hover:text-foreground">
+              <Link to="/find-a-tutor" className="hover:text-foreground">
                 Find a Tutor
               </Link>
               <Link to="/about" className="hover:text-foreground">
