@@ -15,7 +15,6 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as ApiChatbotRouteImport } from './routes/api/chatbot'
 import { Route as PublicWorkWithUsRouteImport } from './routes/_public.work-with-us'
-import { Route as PublicFindTutorRouteImport } from './routes/_public.find-a-tutor'
 import { Route as PublicFindATutorRouteImport } from './routes/_public.find-a-tutor'
 import { Route as PublicContactRouteImport } from './routes/_public.contact'
 import { Route as PublicApplyRouteImport } from './routes/_public.apply'
@@ -50,6 +49,7 @@ import { Route as AuthenticatedRecruitmentDocumentsRouteImport } from './routes/
 import { Route as AuthenticatedRecruitmentCandidatesRouteImport } from './routes/_authenticated/recruitment/candidates'
 import { Route as AuthenticatedRecruitmentApplicationsRouteImport } from './routes/_authenticated/recruitment/applications'
 import { Route as AuthenticatedRecruitmentActivityRouteImport } from './routes/_authenticated/recruitment/activity'
+import { Route as AuthenticatedOwnerFinanceRouteImport } from './routes/_authenticated/owner/finance'
 import { Route as AuthenticatedAdminTutorsRouteImport } from './routes/_authenticated/admin/tutors'
 import { Route as AuthenticatedAdminTutorApplicationsRouteImport } from './routes/_authenticated/admin/tutor-applications'
 import { Route as AuthenticatedAdminStudentsRouteImport } from './routes/_authenticated/admin/students'
@@ -90,11 +90,6 @@ const ApiChatbotRoute = ApiChatbotRouteImport.update({
 const PublicWorkWithUsRoute = PublicWorkWithUsRouteImport.update({
   id: '/work-with-us',
   path: '/work-with-us',
-  getParentRoute: () => PublicRoute,
-} as any)
-const PublicFindTutorRoute = PublicFindTutorRouteImport.update({
-  id: '/find-a-tutor',
-  path: '/find-a-tutor',
   getParentRoute: () => PublicRoute,
 } as any)
 const PublicFindATutorRoute = PublicFindATutorRouteImport.update({
@@ -285,6 +280,12 @@ const AuthenticatedRecruitmentActivityRoute =
     path: '/recruitment/activity',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedOwnerFinanceRoute =
+  AuthenticatedOwnerFinanceRouteImport.update({
+    id: '/owner/finance',
+    path: '/owner/finance',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminTutorsRoute =
   AuthenticatedAdminTutorsRouteImport.update({
     id: '/admin/tutors',
@@ -379,7 +380,6 @@ export interface FileRoutesByFullPath {
   '/apply': typeof PublicApplyRoute
   '/contact': typeof PublicContactRoute
   '/find-a-tutor': typeof PublicFindATutorRoute
-  '/find-a-tutor': typeof PublicFindTutorRoute
   '/work-with-us': typeof PublicWorkWithUsRoute
   '/api/chatbot': typeof ApiChatbotRoute
   '/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
@@ -395,6 +395,7 @@ export interface FileRoutesByFullPath {
   '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/admin/tutor-applications': typeof AuthenticatedAdminTutorApplicationsRoute
   '/admin/tutors': typeof AuthenticatedAdminTutorsRoute
+  '/owner/finance': typeof AuthenticatedOwnerFinanceRoute
   '/recruitment/activity': typeof AuthenticatedRecruitmentActivityRoute
   '/recruitment/applications': typeof AuthenticatedRecruitmentApplicationsRoute
   '/recruitment/candidates': typeof AuthenticatedRecruitmentCandidatesRoute
@@ -433,7 +434,6 @@ export interface FileRoutesByTo {
   '/apply': typeof PublicApplyRoute
   '/contact': typeof PublicContactRoute
   '/find-a-tutor': typeof PublicFindATutorRoute
-  '/find-a-tutor': typeof PublicFindTutorRoute
   '/work-with-us': typeof PublicWorkWithUsRoute
   '/api/chatbot': typeof ApiChatbotRoute
   '/admin/advertisements': typeof AuthenticatedAdminAdvertisementsRoute
@@ -449,6 +449,7 @@ export interface FileRoutesByTo {
   '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/admin/tutor-applications': typeof AuthenticatedAdminTutorApplicationsRoute
   '/admin/tutors': typeof AuthenticatedAdminTutorsRoute
+  '/owner/finance': typeof AuthenticatedOwnerFinanceRoute
   '/recruitment/activity': typeof AuthenticatedRecruitmentActivityRoute
   '/recruitment/applications': typeof AuthenticatedRecruitmentApplicationsRoute
   '/recruitment/candidates': typeof AuthenticatedRecruitmentCandidatesRoute
@@ -489,7 +490,6 @@ export interface FileRoutesById {
   '/_public/apply': typeof PublicApplyRoute
   '/_public/contact': typeof PublicContactRoute
   '/_public/find-a-tutor': typeof PublicFindATutorRoute
-  '/_public/find-a-tutor': typeof PublicFindTutorRoute
   '/_public/work-with-us': typeof PublicWorkWithUsRoute
   '/api/chatbot': typeof ApiChatbotRoute
   '/_public/': typeof PublicIndexRoute
@@ -506,6 +506,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/_authenticated/admin/tutor-applications': typeof AuthenticatedAdminTutorApplicationsRoute
   '/_authenticated/admin/tutors': typeof AuthenticatedAdminTutorsRoute
+  '/_authenticated/owner/finance': typeof AuthenticatedOwnerFinanceRoute
   '/_authenticated/recruitment/activity': typeof AuthenticatedRecruitmentActivityRoute
   '/_authenticated/recruitment/applications': typeof AuthenticatedRecruitmentApplicationsRoute
   '/_authenticated/recruitment/candidates': typeof AuthenticatedRecruitmentCandidatesRoute
@@ -546,7 +547,6 @@ export interface FileRouteTypes {
     | '/apply'
     | '/contact'
     | '/find-a-tutor'
-    | '/find-a-tutor'
     | '/work-with-us'
     | '/api/chatbot'
     | '/admin/advertisements'
@@ -562,6 +562,7 @@ export interface FileRouteTypes {
     | '/admin/students'
     | '/admin/tutor-applications'
     | '/admin/tutors'
+    | '/owner/finance'
     | '/recruitment/activity'
     | '/recruitment/applications'
     | '/recruitment/candidates'
@@ -600,7 +601,6 @@ export interface FileRouteTypes {
     | '/apply'
     | '/contact'
     | '/find-a-tutor'
-    | '/find-a-tutor'
     | '/work-with-us'
     | '/api/chatbot'
     | '/admin/advertisements'
@@ -616,6 +616,7 @@ export interface FileRouteTypes {
     | '/admin/students'
     | '/admin/tutor-applications'
     | '/admin/tutors'
+    | '/owner/finance'
     | '/recruitment/activity'
     | '/recruitment/applications'
     | '/recruitment/candidates'
@@ -655,7 +656,6 @@ export interface FileRouteTypes {
     | '/_public/apply'
     | '/_public/contact'
     | '/_public/find-a-tutor'
-    | '/_public/find-a-tutor'
     | '/_public/work-with-us'
     | '/api/chatbot'
     | '/_public/'
@@ -672,6 +672,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/students'
     | '/_authenticated/admin/tutor-applications'
     | '/_authenticated/admin/tutors'
+    | '/_authenticated/owner/finance'
     | '/_authenticated/recruitment/activity'
     | '/_authenticated/recruitment/applications'
     | '/_authenticated/recruitment/candidates'
@@ -745,13 +746,6 @@ declare module '@tanstack/react-router' {
       path: '/work-with-us'
       fullPath: '/work-with-us'
       preLoaderRoute: typeof PublicWorkWithUsRouteImport
-      parentRoute: typeof PublicRoute
-    }
-    '/_public/find-a-tutor': {
-      id: '/_public/find-a-tutor'
-      path: '/find-a-tutor'
-      fullPath: '/find-a-tutor'
-      preLoaderRoute: typeof PublicFindTutorRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_public/find-a-tutor': {
@@ -992,6 +986,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecruitmentActivityRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/owner/finance': {
+      id: '/_authenticated/owner/finance'
+      path: '/owner/finance'
+      fullPath: '/owner/finance'
+      preLoaderRoute: typeof AuthenticatedOwnerFinanceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/tutors': {
       id: '/_authenticated/admin/tutors'
       path: '/admin/tutors'
@@ -1109,6 +1110,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminStudentsRoute: typeof AuthenticatedAdminStudentsRoute
   AuthenticatedAdminTutorApplicationsRoute: typeof AuthenticatedAdminTutorApplicationsRoute
   AuthenticatedAdminTutorsRoute: typeof AuthenticatedAdminTutorsRoute
+  AuthenticatedOwnerFinanceRoute: typeof AuthenticatedOwnerFinanceRoute
   AuthenticatedRecruitmentActivityRoute: typeof AuthenticatedRecruitmentActivityRoute
   AuthenticatedRecruitmentApplicationsRoute: typeof AuthenticatedRecruitmentApplicationsRoute
   AuthenticatedRecruitmentCandidatesRoute: typeof AuthenticatedRecruitmentCandidatesRoute
@@ -1155,6 +1157,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminTutorApplicationsRoute:
     AuthenticatedAdminTutorApplicationsRoute,
   AuthenticatedAdminTutorsRoute: AuthenticatedAdminTutorsRoute,
+  AuthenticatedOwnerFinanceRoute: AuthenticatedOwnerFinanceRoute,
   AuthenticatedRecruitmentActivityRoute: AuthenticatedRecruitmentActivityRoute,
   AuthenticatedRecruitmentApplicationsRoute:
     AuthenticatedRecruitmentApplicationsRoute,
@@ -1189,7 +1192,6 @@ interface PublicRouteChildren {
   PublicApplyRoute: typeof PublicApplyRoute
   PublicContactRoute: typeof PublicContactRoute
   PublicFindATutorRoute: typeof PublicFindATutorRoute
-  PublicFindTutorRoute: typeof PublicFindTutorRoute
   PublicWorkWithUsRoute: typeof PublicWorkWithUsRoute
   PublicIndexRoute: typeof PublicIndexRoute
   PublicTutorsTutorIdRoute: typeof PublicTutorsTutorIdRoute
@@ -1200,7 +1202,6 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicApplyRoute: PublicApplyRoute,
   PublicContactRoute: PublicContactRoute,
   PublicFindATutorRoute: PublicFindATutorRoute,
-  PublicFindTutorRoute: PublicFindTutorRoute,
   PublicWorkWithUsRoute: PublicWorkWithUsRoute,
   PublicIndexRoute: PublicIndexRoute,
   PublicTutorsTutorIdRoute: PublicTutorsTutorIdRoute,

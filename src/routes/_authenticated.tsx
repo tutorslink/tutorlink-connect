@@ -22,6 +22,7 @@ import {
   FileEdit,
   MessageSquare,
   BarChart3,
+  WalletCards,
   ShieldCheck,
   LogOut,
 } from "lucide-react";
@@ -91,6 +92,11 @@ const adminNav: NavItem[] = [
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
+const ownerNav: NavItem[] = [
+  ...adminNav,
+  { name: "Finances", href: "/owner/finance", icon: WalletCards },
+];
+
 function AuthLayout() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
@@ -140,7 +146,7 @@ function AuthLayout() {
   let navItems = studentNav;
   let roleLabel = "Student Portal";
   if (isOwner) {
-    navItems = adminNav;
+    navItems = ownerNav;
     roleLabel = "Owner Dashboard";
   } else if (isManager) {
     navItems = adminNav;
