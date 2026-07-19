@@ -22,13 +22,13 @@ import { toast } from "sonner";
 import { DataStore } from "@/lib/data-store";
 import { appwrite } from "@/integrations/appwrite/client";
 
+
 export const Route = createFileRoute("/_authenticated/admin/settings")({
   component: AdminSettings,
 });
 
 function AdminSettings() {
   const [settings, setSettings] = useState({
-    darkMode: false,
     emailNotifications: true,
     pushNotifications: true,
     weeklyReports: true,
@@ -43,6 +43,25 @@ function AdminSettings() {
     announcement_channel: "",
   });
 
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem("theme");
+
+    if (saved) {
+      return saved === "dark";
+    }
+
+    return document.documentElement.classList.contains("dark");
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+
+    localStorage.setItem(
+      "theme",
+      darkMode ? "dark" : "light"
+    );
+  }, [darkMode]);
+  
   const [discordLink, setDiscordLink] = useState<Record<string, unknown> | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -213,7 +232,9 @@ function AdminSettings() {
                 <p className="text-sm font-medium">Dark Mode</p>
                 <p className="text-xs text-muted-foreground">Use dark theme across the dashboard</p>
               </div>
-              <Switch checked={settings.darkMode} onCheckedChange={() => toggle("darkMode")} />
+              <Switch
+                checked={darkMode}
+                onCheckedChange={setDarkMode} />
             </div>
           </CardContent>
         </Card>

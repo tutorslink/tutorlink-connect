@@ -11,32 +11,41 @@ export function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check initial theme
-    const isDarkMode = document.documentElement.classList.contains("dark") || 
-      (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    setIsDark(isDarkMode);
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+    const savedTheme = localStorage.getItem("theme");
+
+    let dark = false;
+
+    if (savedTheme === "dark") {
+      dark = true;
+    } else if (savedTheme === "light") {
+      dark = false;
     } else {
-      document.documentElement.classList.remove("dark");
+      dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
 
+    setIsDark(dark);
+    document.documentElement.classList.toggle("dark", dark);
+
     appwrite.auth.getSession().then(({ data }) => setSession(data.session));
+
     const { data: authSub } = appwrite.auth.onAuthStateChange((_e, sesh) => {
       setSession(sesh);
     });
+
     return () => authSub.subscription.unsubscribe();
   }, []);
 
   const toggleTheme = () => {
-    setIsDark(!isDark);
-    if (!isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    const newTheme = !isDark;
+
+    setIsDark(newTheme);
+
+    document.documentElement.classList.toggle("dark", newTheme);
+
+    localStorage.setItem(
+      "theme",
+      newTheme ? "dark" : "light"
+    );
   };
 
   const handleSignOut = async () => {

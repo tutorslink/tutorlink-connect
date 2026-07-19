@@ -2,6 +2,7 @@ import { createFileRoute, Outlet, Link, useNavigate } from "@tanstack/react-rout
 import { useEffect, useState } from "react";
 import { appwrite } from "@/integrations/appwrite/client";
 import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/Navbar";
 import { AIChatbot } from "@/components/AIChatbot";
 import {
   DropdownMenu,
@@ -71,69 +72,7 @@ function PublicLayout() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b sticky top-0 bg-background/95 backdrop-blur z-50">
-        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link to="/" className="font-bold text-xl text-primary">
-            Alvey
-          </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-            <Link to="/" className="hover:text-primary transition-colors">
-              Home
-            </Link>
-            <Link to="/find-a-tutor" className="hover:text-primary transition-colors">
-              Find a Tutor
-            </Link>
-            <Link to="/apply" className="hover:text-primary transition-colors">
-              Apply as a Tutor
-            </Link>
-            <Link to="/work-with-us" className="hover:text-primary transition-colors">
-              Work With Us
-            </Link>
-            <Link to="/about" className="hover:text-primary transition-colors">
-              About Us
-            </Link>
-            <Link to="/contact" className="hover:text-primary transition-colors">
-              Contact
-            </Link>
-          </nav>
-          <div className="flex items-center gap-3">
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <User className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link to="/dashboard" className="cursor-pointer">
-                      <LayoutDashboard className="mr-2 h-4 w-4" />
-                      <span>Dashboard</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={handleSignOut}
-                    className="cursor-pointer text-red-600 focus:text-red-600"
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Sign Out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <>
-                <Button variant="ghost" asChild>
-                  <Link to="/auth">Login</Link>
-                </Button>
-                <Button asChild>
-                  <Link to="/auth">Sign Up</Link>
-                </Button>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
+      <Navbar />
       <main className="flex-1">
         <Outlet />
       </main>
@@ -151,7 +90,14 @@ function PublicLayout() {
               <Link to="/" className="hover:text-foreground">
                 Home
               </Link>
-              <Link to="/find-a-tutor" className="hover:text-foreground">
+              <Link
+                to="/find-a-tutor"
+                search={{
+                  level: undefined,
+                  subject: undefined,
+                }}
+                className="hover:text-foreground"
+              >
                 Find a Tutor
               </Link>
               <Link to="/about" className="hover:text-foreground">

@@ -2,6 +2,7 @@
 import { ID, Permission, Query, Role } from "appwrite";
 import { appwrite, APPWRITE_DATABASE_ID, getCurrentUser } from "@/integrations/appwrite/client";
 
+
 export interface Tutor {
   id: string;
   name: string;
@@ -447,6 +448,7 @@ async function deleteDocument(collectionId: string, documentId: string) {
   });
 }
 
+
 async function createDocument(
   collectionId: string,
   data: Record<string, any>,
@@ -569,7 +571,7 @@ function asObject<T extends Record<string, any>>(value: unknown, fallback: T): T
     try {
       const parsed = JSON.parse(value);
       if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) return parsed as T;
-    } catch {}
+    } catch { }
   }
   return fallback;
 }
@@ -578,7 +580,7 @@ function parseJson(value: unknown) {
   if (typeof value === "string" && value.trim()) {
     try {
       return JSON.parse(value);
-    } catch {}
+    } catch { }
   }
   return value;
 }
@@ -613,7 +615,7 @@ export const DataStore = {
     try {
       const docs = await listDocuments(COLLECTIONS.TUTOR_PROFILES, [Query.equal("active", true)]);
       if (docs.length > 0) return docs.map(mapTutorDoc);
-    } catch {}
+    } catch { }
     return getLocal<Tutor[]>(KEYS.TUTORS, defaultTutors);
   },
 
@@ -660,6 +662,7 @@ export const DataStore = {
     setLocal(KEYS.TUTORS, tutors);
   },
 
+
   updateTutorProfile: async (tutor: Partial<Tutor> & { id: string }): Promise<void> => {
     const existing = (await DataStore.getAllTutors()).find((t) => t.id === tutor.id);
     const merged: Tutor = {
@@ -688,12 +691,45 @@ export const DataStore = {
     setLocal(KEYS.TUTORS, tutors);
   },
 
+  getHomepageStats: async function () {
+    const tutors = await this.getAllTutors();
+    const docs = await listDocuments(COLLECTIONS.TUTOR_PROFILES);
+    const subjectSet = new Set<string>();
+
+    tutors.forEach((t: any) => {
+      (t.subjects || []).forEach((s: string) => subjectSet.add(s));
+    });
+
+    const rated = tutors.filter(
+      (t: any) => typeof t.rating_avg === "number"
+    );
+
+    const rating =
+      rated.length > 0
+        ? rated.reduce(
+          (sum: number, t: Tutor) => sum + t.rating_avg,
+          0
+        ) / rated.length
+        : 0;
+
+    console.log("Tutors:", tutors);
+    console.log("Members:", docs);
+
+    return {
+      tutors: tutors.length,
+      members: docs.length,
+      subjects: subjectSet.size,
+      rating: Number(rating.toFixed(1)),
+    };
+
+  },
+
   // --- SUBJECTS & LEVELS ---
   getSubjects: async (): Promise<string[]> => {
     try {
       const docs = await listDocuments(COLLECTIONS.SUBJECTS, [Query.equal("active", true)]);
       if (docs.length > 0) return docs.map((d) => safeString(d.name)).filter(Boolean);
-    } catch {}
+    } catch { }
     return defaultSubjects;
   },
 
@@ -909,7 +945,7 @@ export const DataStore = {
         Query.orderDesc("$createdAt"),
       ]);
       if (docs.length > 0) return docs;
-    } catch {}
+    } catch { }
     return getLocal<any[]>(KEYS.APPLICATIONS, []);
   },
 
@@ -1013,7 +1049,7 @@ export const DataStore = {
         Query.orderDesc("$createdAt"),
       ]);
       if (docs.length > 0) return docs;
-    } catch {}
+    } catch { }
     return getLocal<any[]>(KEYS.RECRUITMENT, []);
   },
 
@@ -1047,7 +1083,7 @@ export const DataStore = {
       const doc = await getDocument(COLLECTIONS.USERS, userId);
       const role = safeString(doc?.role, "");
       if (role) return [role];
-    } catch {}
+    } catch { }
 
     const mockRoles = getLocal<Record<string, string[]>>("user_roles_map", {});
     return mockRoles[userId] || ["student"];
@@ -1059,12 +1095,14 @@ export const DataStore = {
       await upsertDocument(COLLECTIONS.USERS, userId, {
         authUserId: userId,
         email: safeString(user?.email, `${userId}@tutorslink.local`),
-        displayName: safeString(user?.name, user?.email?.split("@")[0] || userId),
-        role,
+        displayName: safeString(
+          user?.displayName,
+          user?.email?.split("@")[0] || userId
+        ), role,
         discordId: null,
         active: true,
       });
-    } catch {}
+    } catch { }
 
     const mockRoles = getLocal<Record<string, string[]>>("user_roles_map", {});
     if (!mockRoles[userId]) mockRoles[userId] = ["student"];
@@ -1078,7 +1116,7 @@ export const DataStore = {
       if (doc?.role === role) {
         await upsertDocument(COLLECTIONS.USERS, userId, { ...doc, role: "student" });
       }
-    } catch {}
+    } catch { }
 
     const mockRoles = getLocal<Record<string, string[]>>("user_roles_map", {});
     if (mockRoles[userId]) {
@@ -1111,7 +1149,7 @@ export const DataStore = {
           };
         });
       }
-    } catch {}
+    } catch { }
 
     const localAss = getLocal<any[]>(KEYS.ASSIGNMENTS, [
       {
@@ -1271,7 +1309,7 @@ export const DataStore = {
       if (tutorId) queries.push(Query.equal("tutor", tutorId));
       const docs = await listDocuments(COLLECTIONS.REVIEWS, queries);
       if (docs.length > 0) return docs.map(mapReviewDoc);
-    } catch {}
+    } catch { }
 
     const localRevs = getLocal<Review[]>(KEYS.REVIEWS, [
       {
@@ -1324,7 +1362,7 @@ export const DataStore = {
         Query.limit(100),
       ]);
       if (docs.length > 0) return docs;
-    } catch {}
+    } catch { }
     return getLocal<any[]>("tl_audit_logs", []);
   },
 
@@ -1336,7 +1374,7 @@ export const DataStore = {
         Query.orderAsc("displayOrder"),
       ]);
       if (docs.length > 0) return docs;
-    } catch {}
+    } catch { }
     return [];
   },
 
@@ -1348,7 +1386,7 @@ export const DataStore = {
         Query.orderDesc("updatedAt"),
       ]);
       if (docs.length > 0) return docs.map(mapPageDoc);
-    } catch {}
+    } catch { }
     return getLocal<any[]>("tl_pages", []);
   },
 
@@ -1361,7 +1399,7 @@ export const DataStore = {
         Query.limit(1),
       ]);
       if (docs[0]) return mapPageDoc(docs[0]);
-    } catch {}
+    } catch { }
     return null;
   },
 
@@ -1395,7 +1433,7 @@ export const DataStore = {
     try {
       const doc = await getDocument(COLLECTIONS.HOMEPAGE, "homepage");
       if (doc) return doc;
-    } catch {}
+    } catch { }
     return null;
   },
 
@@ -1423,7 +1461,7 @@ export const DataStore = {
     try {
       const doc = await getDocument(COLLECTIONS.PLATFORM_SETTINGS, key);
       if (doc) return asObject(doc.value, doc.value);
-    } catch {}
+    } catch { }
     return null;
   },
 
@@ -1432,7 +1470,7 @@ export const DataStore = {
     await upsertDocument(COLLECTIONS.PLATFORM_SETTINGS, key, {
       key,
       value: JSON.stringify(value),
-      updatedBy: (await getCurrentUser())?.$id || null,
+      updatedBy: (await getCurrentUser())?.id || null,
       updatedAt: now,
       createdAt: now,
     });
@@ -1477,7 +1515,7 @@ export const DataStore = {
         Query.limit(50),
       ]);
       if (docs.length > 0) return docs.map(mapNotificationDoc);
-    } catch {}
+    } catch { }
     return getLocal<any[]>(KEYS.NOTIFICATIONS, []);
   },
 
@@ -1526,7 +1564,7 @@ export const DataStore = {
       for (const doc of docs) {
         await upsertDocument(COLLECTIONS.NOTIFICATIONS, doc.$id || doc.id, { isRead: true });
       }
-    } catch {}
+    } catch { }
   },
 
   // --- LESSONS ---
@@ -1540,7 +1578,7 @@ export const DataStore = {
       queries.push(Query.equal(isTutor ? "tutorId" : "studentId", userId));
       const docs = await listDocuments(COLLECTIONS.LESSONS, queries);
       if (docs.length > 0) return docs.map(mapLessonDoc);
-    } catch {}
+    } catch { }
     return getLocal<any[]>(KEYS.LESSONS, []);
   },
 
@@ -1569,7 +1607,7 @@ export const DataStore = {
           };
         });
       }
-    } catch {}
+    } catch { }
     return [];
   },
 
@@ -1632,7 +1670,7 @@ export const DataStore = {
       ]);
       if (docs.length > 0)
         return docs.map((doc) => ({ ...mapReviewDoc(doc), student: doc.student }));
-    } catch {}
+    } catch { }
     return getLocal<Review[]>(KEYS.REVIEWS, []);
   },
 
@@ -1644,7 +1682,7 @@ export const DataStore = {
         Query.limit(100),
       ]);
       if (docs.length > 0) return docs.map(mapReviewDoc);
-    } catch {}
+    } catch { }
     return getLocal<Review[]>(KEYS.REVIEWS, []);
   },
 
@@ -1719,7 +1757,7 @@ export const DataStore = {
           };
         });
       }
-    } catch {}
+    } catch { }
     return DataStore.getStudentAssignments(studentId);
   },
 
@@ -1737,7 +1775,7 @@ export const DataStore = {
           avatar_url: avatarFor(doc.displayName || doc.email || "Student"),
         }));
       }
-    } catch {}
+    } catch { }
     return [];
   },
 
@@ -1778,13 +1816,14 @@ export const DataStore = {
           rating_count: t.reviewCount,
           years_experience: t.experienceYears,
           languages: t.languages || [],
+          subjects: t.subjects || [],   // <-- add this
           is_featured: t.featured,
           is_verified: t.verified,
           is_active: t.active,
           slug: t.slug,
         }));
       }
-    } catch {}
+    } catch { }
     return getLocal<Tutor[]>(KEYS.TUTORS, defaultTutors);
   },
 
@@ -1795,7 +1834,7 @@ export const DataStore = {
         Query.limit(200),
       ]);
       if (docs.length > 0) return docs;
-    } catch {}
+    } catch { }
     return getLocal<any[]>(KEYS.APPLICATIONS, []);
   },
 
@@ -1806,7 +1845,7 @@ export const DataStore = {
         Query.limit(200),
       ]);
       if (docs.length > 0) return docs;
-    } catch {}
+    } catch { }
     return getLocal<any[]>(KEYS.RECRUITMENT, []);
   },
 
@@ -1847,7 +1886,7 @@ export const DataStore = {
           });
         }
       }
-    } catch {}
+    } catch { }
   },
 
   // --- ADVERTISEMENTS ---

@@ -75,12 +75,17 @@ export const Route = createFileRoute("/_public/find-a-tutor")({
       },
     ],
   }),
-  validateSearch: (search: Record<string, unknown>) => {
-    return {
-      level: (search.level as string) || undefined,
-      subject: (search.subject as string) || undefined,
-    };
-  },
+  validateSearch: (search: Record<string, unknown>) => ({
+    level:
+      typeof search.level === "string"
+        ? search.level
+        : undefined,
+
+    subject:
+      typeof search.subject === "string"
+        ? search.subject
+        : undefined,
+  }),
   component: FindATutorPage,
 });
 
@@ -401,57 +406,57 @@ function FindATutorPage() {
             selectedLanguage !== "All" ||
             onlyVerified ||
             searchQuery !== "") && (
-            <div className="flex flex-wrap items-center gap-1.5 bg-blue-50/30 dark:bg-blue-950/10 p-3 rounded-xl border border-blue-100/30">
-              <span className="text-xs text-muted-foreground font-medium mr-1.5">
-                Active filters:
-              </span>
-              {searchQuery !== "" && (
-                <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
-                  Search: "{searchQuery}"
-                  <X
-                    className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
-                    onClick={() => setSearchQuery("")}
-                  />
-                </Badge>
-              )}
-              {selectedSubject !== "All" && (
-                <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
-                  Subject: {selectedSubject}
-                  <X
-                    className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
-                    onClick={() => setSelectedSubject("All")}
-                  />
-                </Badge>
-              )}
-              {selectedLevel !== "All" && (
-                <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
-                  Level: {selectedLevel}
-                  <X
-                    className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
-                    onClick={() => setSelectedLevel("All")}
-                  />
-                </Badge>
-              )}
-              {selectedLanguage !== "All" && (
-                <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
-                  Language: {selectedLanguage}
-                  <X
-                    className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
-                    onClick={() => setSelectedLanguage("All")}
-                  />
-                </Badge>
-              )}
-              {onlyVerified && (
-                <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
-                  Verified Only
-                  <X
-                    className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
-                    onClick={() => setOnlyVerified(false)}
-                  />
-                </Badge>
-              )}
-            </div>
-          )}
+              <div className="flex flex-wrap items-center gap-1.5 bg-blue-50/30 dark:bg-blue-950/10 p-3 rounded-xl border border-blue-100/30">
+                <span className="text-xs text-muted-foreground font-medium mr-1.5">
+                  Active filters:
+                </span>
+                {searchQuery !== "" && (
+                  <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
+                    Search: "{searchQuery}"
+                    <X
+                      className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
+                      onClick={() => setSearchQuery("")}
+                    />
+                  </Badge>
+                )}
+                {selectedSubject !== "All" && (
+                  <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
+                    Subject: {selectedSubject}
+                    <X
+                      className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
+                      onClick={() => setSelectedSubject("All")}
+                    />
+                  </Badge>
+                )}
+                {selectedLevel !== "All" && (
+                  <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
+                    Level: {selectedLevel}
+                    <X
+                      className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
+                      onClick={() => setSelectedLevel("All")}
+                    />
+                  </Badge>
+                )}
+                {selectedLanguage !== "All" && (
+                  <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
+                    Language: {selectedLanguage}
+                    <X
+                      className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
+                      onClick={() => setSelectedLanguage("All")}
+                    />
+                  </Badge>
+                )}
+                {onlyVerified && (
+                  <Badge variant="secondary" className="gap-1 rounded-md px-2 py-0.5">
+                    Verified Only
+                    <X
+                      className="h-3 w-3 cursor-pointer text-muted-foreground hover:text-foreground"
+                      onClick={() => setOnlyVerified(false)}
+                    />
+                  </Badge>
+                )}
+              </div>
+            )}
 
           {/* Tutors Grid Results */}
           {filteredTutors.length === 0 ? (
@@ -494,13 +499,11 @@ function FindATutorPage() {
                         {tutor.is_verified && (
                           <CheckCircle
                             className="h-4 w-4 text-blue-600 fill-blue-50 shrink-0"
-                            title="Verified Tutor"
                           />
                         )}
                         {tutor.is_featured && (
                           <Award
                             className="h-4 w-4 text-amber-500 shrink-0"
-                            title="Featured Tutor"
                           />
                         )}
                       </div>
