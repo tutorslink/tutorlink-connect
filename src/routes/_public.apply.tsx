@@ -99,6 +99,7 @@ function Apply() {
         status: "pending",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
+        isDeleted: false
       };
 
       await appwrite.databases.createDocument({

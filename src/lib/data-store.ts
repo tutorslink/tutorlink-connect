@@ -712,8 +712,6 @@ export const DataStore = {
         ) / rated.length
         : 0;
 
-    console.log("Tutors:", tutors);
-    console.log("Members:", docs);
 
     return {
       tutors: tutors.length,

@@ -42,26 +42,28 @@ function AuthPage() {
   useEffect(() => {
     (async () => {
       const user = await getCurrentUser();
+      console.log("CURRENT USER:", user);
+
       if (user) {
+        console.log("USER FOUND");
         await ensureUserRecord();
+        console.log("NAVIGATING");
         navigate({ to: "/dashboard" });
+      } else {
+        console.log("NO USER");
       }
     })();
-  }, [navigate]);
+  }, []);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { error } = await appwrite.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      // User record already exists from signup; just navigate.
       navigate({ to: "/dashboard" });
       toast.success("Welcome back");
     } catch (err: any) {
-      toast.error(err?.message ?? "Sign-in failed");
-    } finally {
-      setLoading(false);
+      console.log(err);
+      console.log(err.code);
     }
   };
 
