@@ -118,7 +118,7 @@ function AdminSettings() {
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Support Email
               </label>
-              <Input type="email" defaultValue="support@tutorslink.me" />
+              <Input type="email" defaultValue="support@alvey.study" />
             </div>
             <div className="flex items-center justify-between pt-2">
               <div>

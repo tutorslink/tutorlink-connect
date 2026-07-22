@@ -20,8 +20,8 @@ function Contact() {
           <div className="space-y-4">
             <div>
               <h3 className="font-semibold">Email</h3>
-              <a href="mailto:support@tutorslink.me" className="text-primary hover:underline">
-                support@tutorslink.me
+              <a href="mailto:support@alvey.study" className="text-primary hover:underline">
+                support@alvey.study
               </a>
             </div>
             <div>

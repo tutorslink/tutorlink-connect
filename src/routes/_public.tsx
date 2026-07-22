@@ -165,8 +165,8 @@ function PublicLayout() {
               <Link to="/contact" className="hover:text-foreground">
                 Contact Us
               </Link>
-              <a href="mailto:support@tutorslink.me" className="hover:text-foreground">
-                support@tutorslink.me
+              <a href="mailto:support@alvey.study" className="hover:text-foreground">
+                support@alvey.study
               </a>
               <Link to="/contact" className="hover:text-foreground">
                 Privacy Policy

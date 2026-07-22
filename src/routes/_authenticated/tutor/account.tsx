@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/tutor/account")({
 function TutorAccount() {
   const [profile, setProfile] = useState({
     fullName: "Dr. Alexander Sterling",
-    email: "alex.sterling@tutorslink.me",
+    email: "alex.sterling@alvey.study",
     phone: "+44 7911 123456",
     country: "United Kingdom",
     timezone: "GMT+0 (London)",
