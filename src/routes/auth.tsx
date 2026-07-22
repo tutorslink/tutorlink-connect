@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ID, getCurrentUser, APPWRITE_ENDPOINT, APPWRITE_PROJECT_ID } from "@/integrations/appwrite/client";
+import { getCurrentUser, appwrite } from "@/integrations/appwrite/client";
 import { DataStore } from "@/lib/data-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,14 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Client, Account, OAuthProvider } from "appwrite";
-
-// Use a fresh Account instance so we can call Appwrite directly without
-// going through any wrapper indirection.
-function getAccount() {
-  const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
-  return new Account(client);
-}
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -50,26 +42,28 @@ function AuthPage() {
   useEffect(() => {
     (async () => {
       const user = await getCurrentUser();
+      console.log("CURRENT USER:", user);
+
       if (user) {
+        console.log("USER FOUND");
         await ensureUserRecord();
+        console.log("NAVIGATING");
         navigate({ to: "/dashboard" });
+      } else {
+        console.log("NO USER");
       }
     })();
-  }, [navigate]);
+  }, []);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const account = getAccount();
-      await account.createEmailPasswordSession(email, password);
-      // User record already exists from signup; just navigate.
       navigate({ to: "/dashboard" });
       toast.success("Welcome back");
     } catch (err: any) {
-      toast.error(err?.message ?? "Sign-in failed");
-    } finally {
-      setLoading(false);
+      console.log(err);
+      console.log(err.code);
     }
   };
 
@@ -77,13 +71,14 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const account = getAccount();
       const name = displayName.trim() || email.split("@")[0];
-      // 1. Create the Appwrite auth account
-      await account.create(ID.unique(), email, password, name);
-      // 2. Open a session immediately
-      await account.createEmailPasswordSession(email, password);
-      // 3. Write the user record to the database
+      const { error } = await appwrite.auth.signUp({
+        email,
+        password,
+        options: { data: { display_name: name } },
+      });
+      if (error) throw error;
+      // Write the user record to the database
       await ensureUserRecord(name);
       toast.success("Account created — welcome!");
       navigate({ to: "/dashboard" });
@@ -95,27 +90,18 @@ function AuthPage() {
   };
 
   const handleGoogle = () => {
-    const account = getAccount();
-    // Appwrite redirects back to /auth, where the useEffect above will
-    // pick up the session and write the user record.
     const origin = window.location.origin;
-    account.createOAuth2Session(
-      OAuthProvider.Google,
-      `${origin}/auth`,  // success → back here so useEffect writes the record
-      `${origin}/auth`,  // failure → same page so user sees the sign-in form
-    );
+    appwrite.auth.signInWithOAuth("google", { redirect_uri: `${origin}/auth` });
   };
 
   const handleLinkedIn = () => {
-    const account = getAccount();
     const origin = window.location.origin;
-    account.createOAuth2Session(OAuthProvider.Linkedin, `${origin}/auth`, `${origin}/auth`);
+    appwrite.auth.signInWithOAuth("linkedin", { redirect_uri: `${origin}/auth` });
   };
 
   const handleDiscord = () => {
-    const account = getAccount();
     const origin = window.location.origin;
-    account.createOAuth2Session(OAuthProvider.Discord, `${origin}/auth`, `${origin}/auth`);
+    appwrite.auth.signInWithOAuth("discord", { redirect_uri: `${origin}/auth` });
   };
 
   return (

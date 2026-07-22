@@ -94,7 +94,6 @@ const adminNav: NavItem[] = [
 
 const ownerNav: NavItem[] = [
   ...adminNav,
-  { name: "Finances", href: "/owner/finance", icon: WalletCards },
 ];
 
 function AuthLayout() {
@@ -119,7 +118,7 @@ function AuthLayout() {
 
     const { data: sub } = appwrite.auth.onAuthStateChange((_e, session) => {
       if (!session) navigate({ to: "/auth", replace: true });
-      else setEmail(session.user.email ?? null);
+      else setEmail((session as any)?.user?.email ?? null);
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate]);

@@ -12,8 +12,8 @@ function readEnv(name: string, fallback = ""): string {
     const processEnv =
       typeof globalThis !== "undefined"
         ? (globalThis as typeof globalThis & {
-            process?: { env?: Record<string, string | undefined> };
-          }).process?.env
+          process?: { env?: Record<string, string | undefined> };
+        }).process?.env
         : undefined;
 
     if (processEnv?.[name]) return processEnv[name] as string;
@@ -59,12 +59,26 @@ function emitAuthChange(session: { user: Record<string, unknown> } | null) {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new CustomEvent(AUTH_EVENT, { detail: session }));
 }
+type NormalizedUser = {
+  id: string;
+  email?: string;
+  displayName?: string;
+  name?: string;
+  $id?: string;
+} & Record<string, unknown>;
 
-function normalizeUser(user: Record<string, unknown> | null) {
+function normalizeUser(
+  user: Record<string, unknown> | null
+): NormalizedUser | null {
   if (!user) return null;
+
   return {
     ...user,
     id: (user.id as string) || (user.$id as string),
+    email: user.email as string | undefined,
+    displayName: user.displayName as string | undefined,
+    name: user.name as string | undefined,
+    $id: user.$id as string | undefined,
   };
 }
 
@@ -121,11 +135,12 @@ export const appwrite = {
       options?: { emailRedirectTo?: string; data?: Record<string, unknown> };
     }) {
       try {
-        const name =
-          options?.data?.display_name ||
-          options?.data?.name ||
-          email.split("@")[0] ||
-          "Alvey User";
+        const name = String(
+          options?.data?.display_name ??
+          options?.data?.name ??
+          email.split("@")[0] ??
+          "Alvey User"
+        );
         await getClient().account.create(ID.unique(), email, password, name);
         await getClient().account.createEmailPasswordSession(email, password);
         const user = await getCurrentUser();

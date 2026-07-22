@@ -49,7 +49,6 @@ import { Route as AuthenticatedRecruitmentDocumentsRouteImport } from './routes/
 import { Route as AuthenticatedRecruitmentCandidatesRouteImport } from './routes/_authenticated/recruitment/candidates'
 import { Route as AuthenticatedRecruitmentApplicationsRouteImport } from './routes/_authenticated/recruitment/applications'
 import { Route as AuthenticatedRecruitmentActivityRouteImport } from './routes/_authenticated/recruitment/activity'
-import { Route as AuthenticatedOwnerFinanceRouteImport } from './routes/_authenticated/owner/finance'
 import { Route as AuthenticatedAdminTutorsRouteImport } from './routes/_authenticated/admin/tutors'
 import { Route as AuthenticatedAdminTutorApplicationsRouteImport } from './routes/_authenticated/admin/tutor-applications'
 import { Route as AuthenticatedAdminStudentsRouteImport } from './routes/_authenticated/admin/students'
@@ -280,12 +279,6 @@ const AuthenticatedRecruitmentActivityRoute =
     path: '/recruitment/activity',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedOwnerFinanceRoute =
-  AuthenticatedOwnerFinanceRouteImport.update({
-    id: '/owner/finance',
-    path: '/owner/finance',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedAdminTutorsRoute =
   AuthenticatedAdminTutorsRouteImport.update({
     id: '/admin/tutors',
@@ -395,7 +388,6 @@ export interface FileRoutesByFullPath {
   '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/admin/tutor-applications': typeof AuthenticatedAdminTutorApplicationsRoute
   '/admin/tutors': typeof AuthenticatedAdminTutorsRoute
-  '/owner/finance': typeof AuthenticatedOwnerFinanceRoute
   '/recruitment/activity': typeof AuthenticatedRecruitmentActivityRoute
   '/recruitment/applications': typeof AuthenticatedRecruitmentApplicationsRoute
   '/recruitment/candidates': typeof AuthenticatedRecruitmentCandidatesRoute
@@ -449,7 +441,6 @@ export interface FileRoutesByTo {
   '/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/admin/tutor-applications': typeof AuthenticatedAdminTutorApplicationsRoute
   '/admin/tutors': typeof AuthenticatedAdminTutorsRoute
-  '/owner/finance': typeof AuthenticatedOwnerFinanceRoute
   '/recruitment/activity': typeof AuthenticatedRecruitmentActivityRoute
   '/recruitment/applications': typeof AuthenticatedRecruitmentApplicationsRoute
   '/recruitment/candidates': typeof AuthenticatedRecruitmentCandidatesRoute
@@ -506,7 +497,6 @@ export interface FileRoutesById {
   '/_authenticated/admin/students': typeof AuthenticatedAdminStudentsRoute
   '/_authenticated/admin/tutor-applications': typeof AuthenticatedAdminTutorApplicationsRoute
   '/_authenticated/admin/tutors': typeof AuthenticatedAdminTutorsRoute
-  '/_authenticated/owner/finance': typeof AuthenticatedOwnerFinanceRoute
   '/_authenticated/recruitment/activity': typeof AuthenticatedRecruitmentActivityRoute
   '/_authenticated/recruitment/applications': typeof AuthenticatedRecruitmentApplicationsRoute
   '/_authenticated/recruitment/candidates': typeof AuthenticatedRecruitmentCandidatesRoute
@@ -562,7 +552,6 @@ export interface FileRouteTypes {
     | '/admin/students'
     | '/admin/tutor-applications'
     | '/admin/tutors'
-    | '/owner/finance'
     | '/recruitment/activity'
     | '/recruitment/applications'
     | '/recruitment/candidates'
@@ -616,7 +605,6 @@ export interface FileRouteTypes {
     | '/admin/students'
     | '/admin/tutor-applications'
     | '/admin/tutors'
-    | '/owner/finance'
     | '/recruitment/activity'
     | '/recruitment/applications'
     | '/recruitment/candidates'
@@ -672,7 +660,6 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/students'
     | '/_authenticated/admin/tutor-applications'
     | '/_authenticated/admin/tutors'
-    | '/_authenticated/owner/finance'
     | '/_authenticated/recruitment/activity'
     | '/_authenticated/recruitment/applications'
     | '/_authenticated/recruitment/candidates'
@@ -986,13 +973,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecruitmentActivityRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/owner/finance': {
-      id: '/_authenticated/owner/finance'
-      path: '/owner/finance'
-      fullPath: '/owner/finance'
-      preLoaderRoute: typeof AuthenticatedOwnerFinanceRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/admin/tutors': {
       id: '/_authenticated/admin/tutors'
       path: '/admin/tutors'
@@ -1110,7 +1090,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminStudentsRoute: typeof AuthenticatedAdminStudentsRoute
   AuthenticatedAdminTutorApplicationsRoute: typeof AuthenticatedAdminTutorApplicationsRoute
   AuthenticatedAdminTutorsRoute: typeof AuthenticatedAdminTutorsRoute
-  AuthenticatedOwnerFinanceRoute: typeof AuthenticatedOwnerFinanceRoute
   AuthenticatedRecruitmentActivityRoute: typeof AuthenticatedRecruitmentActivityRoute
   AuthenticatedRecruitmentApplicationsRoute: typeof AuthenticatedRecruitmentApplicationsRoute
   AuthenticatedRecruitmentCandidatesRoute: typeof AuthenticatedRecruitmentCandidatesRoute
@@ -1157,7 +1136,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminTutorApplicationsRoute:
     AuthenticatedAdminTutorApplicationsRoute,
   AuthenticatedAdminTutorsRoute: AuthenticatedAdminTutorsRoute,
-  AuthenticatedOwnerFinanceRoute: AuthenticatedOwnerFinanceRoute,
   AuthenticatedRecruitmentActivityRoute: AuthenticatedRecruitmentActivityRoute,
   AuthenticatedRecruitmentApplicationsRoute:
     AuthenticatedRecruitmentApplicationsRoute,
