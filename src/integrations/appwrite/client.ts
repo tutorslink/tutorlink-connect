@@ -28,7 +28,7 @@ export const APPWRITE_ENDPOINT = readEnv(
   "https://fra.cloud.appwrite.io/v1",
 );
 export const APPWRITE_PROJECT_ID = readEnv("VITE_APPWRITE_PROJECT_ID", "tutorslink");
-export const APPWRITE_DATABASE_ID = readEnv("VITE_APPWRITE_DATABASE_ID", "TutorsLinkDatabase");
+export const APPWRITE_DATABASE_ID = readEnv("VITE_APPWRITE_DATABASE_ID", "Database");
 
 const AUTH_EVENT = "tutorslink-auth-change";
 

@@ -1,0 +1,50 @@
+{
+  "name": "alvey-whatsapp-webhook",
+  "runtime": "node-18.0",
+  "execute": ["any"],
+  "events": [],
+  "schedule": "",
+  "timeout": 30,
+  "enabled": true,
+  "logging": true,
+  "entrypoint": "src/main.js",
+  "commands": "npm install",
+  "scopes": [
+    "databases.read",
+    "databases.write"
+  ],
+  "vars": [
+    {
+      "name": "APPWRITE_ENDPOINT",
+      "value": ""
+    },
+    {
+      "name": "APPWRITE_PROJECT_ID",
+      "value": ""
+    },
+    {
+      "name": "APPWRITE_API_KEY",
+      "value": ""
+    },
+    {
+      "name": "APPWRITE_DATABASE_ID",
+      "value": "Database"
+    },
+    {
+      "name": "WHATSAPP_VERIFY_TOKEN",
+      "value": ""
+    },
+    {
+      "name": "WHATSAPP_ACCESS_TOKEN",
+      "value": ""
+    },
+    {
+      "name": "WHATSAPP_PHONE_NUMBER_ID",
+      "value": ""
+    },
+    {
+      "name": "ALVEY_AI_BRAIN_URL",
+      "value": ""
+    }
+  ]
+}

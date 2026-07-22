@@ -1,0 +1,13 @@
+{
+  "name": "alvey-whatsapp-webhook",
+  "version": "1.0.0",
+  "description": "Meta webhook handler for the Alvey WhatsApp bot — verifies the webhook and processes inbound messages",
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^26.2.0"
+  }
+}

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { appwrite } from "@/integrations/appwrite/client";
+import { DataStore } from "@/lib/data-store";
 
 interface Message {
   role: "user" | "assistant";
@@ -19,6 +21,13 @@ const SUGGESTED_PROMPTS = [
   "Is Alvey Legit?",
 ];
 
+// Extra prompts shown only when the user is authenticated
+const AUTH_PROMPTS = [
+  "When is my next lesson?",
+  "Who are my tutors?",
+  "How many classes do I have left?",
+];
+
 const CONTEXT_PROMPTS: Record<string, string[]> = {
   "/find-a-tutor": ["Find a math tutor", "Show me English tutors", "Who teaches computer science?"],
   "/apply": ["How do I apply?", "What documents do I need?", "What's the approval process?" , "is applying easy?"],
@@ -32,8 +41,12 @@ const CONTEXT_PROMPTS: Record<string, string[]> = {
   "/contact": ["How do I contact support?", "What are your response times?"],
 };
 
-function getContextualPrompts(pathname: string): string[] {
-  return CONTEXT_PROMPTS[pathname] || SUGGESTED_PROMPTS;
+function getContextualPrompts(pathname: string, isAuthenticated: boolean): string[] {
+  const base = CONTEXT_PROMPTS[pathname] || SUGGESTED_PROMPTS;
+  if (!isAuthenticated) return base;
+  // For authenticated users, merge in personal prompts (no duplicates)
+  const personal = AUTH_PROMPTS.filter(p => !base.includes(p));
+  return [...base, ...personal];
 }
 
 export function AIChatbot() {
@@ -52,7 +65,36 @@ export function AIChatbot() {
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
 
+  // Identity — resolved once on mount from the active Appwrite session
+  const [userId, setUserId]     = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
   const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
+
+  // Resolve user identity from the active session
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await appwrite.auth.getUser();
+        const uid = (data.user as { id?: string; $id?: string } | null)?.id
+                 || (data.user as { $id?: string } | null)?.$id
+                 || null;
+        if (!uid) return;
+        setUserId(uid);
+
+        const roles = await DataStore.getUserRoles(uid);
+        // roles is an array; pick the most specific one (tutor > student)
+        const role = roles.includes("tutor")
+          ? "tutor"
+          : roles.includes("admin")
+            ? "admin"
+            : "student";
+        setUserRole(role);
+      } catch {
+        // Not logged in — identity stays null, chatbot works anonymously
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -80,6 +122,8 @@ export function AIChatbot() {
               content: m.content,
             })),
             currentUrl: currentPath,
+            // Identity — null when the user is not logged in (anonymous mode)
+            ...(userId ? { userId, userRole } : {}),
           }),
         });
 
@@ -108,7 +152,7 @@ export function AIChatbot() {
         setIsLoading(false);
       }
     },
-    [input, isLoading, messages, currentPath],
+    [input, isLoading, messages, currentPath, userId, userRole],
   );
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -133,7 +177,7 @@ export function AIChatbot() {
     };
   }, [isDragging]);
 
-  const suggestions = getContextualPrompts(currentPath);
+  const suggestions = getContextualPrompts(currentPath, !!userId);
 
   return (
     <>
