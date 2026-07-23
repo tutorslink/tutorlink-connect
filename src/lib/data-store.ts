@@ -428,12 +428,7 @@ async function upsertDocument(collectionId: string, documentId: string, data: Re
         databaseId: APPWRITE_DATABASE_ID,
         collectionId,
         documentId,
-        data,
-        permissions: [
-          Permission.read(Role.users()),
-          Permission.update(Role.users()),
-          Permission.delete(Role.users()),
-        ],
+        data
       });
     }
     throw e;
@@ -454,16 +449,14 @@ async function createDocument(
   data: Record<string, any>,
   documentId = ID.unique(),
 ) {
+  console.log("Creating in:", collectionId);
+  console.log("Database:", APPWRITE_DATABASE_ID);
+
   return await appwrite.databases.createDocument({
     databaseId: APPWRITE_DATABASE_ID,
     collectionId,
     documentId,
     data,
-    permissions: [
-      Permission.read(Role.users()),
-      Permission.update(Role.users()),
-      Permission.delete(Role.users()),
-    ],
   });
 }
 
@@ -478,27 +471,37 @@ function mapTutorDoc(doc: any): Tutor {
   const years = safeNumber(doc.experienceYears ?? doc.years_experience, 5);
 
   return {
-    id: doc.$id || doc.id || doc.authUserId || name,
-    name,
-    avatar_url: safeString(doc.avatarUrl || doc.avatar_url, avatarFor(name)),
-    headline: safeString(doc.headline, "Alvey Educator"),
-    about: safeString(doc.fullBio || doc.shortBio || doc.about, ""),
-    hourly_rate: rate,
-    rating_avg: rating,
-    rating_count: reviews,
-    years_experience: years,
+    id: doc.$id,
+    name: doc.displayName ?? "Certified Tutor",
+    avatar_url:
+      doc.avatarUrl ??
+      avatarFor(doc.displayName ?? "Tutor"),
+    headline: doc.headline ?? "",
+    about:
+      doc.fullBio ??
+      doc.shortBio ??
+      "",
+    hourly_rate: Number(doc.hourlyRate ?? 0),
+    rating_avg: Number(doc.rating ?? 0),
+    rating_count: Number(doc.reviewCount ?? 0),
+    years_experience: Number(doc.experienceYears ?? 0),
     languages: Array.isArray(doc.languages)
       ? doc.languages
-      : Array.isArray(doc.education)
-        ? doc.education
-        : ["English"],
-    subjects: Array.isArray(doc.subjects) ? doc.subjects : [],
-    levels: Array.isArray(doc.levels) ? doc.levels : defaultLevels,
-    is_featured: safeBool(doc.featured ?? doc.is_featured),
-    is_verified: safeBool(doc.verified ?? doc.is_verified),
-    availability: safeString(doc.availability, "Flexible schedule (contact us)"),
+      : [],
+    subjects: Array.isArray(doc.subjects)
+      ? doc.subjects
+      : [],
+    levels: Array.isArray(doc.levels)
+      ? doc.levels
+      : [],
+    is_featured: Boolean(doc.featured),
+    is_verified: Boolean(doc.verified),
+    availability:
+      doc.availability ??
+      "Contact tutor",
   };
 }
+
 
 function mapReviewDoc(doc: any): Review {
   return {
@@ -636,13 +639,13 @@ export const DataStore = {
       reviewCount: tutor.rating_count,
       hourlyRate: Math.round(tutor.hourly_rate),
       experienceYears: tutor.years_experience,
-      education: tutor.languages,
-      totalStudents: tutor.rating_count * 2,
-      totalSessions: tutor.rating_count * 10,
+      education: [],
+      languages: tutor.languages,
+      subjects: tutor.subjects,
+      levels: tutor.levels,
       responseTime: "Within 24 hours",
       availability: tutor.availability,
-      languages: tutor.languages,
-      levels: tutor.levels,
+      // removed duplicate properties abuve
       publicBadges: tutor.is_verified ? ["Verified"] : [],
       contactEmail: null,
       contactUrl: null,
@@ -650,10 +653,10 @@ export const DataStore = {
       featured: tutor.is_featured,
       verified: tutor.is_verified,
       active: true,
-      subjects: tutor.subjects,
       avatarUrl: tutor.avatar_url,
     };
-
+    const user = await getCurrentUser();
+    console.log(user);
     await upsertDocument(COLLECTIONS.TUTOR_PROFILES, tutor.id, payload);
     const tutors = await DataStore.getTutors();
     const idx = tutors.findIndex((t) => t.id === tutor.id);
@@ -962,6 +965,8 @@ export const DataStore = {
       if (status === "approved" && list[idx].applicant_user_id) {
         const userId = list[idx].applicant_user_id;
         await DataStore.assignUserRole(userId, "tutor");
+        const user = await getCurrentUser();
+        console.log("CURRENT USER:", user);
         await DataStore.saveTutor({
           id: userId,
           name: list[idx].full_name,

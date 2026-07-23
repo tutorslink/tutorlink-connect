@@ -17,6 +17,13 @@ import { appwrite } from "@/integrations/appwrite/client";
 import { DataStore } from "@/lib/data-store";
 import { getAdminDashboardMetrics, type AdminDashboardMetrics } from "@/lib/analytics";
 
+const toDateValue = (v: unknown) => {
+  if (v == null) return Date.now();
+  if (typeof v === "number") return v;
+  if (v instanceof Date) return v.getTime();
+  return Number(v) || Date.parse(String(v)) || Date.now();
+};
+
 export const Route = createFileRoute("/_authenticated/admin/")({
   component: AdminDashboard,
 });
@@ -24,7 +31,7 @@ export const Route = createFileRoute("/_authenticated/admin/")({
 function AdminDashboard() {
   const [authorized, setAuthorized] = useState<boolean | null>(null);
   const [metrics, setMetrics] = useState<AdminDashboardMetrics | null>(null);
-  const [recentApps, setRecentApps] = useState<Record<string, unknown>[]>([]);
+  const [recentApps, setRecentApps] = useState<Record<string, any>[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,12 +52,11 @@ function AdminDashboard() {
         DataStore.getTutorApplicationsFromDB(),
       ]);
       setMetrics(m);
+
       setRecentApps(
         [...apps]
-          .sort(
-            (a: Record<string, unknown>, b: Record<string, unknown>) =>
-              new Date((b.created_at || b.createdAt || 0) as string | number).getTime() -
-              new Date((a.created_at || a.createdAt || 0) as string | number).getTime(),
+          .sort((a: Record<string, any>, b: Record<string, any>) =>
+            toDateValue(b.created_at ?? b.createdAt) - toDateValue(a.created_at ?? a.createdAt),
           )
           .slice(0, 3),
       );
@@ -166,9 +172,9 @@ function AdminDashboard() {
                             {app.full_name || app.fullName || "Applicant"}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {(app.subjects || [])[0] || app.subjectName || "General"} ·{" "}
+                            {(Array.isArray(app.subjects) ? app.subjects[0] : app.subjectName) || "General"} ·{" "}
                             {new Date(
-                              app.created_at || app.createdAt || Date.now(),
+                              toDateValue(app.created_at ?? app.createdAt),
                             ).toLocaleDateString()}
                           </p>
                         </div>
